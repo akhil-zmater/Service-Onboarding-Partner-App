@@ -7,6 +7,7 @@ import Maps from "./Maps";
 function FollowUps() {
   const [showHome, setShowHome] = useState(false);
   const [showMap, setShowMap] = useState(false);
+  const [button, setButton] = useState<string | null>("Assigned");
 
   const handleHome = (e: React.MouseEvent<HTMLImageElement>) => {
     setShowHome(true);
@@ -18,6 +19,11 @@ function FollowUps() {
 
   const handleCloseMap = () => {
     setShowMap(false);
+  };
+
+  const handleAssigned = (e: React.MouseEvent<HTMLDivElement>) => {
+    const comp = e.currentTarget.getAttribute("data-name");
+    setButton(comp);
   };
 
   return (
@@ -32,59 +38,88 @@ function FollowUps() {
             </div>
           )}
           <Navbar onClick={handleHome} />
-          <div className="my-5 ml-3 mr-2">
-            <div className="flex gap-1 border border-blue px-2 w-max rounded py-[0.25rem] px-[0.35rem] text-[0.75rem] leading-[1.25rem]">
-              <h1 className="text-background font-normal">
-                Total Follow Ups:{" "}
-              </h1>
-              <p className="font-medium">5</p>
-            </div>
-            <p className="bg-whh text-sm mt-[1rem] py-[0.25rem] px-[0.35rem] rounded">
-              09 Sep (Today)
-            </p>
-            <div className="pl-1">
-              <FollowUDetails
-                onClick={handleMap}
-                name="A1 Car Service Center"
-                owner="John Doe"
-                address="jyothi nagar, karmanghat"
-                phone={9866957717}
-              />
-              <FollowUDetails
-                onClick={handleMap}
-                name="A1 Car Service Center"
-                owner="John Doe"
-                address="jyothi nagar, karmanghat"
-                phone={9866957717}
-              />
-              <FollowUDetails
-                onClick={handleMap}
-                name="A1 Car Service Center"
-                owner="John Doe"
-                address="jyothi nagar, karmanghat"
-                phone={9866957717}
-              />
-            </div>
-            <p className="bg-whh text-sm py-[0.25rem] px-[0.35rem] rounded">
-              10 Sep (Tomorrow)
-            </p>
-            <div className="pl-1">
-              <FollowUDetails
-                onClick={handleMap}
-                name="A1 Car Service Center"
-                owner="John Doe"
-                address="jyothi nagar, karmanghat"
-                phone={9866957717}
-              />
-              <FollowUDetails
-                onClick={handleMap}
-                name="A1 Car Service Center"
-                owner="John Doe"
-                address="jyothi nagar, karmanghat"
-                phone={9866957717}
-              />
+          <div className="m-[1rem]">
+            <div className="flex justify-center items-center border-b border-border ">
+              <div
+                data-name="Assigned"
+                onClick={handleAssigned}
+                className={
+                  button === "Assigned"
+                    ? "basis-1/2 text-center font-semibold text-blue text-[0.8rem] bg-lb rounded-lg p-[0.5rem]"
+                    : "basis-1/2 text-center font-semibold text-ipcol  text-[0.8rem] rounded-lg p-[0.5rem]"
+                }
+              >
+                ASSIGNED (3)
+              </div>
+              <div
+                data-name="FollowUp"
+                onClick={handleAssigned}
+                className={
+                  button === "FollowUp"
+                    ? "basis-1/2 text-center font-semibold text-blue text-[0.8rem] bg-lb rounded-lg p-[0.5rem]"
+                    : "basis-1/2 text-center font-semibold text-ipcol  text-[0.8rem] rounded-lg p-[0.5rem]"
+                }
+              >
+                FOLLOWUP (2)
+              </div>
             </div>
           </div>
+          {button === "Assigned" ? (
+            <div className="px-[1rem]">
+              <p className="bg-whh text-sm mt-[1rem] py-[0.25rem] px-[0.35rem] rounded">
+                09 Sep (Today)
+              </p>
+              <div className="pl-1">
+                <FollowUDetails
+                  status="PHOTOGRAPHY PENDING"
+                  onClick={handleMap}
+                  name="A1 Car Service Center"
+                  owner="John Doe"
+                  address="jyothi nagar, karmanghat"
+                  phone={9866957717}
+                />
+                <FollowUDetails
+                  status="STATUS FROM STORE"
+                  onClick={handleMap}
+                  name="A1 Car Service Center"
+                  owner="John Doe"
+                  address="jyothi nagar, karmanghat"
+                  phone={9866957717}
+                />
+                <FollowUDetails
+                  status="STATUS FROM STORE"
+                  onClick={handleMap}
+                  name="A1 Car Service Center"
+                  owner="John Doe"
+                  address="jyothi nagar, karmanghat"
+                  phone={9866957717}
+                />
+              </div>
+              <p className="bg-whh text-sm py-[0.25rem] px-[0.35rem] rounded">
+                10 Sep (Tomorrow)
+              </p>
+              <div className="pl-1">
+                <FollowUDetails
+                  status="STATUS FROM STORE"
+                  onClick={handleMap}
+                  name="A1 Car Service Center"
+                  owner="John Doe"
+                  address="jyothi nagar, karmanghat"
+                  phone={9866957717}
+                />
+                <FollowUDetails
+                  status="STATUS FROM STORE"
+                  onClick={handleMap}
+                  name="A1 Car Service Center"
+                  owner="John Doe"
+                  address="jyothi nagar, karmanghat"
+                  phone={9866957717}
+                />
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       )}
     </div>

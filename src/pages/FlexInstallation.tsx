@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import Navbar from "./Navbar";
 import Input from "../components/Input";
-import Button from "../components/Button";
 import cam from "../images/camera.svg";
 import del from "../images/deleteicon.svg";
 import down from "../images/download.svg";
@@ -12,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.module.css";
 import { useDispatch } from "react-redux";
 import { setInputs } from "../redux/inputSlice";
 import NextFollowup from "./NextFollowup";
+import Submit from "../components/Submit";
 
 function FlexInstallation() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -266,15 +266,7 @@ function FlexInstallation() {
                       />
                     </div>
                   )}
-                  <div>
-                    <Button
-                      type="button"
-                      name="Submit"
-                      onClick={handleSubmit}
-                      data-name=""
-                      className="text-[1rem] font-semibold leading-[1.5rem] w-72 h-12 rounded-lg shadow-xl  bg-gradient-to-r from-[rgba(21,79,187,1)] to-[rgba(28,73,151,1)] text-white"
-                    />
-                  </div>
+                  <Submit onClick={handleSubmit} />
                 </div>
               </div>
             </div>

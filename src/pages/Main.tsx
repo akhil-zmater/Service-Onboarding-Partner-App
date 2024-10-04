@@ -152,7 +152,7 @@ function Main() {
                 <div className="flex flex-col gap-[0.25rem] mt-[0.3rem]">
                   <div className="flex gap-1 text-xs font-normal leading-[1rem] text-[1rem]">
                     <p className="text-background pl-[0.32rem] ">
-                      Owner Name:{" "}
+                      Owner Name:
                     </p>
                     <span className="font-normal text-black leading-[1rem]  ">
                       {inputs.service_center_owner}

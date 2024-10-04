@@ -25,6 +25,7 @@ module.exports = {
         yellow: "rgba(212,130,14,1)",
         prim: "rgba(22,22,22,1)",
         whh: "rgba(242,244,247,1)",
+        lb: "#DBE8FF",
       },
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],

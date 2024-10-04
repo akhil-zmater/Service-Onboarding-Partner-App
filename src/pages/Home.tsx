@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import logo from "../images/logo.svg";
 import Input from "../components/Input";
-import Button from "../components/Button";
 import Main from "./Main";
 import { useDispatch } from "react-redux";
 import { setInputs } from "../redux/inputSlice";
 import axios from "axios";
-import side from "../images/open.svg";
 import FollowUps from "./FollowUps";
+import open from "../images/open.svg";
 
 function Home() {
   const dispatch = useDispatch();
@@ -30,8 +29,8 @@ function Home() {
     installation_comments: "",
     subscription_type: null,
   });
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (inputs.phone.length <= 10) {
+  const handleSubmit = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (inputs.phone.length === 10) {
       dispatch(setInputs({ phone: inputs.phone }));
       setShowMain(true);
     } else {
@@ -75,7 +74,7 @@ function Home() {
   }, [inputs]);
 
   const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (inputs.phone.length <= 10) {
+    if (inputs.phone.length <= 9) {
       const { name, value } = e.target;
       setInputsss({ ...inputs, [name]: value });
     }
@@ -102,47 +101,50 @@ function Home() {
               Service Partner Onboarding
             </h1>
             <div className="mt-[1rem] flex flex-col gap-2">
-              <h1 className="text-[1rem] leading-[1rem] font-normal text-ipcol">
-                Phone Number
-              </h1>
-              <div className="flex gap-1 items-center text-ipcol h-[3.5rem] w-full pl-4 border border-border rounded-[0.5rem] text-[1rem] leading-[1.5rem] font-normal">
-                <p className="text-ipcol text-[1rem] font-normal leading-[1.5rem]">
-                  +91
-                </p>
-                <Input
-                  type="number"
-                  name="phone"
-                  value={inputs.phone}
-                  placeholder="Enter Phone Number"
-                  onChange={handlePhone}
-                  className="focus:outline-none"
-                  maxLength={10}
-                />
-              </div>
-              <div
-                onClick={handleFollowUps}
-                className="flex justify-between text-[0.9rem] leading-[1rem] font-medium mt-3 bg-borderblue p-[0.6rem] text-ipcol font-poppins rounded-lg"
-              >
-                <Button
-                  type="button"
-                  name="View Follow Ups"
-                  className=""
+              <div className="flex justify-between  items-center text-[0.9rem] leading-[1rem] font-medium border border-border p-[1rem] font-poppins rounded-lg">
+                <div className="flex items-center justify-center gap-16">
+                  <div className="flex flex-col gap-2">
+                    <h1 className="text-[0.8rem] text-ipcol ">ASSIGNED</h1>
+                    <h1 className="text-[1.2rem] text-blue">3</h1>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <h1 className="text-[0.8rem] text-ipcol ">FOLLOWUP</h1>
+                    <h1 className="text-[1.2rem] text-blue">2</h1>
+                  </div>
+                </div>
+                <div
                   onClick={handleFollowUps}
-                  data-name=""
-                />
-                <img src={side} alt="" />
+                  className="border rounded-[0.3rem] p-1 border-blue"
+                >
+                  <img src={open} alt="" className="" />
+                </div>
+              </div>
+              <h1 className="text-sm leading-[1rem] mt-3 font-normal text-ipcol">
+                Service Center Phone Number
+              </h1>
+              <div className="flex justify-between items-center text-ipcol h-[3.5rem] w-max p-[1rem] border border-border rounded-[0.5rem] text-[1rem] leading-[1.5rem] font-normal">
+                <div className="flex gap-2">
+                  <p className="text-ipcol text-[1rem] font-normal leading-[1.5rem]">
+                    +91
+                  </p>
+                  <Input
+                    type="number"
+                    name="phone"
+                    value={inputs.phone}
+                    placeholder="Enter Phone Number"
+                    onChange={handlePhone}
+                    className="focus:outline-none"
+                    maxLength={10}
+                  />
+                </div>
+                <div
+                  onClick={handleSubmit}
+                  className="border rounded-[0.3rem] p-1 border-blue"
+                >
+                  <img src={open} alt="" className="" />
+                </div>
               </div>
             </div>
-          </div>
-          {/* SUBMIT BUTTON */}
-          <div>
-            <Button
-              type="button"
-              name="Submit"
-              onClick={handleSubmit}
-              data-name=""
-              className="text-[1rem] font-semibold leading-[1.5rem] w-72 h-12 rounded-lg shadow-xl  bg-gradient-to-r from-[rgba(21,79,187,1)] to-[rgba(28,73,151,1)] text-white"
-            />
           </div>
         </div>
       )}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import call from "../images/phoneicon.svg";
 import loc from "../images/mapsiconn.svg";
 
@@ -8,25 +8,37 @@ interface FollowUDetailsProps {
   phone: number;
   address: string;
   onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  status: string;
 }
 
 function FollowUDetails(props: FollowUDetailsProps) {
+  const phoneRef = useRef<HTMLAnchorElement>(null);
+
+  const handleCallClick = () => {
+    if (phoneRef.current) {
+      phoneRef.current.click();
+    }
+  };
+
   return (
-    <div className="text-sm flex flex-col gap-1 border-b py-3 border-border">
-      <h1 className="text-[1rem] text-black leading-[1.5rem] font-normal ">
+    <div className="flex flex-col gap-1 border-b py-[0.5rem] border-border">
+      <h1 className="text-[0.9rem] text-black leading-[1.5rem] font-normal ">
         {props.name}
       </h1>
-      <div className="flex flex-col gap-[0.25rem]">
-        <div className="flex gap-1 items-center">
-          <p className="text-background text-[0.8rem] leading-[1rem] pl-[0.32rem] font-normal ">
-            Owner:{" "}
-          </p>
-          <p>{props.owner}</p>
-        </div>
-        <div className="flex gap-1">
+      <div className="flex flex-col gap-1">
+        <h1 className="text-ipcol font-normal leading-[1rem] text-[0.7rem]">
+          {props.status}
+        </h1>
+        <div className="flex gap-2">
           <div className="flex items-center">
-            <img src={call} alt="" />
-            <p className="text-blue  text-[0.75rem] pb-[0.2rem] leading-[1rem] font-medium">
+            <img src={call} alt="" className="w-6 h-6" />
+            <a href={`tel: ${"9866957717"}`} className="hidden" ref={phoneRef}>
+              {"9866957717"}
+            </a>
+            <p
+              onClick={handleCallClick}
+              className="text-blue text-[0.8rem] pb-[0.2rem] leading-[1rem] font-medium "
+            >
               Call
             </p>
           </div>

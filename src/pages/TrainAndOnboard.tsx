@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import Button from "../components/Button";
 import Input from "../components/Input";
 import Navbar from "./Navbar";
 import Main from "./Main";
 import NextFollowup from "./NextFollowup";
 import { useDispatch } from "react-redux";
 import { setInputs } from "../redux/inputSlice";
+import Submit from "../components/Submit";
 
 function TrainAndOnboard() {
   const [showMain, setShowMain] = useState(false);
@@ -26,8 +26,9 @@ function TrainAndOnboard() {
     installation_comments: "",
     subscription_type: null,
   });
-  const [onboarding, setOnbarding] = useState<string | null>(
-    "Training Pending"
+  const [training, setTraining] = useState<string | null>("Training Pending");
+  const [onboarding, setOnboarding] = useState<string | null>(
+    "Onboarding Pending"
   );
   const dispatch = useDispatch();
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +37,7 @@ function TrainAndOnboard() {
   };
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (
-      onboarding === "Training & Onboarding Complete" &&
+      training === "Training & training Complete" &&
       inputs.additional_comments !== ""
     ) {
       dispatch(setInputs(inputs));
@@ -46,7 +47,7 @@ function TrainAndOnboard() {
     }
   };
 
-  const handleToggle = (
+  const handleTrainingToggle = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
   ) => {
     const statuss = e.currentTarget.getAttribute("data-name");
@@ -55,24 +56,72 @@ function TrainAndOnboard() {
         ...prev,
         status: statuss,
       }));
-      setOnbarding(statuss);
+      setTraining(statuss);
     }
   };
 
-  const statusButtons = [
-    "Training Pending",
-    "Onboarding Pending",
-    "Training & Onboarding Complete",
-  ];
+  const TrainingStatusButtons = ["Training Pending", "Training Complete"];
 
-  const statusComp = statusButtons.map((status, key) => (
+  const TrainingComp = TrainingStatusButtons.map((status, key) => (
     <div key={key} className="flex flex-col">
       <div className="text-sm text-black">
         <div
           data-name={status}
-          onClick={handleToggle}
+          onClick={handleTrainingToggle}
           className={`${
-            key === statusButtons.length - 1
+            key === TrainingStatusButtons.length - 1
+              ? "flex justify-between items-center pb-2 pt-2 text-black font-normal text-[0.75rem] leading-[1rem]"
+              : "flex justify-between items-center pb-3 pt-2 border-b border-border text-black font-normal text-[0.75rem] leading-[1rem]"
+          }`}
+        >
+          <p>{status}</p>
+          <div
+            className={`${
+              training === status
+                ? "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-blue"
+                : "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-border"
+            }`}
+          >
+            <button
+              type="button"
+              name={status}
+              data-name={status}
+              onClick={handleTrainingToggle}
+              className={`${
+                training === status
+                  ? "bg-blue rounded-full w-3 h-3"
+                  : "bg-gray-300 rounded-full w-3 h-3"
+              }`}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  ));
+
+  const handleOnboardingToggle = (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
+  ) => {
+    const statuss = e.currentTarget.getAttribute("data-name");
+    if (statuss) {
+      setInputsss((prev) => ({
+        ...prev,
+        status: statuss,
+      }));
+      setOnboarding(statuss);
+    }
+  };
+
+  const OnboardingStatusButtons = ["Onboarding Pending", "Onboarding Complete"];
+
+  const onboardingComp = OnboardingStatusButtons.map((status, key) => (
+    <div key={key} className="flex flex-col">
+      <div className="text-sm text-black">
+        <div
+          data-name={status}
+          onClick={handleOnboardingToggle}
+          className={`${
+            key === OnboardingStatusButtons.length - 1
               ? "flex justify-between items-center pb-2 pt-2 text-black font-normal text-[0.75rem] leading-[1rem]"
               : "flex justify-between items-center pb-3 pt-2 border-b border-border text-black font-normal text-[0.75rem] leading-[1rem]"
           }`}
@@ -89,7 +138,7 @@ function TrainAndOnboard() {
               type="button"
               name={status}
               data-name={status}
-              onClick={handleToggle}
+              onClick={handleOnboardingToggle}
               className={`${
                 onboarding === status
                   ? "bg-blue rounded-full w-3 h-3"
@@ -141,13 +190,22 @@ function TrainAndOnboard() {
                 <div className="mt-4 flex flex-col gap-4">
                   <div className="flex flex-col gap-1">
                     <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                      Trainig Status
+                    </p>
+                    <div className="border border-border p-2 rounded-lg">
+                      {TrainingComp}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                       Onboarding Status
                     </p>
                     <div className="border border-border p-2 rounded-lg">
-                      {statusComp}
+                      {onboardingComp}
                     </div>
                   </div>
-                  {onboarding === "Training Pending" ? (
+                  {training === "Training Pending" ||
+                  onboarding === "Onboarding Pending" ? (
                     <NextFollowup />
                   ) : (
                     <div className="flex flex-col gap-1">
@@ -164,15 +222,7 @@ function TrainAndOnboard() {
                       />
                     </div>
                   )}
-                  <div>
-                    <Button
-                      type="button"
-                      name="Submit"
-                      onClick={handleSubmit}
-                      data-name=""
-                      className="text-[1rem] font-semibold leading-[1.5rem] w-72 h-12 rounded-lg shadow-xl  bg-gradient-to-r from-[rgba(21,79,187,1)] to-[rgba(28,73,151,1)] text-white"
-                    />
-                  </div>
+                  <Submit onClick={handleSubmit} />
                 </div>
               </div>
             </div>

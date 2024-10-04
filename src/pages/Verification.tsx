@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import Button from "../components/Button";
 import Navbar from "./Navbar";
 import Input from "../components/Input";
 import cam from "../images/camera.svg";
@@ -12,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.module.css";
 import { useDispatch } from "react-redux";
 import NextFollowup from "./NextFollowup";
 import { setInputs } from "../redux/inputSlice";
+import Submit from "../components/Submit";
 
 function Verification() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -83,8 +83,6 @@ function Verification() {
       setFile(selectedFile.name);
     }
   };
-
-  const handleChange = () => {};
 
   const handleToggle = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
@@ -305,22 +303,14 @@ function Verification() {
                         <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                           Flex Dimensions
                         </p>
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            name="L"
-                            onChange={handleChange}
-                            value="L"
-                            className=" border border-border leading-[1.25rem] font-normal text-[1rem] py-2 px-4 rounded-lg w-[50%]"
-                          />
-                          <input
-                            type="text"
-                            name="H"
-                            onChange={handleChange}
-                            value="H"
-                            className=" border border-border leading-[1.25rem] font-normal text-[1rem] py-2 px-4 rounded-lg w-[50%]"
-                          />
-                        </div>
+                        <Input
+                          type="text"
+                          name=""
+                          value=""
+                          placeholder=""
+                          onChange={handleVerFields}
+                          className="h-24 w-full pl-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg "
+                        />
                       </div>
                       <div className="flex flex-col gap-1">
                         <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
@@ -378,15 +368,7 @@ function Verification() {
                       />
                     </div>
                   )}
-                  <div>
-                    <Button
-                      type="button"
-                      name="Submit"
-                      onClick={handleSubmit}
-                      data-name=""
-                      className="text-[1rem] font-semibold leading-[1.5rem] w-72 h-12 rounded-lg shadow-xl  bg-gradient-to-r from-[rgba(21,79,187,1)] to-[rgba(28,73,151,1)] text-white"
-                    />
-                  </div>
+                  <Submit onClick={handleSubmit} />
                 </div>
               </div>
             </div>
