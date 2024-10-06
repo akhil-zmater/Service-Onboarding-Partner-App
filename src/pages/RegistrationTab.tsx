@@ -12,6 +12,8 @@ import { setInputs } from "../redux/inputSlice";
 import loc from "../images/loc.svg";
 import Submit from "../components/Submit";
 import Maps from "./Maps";
+import { useAppSelector } from "../state";
+import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
 
 interface RegistrationTabProps {
   status: (newStatus: string, btnName: string) => void;
@@ -21,6 +23,7 @@ export default function RegistrationTab(props: RegistrationTabProps) {
   const { status } = props;
 
   const dispatch = useDispatch();
+  const activeSCDetails = useAppSelector(getActiveScDetails);
   const [showMain, setShowMain] = useState(false);
   const [onboarding, setOnbarding] = useState<string | null>(null);
   const [subscription, setSubscription] = useState<string | null>("");
@@ -209,10 +212,11 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                     <Input
                       type="text"
                       name="sales_rep_id"
-                      value={inputs.sales_rep_id}
+                      value={activeSCDetails?.salesRepId as string}
                       placeholder=""
                       onChange={handleRegFields}
                       className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
+                      isReadOnly={true}
                     />
                   </div>
                   <div className="flex flex-col gap-1">
@@ -222,10 +226,11 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                     <Input
                       type="text"
                       name="service_center_phone"
-                      value={inputs.service_center_phone}
+                      value={activeSCDetails?.phoneNumber as string}
                       placeholder=""
                       onChange={handleRegFields}
                       className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
+                      isReadOnly={true}
                     />
                   </div>
                   <div className="flex flex-col gap-1">
@@ -235,10 +240,11 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                     <Input
                       type="text"
                       name="service_center_name"
-                      value={inputs.service_center_name}
+                      value={activeSCDetails?.serviceCenterName as string}
                       placeholder=""
                       onChange={handleRegFields}
                       className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
+                      isReadOnly={true}
                     />
                   </div>
                   <div className="flex flex-col gap-1">
@@ -248,10 +254,11 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                     <Input
                       type="text"
                       name="service_center_owner"
-                      value={inputs.service_center_owner}
+                      value={activeSCDetails?.serviceCenterOwnerName as string}
                       placeholder=""
                       onChange={handleRegFields}
                       className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
+                      isReadOnly={true}
                     />
                   </div>
                   <div className="flex flex-col gap-1">
@@ -266,10 +273,11 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                       <Input
                         type="text"
                         name="service_center_location"
-                        value={inputs.service_center_location}
+                        value={activeSCDetails?.serviceCenterAddress as string}
                         placeholder=""
                         onChange={handleRegFields}
                         className="outline-none w-full"
+                        isReadOnly={true}
                       />
                     </div>
                     {showMap && (
@@ -278,7 +286,8 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                       </div>
                     )}
                   </div>
-                  <div className="flex flex-col gap-1">
+
+                  {/* <div className="flex flex-col gap-1"> // Service centerPhoto
                     <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                       Service Center Photo
                     </p>
@@ -314,7 +323,8 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                         </div>
                       )}
                     </div>
-                  </div>
+                  </div> */}
+
                   <div className="flex flex-col gap-1">
                     <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                       Onboarding Status
