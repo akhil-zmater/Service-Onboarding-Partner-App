@@ -1,84 +1,112 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import logo from "../images/logo.svg";
 import Input from "../components/Input";
 import Main from "./Main";
-import { useDispatch } from "react-redux";
 import { setInputs } from "../redux/inputSlice";
-import axios from "axios";
+
 import FollowUps from "./FollowUps";
 import open from "../images/open.svg";
+import { useAppDispatch, useAppSelector } from "../state";
+import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
+import { getSCDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
 
 function Home() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [showMain, setShowMain] = useState(false);
   const [showFollowUps, setShowFollowUps] = useState(false);
-  const [inputs, setInputsss] = useState({
-    phone: "",
-    sales_rep_id: "",
-    service_center_name: "",
-    service_center_owner: "",
-    service_center_phone: "",
-    service_center_location: "",
-    status: "",
-    additional_comments: "",
-    verifier_name: "",
-    transaction_id: "",
-    verifier_comments: "",
-    photographer_name: "",
-    technician_name: "",
-    installation_comments: "",
-    subscription_type: null,
-  });
-  const handleSubmit = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (inputs.phone.length === 10) {
-      dispatch(setInputs({ phone: inputs.phone }));
+  const [mobileNumber, setMobileNumber] = useState<string>("");
+  // const [inputs, setInputsss] = useState({
+  //   phone: "",
+  //   sales_rep_id: "",
+  //   service_center_name: "",
+  //   service_center_owner: "",
+  //   service_center_phone: "",
+  //   service_center_location: "",
+  //   status: "",
+  //   additional_comments: "",
+  //   verifier_name: "",
+  //   transaction_id: "",
+  //   verifier_comments: "",
+  //   photographer_name: "",
+  //   technician_name: "",
+  //   installation_comments: "",
+  //   subscription_type: null,
+  // });
+
+  // const handleSubmit = (e: React.MouseEvent<HTMLDivElement>) => {
+  //   console.log("mobileNumber====>>", mobileNumber);
+  //   // if (inputs.phone.length === 10) {
+  //   //   console.log("inputss===>>", inputs.phone);
+  //   //   // dispatch(setInputs({ phone: inputs.phone }));
+  //   //   setShowMain(true);
+  //   // } else {
+  //   //   alert("Please Enter Valid Phone Number");
+  //   // }
+  // };
+  const { success } = useAppSelector(getSCDetailsLoadingState);
+
+  React.useEffect(() => {
+    if (success) {
       setShowMain(true);
+    }
+  }, [success]);
+
+  const handleSubmit = () => {
+    if (mobileNumber.length === 10) {
+      console.log("mobileNumber===>>", mobileNumber);
+      dispatch(
+        serviceCenterActions.getScDetailsByMobileNum({
+          mobileNumber: mobileNumber,
+        })
+      );
     } else {
       alert("Please Enter Valid Phone Number");
     }
   };
 
-  useEffect(() => {
-    const url = "http://localhost:3000/service_center";
-    axios
-      .post(url, {
-        phone: inputs.phone,
-        sales_rep_id: inputs.sales_rep_id,
-        service_center_phone: inputs.service_center_phone,
-        service_center_name: inputs.service_center_name,
-        service_center_owner: inputs.service_center_owner,
-        service_center_location: inputs.service_center_location,
-        additional_comments: inputs.additional_comments,
-        service_center_photo: "",
-        status: "",
-        verifier_appointment_date: "",
-        next_follow_up_date: "",
-        customer_comments: "",
-        verifier_name: inputs.verifier_name,
-        transaction_id: inputs.transaction_id,
-        verifier_comments: inputs.verifier_comments,
-        verification_date: "",
-        verifier_selfie: "",
-        photography_date: "",
-        flex_dimensions: "",
-        photographer_name: inputs.photographer_name,
-        flex_installation_appointment_date: "",
-        technician_name: inputs.technician_name,
-        installation_date: "",
-        installation_comments: inputs.installation_comments,
-        installation_pics: "",
-        training_status: "",
-      })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
-  }, [inputs]);
+  // useEffect(() => {
+  //   const url = "http://localhost:3000/service_center";
+  //   axios
+  //     .post(url, {
+  //       phone: inputs.phone,
+  //       sales_rep_id: inputs.sales_rep_id,
+  //       service_center_phone: inputs.service_center_phone,
+  //       service_center_name: inputs.service_center_name,
+  //       service_center_owner: inputs.service_center_owner,
+  //       service_center_location: inputs.service_center_location,
+  //       additional_comments: inputs.additional_comments,
+  //       service_center_photo: "",
+  //       status: "",
+  //       verifier_appointment_date: "",
+  //       next_follow_up_date: "",
+  //       customer_comments: "",
+  //       verifier_name: inputs.verifier_name,
+  //       transaction_id: inputs.transaction_id,
+  //       verifier_comments: inputs.verifier_comments,
+  //       verification_date: "",
+  //       verifier_selfie: "",
+  //       photography_date: "",
+  //       flex_dimensions: "",
+  //       photographer_name: inputs.photographer_name,
+  //       flex_installation_appointment_date: "",
+  //       technician_name: inputs.technician_name,
+  //       installation_date: "",
+  //       installation_comments: inputs.installation_comments,
+  //       installation_pics: "",
+  //       training_status: "",
+  //     })
+  //     .then((res) => console.log(res.data))
+  //     .catch((err) => console.log(err));
+  // }, [inputs]);
 
-  const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (inputs.phone.length <= 9) {
-      const { name, value } = e.target;
-      setInputsss({ ...inputs, [name]: value });
-    }
-  };
+  // const handlePhone = (e: ChangeEvent<HTMLInputElement>) => {
+  //   console.log("details===>>>", e.target.value);
+  //   setMobileNumber(e.target.value);
+  // if (inputs.phone.length <= 9) {
+  //   const { name, value } = e.target;
+  //   setInputsss({ ...inputs, [name]: value });
+  // }
+  // };
 
   const handleFollowUps = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
@@ -130,9 +158,11 @@ function Home() {
                   <Input
                     type="number"
                     name="phone"
-                    value={inputs.phone}
+                    value={mobileNumber}
                     placeholder="Enter Phone Number"
-                    onChange={handlePhone}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      setMobileNumber(e.target.value);
+                    }}
                     className="focus:outline-none"
                     maxLength={10}
                   />

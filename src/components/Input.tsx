@@ -8,6 +8,7 @@ type InputProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className: string;
   maxLength?: number;
+  isReadOnly?: boolean;
 };
 
 function Input(props: InputProps) {
@@ -20,6 +21,7 @@ function Input(props: InputProps) {
       onChange={props.onChange}
       className={props.className}
       maxLength={props.maxLength}
+      readOnly={props.isReadOnly}
     />
   );
 }

@@ -12,8 +12,11 @@ import Maps from "./Maps";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import Home from "./Home";
+import { useAppSelector } from "../state";
+import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
 
 function Main() {
+  const activeScDetails = useAppSelector(getActiveScDetails);
   const [showRegistration, setShowRegistration] = useState(false);
   const [showVerification, setShowVerification] = useState(false);
   const [showFlexInstall, setShowFlexInstall] = useState(false);
@@ -59,9 +62,9 @@ function Main() {
       }
     };
 
-  const currDate = new Date();
+  const registeredDate = new Date(activeScDetails?.registeredDate as string);
 
-  const formattedDate = currDate.toLocaleDateString("en-GB", {
+  const formattedDate = registeredDate.toLocaleDateString("en-GB", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -93,35 +96,35 @@ function Main() {
     }
   };
 
-  useEffect(() => {
-    console.log(status);
-    let resColor = "text-background";
-    let resFont = "Not Started";
+  // useEffect(() => {
+  //   console.log(status);
+  //   let resColor = "text-background";
+  //   let resFont = "Not Started";
 
-    if (
-      inputs.status === "Registered" ||
-      inputs.status === "Approved" ||
-      inputs.status === "Photography Complete" ||
-      inputs.status === "Flex Installation Complete" ||
-      inputs.status === "Training & Onboarding Complete"
-    ) {
-      resColor = "text-green";
-      resFont = "Completed";
-    } else if (
-      inputs.status === "Follow Up" ||
-      inputs.status === "Training Pending" ||
-      inputs.status === "Onboarding Pendning" ||
-      inputs.status === "Flex Installation Pending" ||
-      inputs.status === "Photography Pending" ||
-      inputs.status === "Verification Pending"
-    ) {
-      resColor = "text-yellow";
-      resFont = "Pending";
-    }
+  //   if (
+  //     inputs.status === "Registered" ||
+  //     inputs.status === "Approved" ||
+  //     inputs.status === "Photography Complete" ||
+  //     inputs.status === "Flex Installation Complete" ||
+  //     inputs.status === "Training & Onboarding Complete"
+  //   ) {
+  //     resColor = "text-green";
+  //     resFont = "Completed";
+  //   } else if (
+  //     inputs.status === "Follow Up" ||
+  //     inputs.status === "Training Pending" ||
+  //     inputs.status === "Onboarding Pendning" ||
+  //     inputs.status === "Flex Installation Pending" ||
+  //     inputs.status === "Photography Pending" ||
+  //     inputs.status === "Verification Pending"
+  //   ) {
+  //     resColor = "text-yellow";
+  //     resFont = "Pending";
+  //   }
 
-    setResClass(resColor);
-    setResText(resFont);
-  }, [inputs.status, status]);
+  //   setResClass(resColor);
+  //   setResText(resFont);
+  // }, [inputs.status, status]);
 
   console.log("resClass:", resClass);
   console.log("resText:", resText);
@@ -147,26 +150,24 @@ function Main() {
               <Navbar onClick={handleHome} />
               <div className="ml-[0.7rem] mt-[1.2rem] mr-[0.5rem]">
                 <h1 className="text-black text-[1.1rem] font-medium leading-[1.7rem]">
-                  A1 Car Service Center
+                  {activeScDetails?.serviceCenterName}
                 </h1>
                 <div className="flex flex-col gap-[0.25rem] mt-[0.3rem]">
                   <div className="flex gap-1 text-xs font-normal leading-[1rem] text-[1rem]">
-                    <p className="text-background pl-[0.32rem] ">
-                      Owner Name:
-                    </p>
+                    <p className="text-background pl-[0.32rem] ">Owner Name:</p>
                     <span className="font-normal text-black leading-[1rem]  ">
-                      {inputs.service_center_owner}
+                      {activeScDetails?.serviceCenterOwnerName}
                     </span>
                   </div>
                   <div className=" flex items-center gap-2">
                     <div className="flex items-center">
                       <img src={phone} alt="" className="w-6 h-6" />
                       <a
-                        href={`tel: ${inputs.phone}`}
+                        href={`tel: ${activeScDetails?.phoneNumber}`}
                         className="hidden"
                         ref={phoneRef}
                       >
-                        {inputs.phone}
+                        {activeScDetails?.phoneNumber}
                       </a>
                       <p
                         onClick={handleCallClick}
@@ -175,20 +176,20 @@ function Main() {
                         Call
                       </p>
                     </div>
-                    <div className="flex items-center w-max">
+                    {/* <div className="flex items-center w-max">
                       <img src={mapii} alt="" className="w-6 h-6" />
                       <p
                         onClick={handleMaps}
                         className="underline text-blue text-[0.8rem] leading-[1rem] font-normal pb-[0.2rem]"
                       >
-                        {inputs.service_center_location}
+                        {scDetails.}
                       </p>
-                    </div>
-                    {showMap && (
+                    </div> */}
+                    {/* {showMap && (
                       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <Maps cross={handleCloseMap} />
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </div>
                 <div className="flex gap-1 text-[0.8rem] mt-[0.45rem] text-ipcol">
