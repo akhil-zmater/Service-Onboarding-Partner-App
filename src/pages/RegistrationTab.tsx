@@ -14,6 +14,7 @@ import Submit from "../components/Submit";
 import Maps from "./Maps";
 import { useAppSelector } from "../state";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
+import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 
 interface RegistrationTabProps {
   status: (newStatus: string, btnName: string) => void;
@@ -25,63 +26,55 @@ export default function RegistrationTab(props: RegistrationTabProps) {
   const dispatch = useDispatch();
   const activeSCDetails = useAppSelector(getActiveScDetails);
   const [showMain, setShowMain] = useState(false);
-  const [onboarding, setOnbarding] = useState<string | null>(null);
+  // const [onboarding, setOnbarding] = useState<string | null>(null);
   const [subscription, setSubscription] = useState<string | null>("");
-  const [file, setFile] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  // const [file, setFile] = useState<string | null>(null);
+  // const inputRef = useRef<HTMLInputElement | null>(null);
   const [showMap, setShowMap] = useState(false);
   const [inputs, setInputsss] = useState({
-    phone: "",
-    sales_rep_id: "",
-    service_center_name: "",
-    service_center_owner: "",
-    service_center_phone: "",
-    service_center_location: "",
-    status: "",
     additional_comments: "",
-    verifier_name: "",
-    transaction_id: "",
-    verifier_comments: "",
-    photographer_name: "",
-    technician_name: "",
-    installation_comments: "",
+    followUpDate: "",
     subscription_type: "",
   });
+
+  const [state, setState] = React.useState<string>("");
 
   const handleRegFields = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInputsss({ ...inputs, [name]: value });
   };
 
-  const handleUpload = () => {
-    if (inputRef.current) inputRef.current.click();
-  };
+  // const handleUpload = () => {
+  //   if (inputRef.current) inputRef.current.click();
+  // };
 
-  const handleDelFile = () => {
-    setFile(null);
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
-  };
+  // const handleDelFile = () => {
+  //   setFile(null);
+  //   if (inputRef.current) {
+  //     inputRef.current.value = "";
+  //   }
+  // };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      setFile(selectedFile.name);
-    }
-  };
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const selectedFile = e.target.files?.[0];
+  //   if (selectedFile) {
+  //     setFile(selectedFile.name);
+  //   }
+  // };
 
   const handleToggle = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
   ) => {
     const statuss = e.currentTarget.getAttribute("data-name");
-    if (statuss) {
-      setInputsss((prev) => ({
-        ...prev,
-        status: statuss,
-      }));
-      setOnbarding(statuss);
-    }
+    setState(statuss as string);
+    console.log("toggle===>>", statuss);
+    // if (statuss) {
+    //   setInputsss((prev) => ({
+    //     ...prev,
+    //     status: statuss,
+    //   }));
+    //   setOnbarding(statuss);
+    // }
   };
 
   const handleSubscription = (
@@ -116,7 +109,7 @@ export default function RegistrationTab(props: RegistrationTabProps) {
           </p>
           <div
             className={`${
-              inputs.status === status
+              state === status
                 ? "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-blue"
                 : "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-border"
             }`}
@@ -127,7 +120,7 @@ export default function RegistrationTab(props: RegistrationTabProps) {
               data-name={status}
               onClick={handleToggle}
               className={`${
-                inputs.status === status
+                state === status
                   ? "bg-blue rounded-full w-3 h-3"
                   : "rounded-full w-3 h-3"
               }`}
@@ -146,22 +139,32 @@ export default function RegistrationTab(props: RegistrationTabProps) {
     year: "numeric",
   });
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (onboarding !== null && file !== null) {
+  const handleSubmit = () => {
+    if (state !== "") {
+      // dispatch(
+      //   setInputs({
+      //     sales_rep_id: inputs.sales_rep_id,
+      //     service_center_name: inputs.service_center_name,
+      //     service_center_owner: inputs.service_center_owner,
+      //     service_center_phone: inputs.service_center_phone,
+      //     service_center_location: inputs.service_center_location,
+      //     status: inputs.status,
+      //     additional_comments: inputs.additional_comments,
+      //     subscription_type: inputs.subscription_type,
+      //   })
+      // );
+      console.log("detailsss===>>", inputs, state);
       dispatch(
-        setInputs({
-          sales_rep_id: inputs.sales_rep_id,
-          service_center_name: inputs.service_center_name,
-          service_center_owner: inputs.service_center_owner,
-          service_center_phone: inputs.service_center_phone,
-          service_center_location: inputs.service_center_location,
-          status: inputs.status,
-          additional_comments: inputs.additional_comments,
-          subscription_type: inputs.subscription_type,
+        serviceCenterActions.postSCDetails({
+          registrationStatus:
+            state === "Follow Up" ? "Followup" : (state as string),
+          salesRepId: "BW102401",
+          comments: inputs.additional_comments,
+          subscriptionType: inputs.subscription_type,
         })
       );
       setShowMain(true);
-      status(onboarding, "Registration");
+      // status(onboarding, "Registration");
     } else {
       alert("Please Fill All Input Fields");
     }
@@ -333,13 +336,12 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                       {statusComp}
                     </div>
                   </div>
-                  {onboarding === "Registered" && (
+                  {state === "Registered" && (
                     <div className="flex flex-col gap-1">
                       <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                         Subscription Type
                       </p>
                       <div className="border border-border p-2 rounded-lg">
-                        {/*  */}
                         <div className="flex flex-col">
                           <div className="text-sm text-black">
                             <div
@@ -399,7 +401,7 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                       </div>
                     </div>
                   )}
-                  {onboarding === "Follow Up" ? (
+                  {state === "Follow Up" ? (
                     <NextFollowup />
                   ) : (
                     <div className="flex flex-col gap-1">
