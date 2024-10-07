@@ -3,11 +3,19 @@ import Input from "../components/Input";
 import logo from "../images/logo.svg";
 import Home from "./Home";
 import Submit from "../components/Submit";
-import axios from "axios";
-// import axios from "axios";
+import { useAppDispatch, useAppSelector } from "../state";
+import { AddLoginDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
+import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 
 function Login() {
   const [showHome, setShowHome] = useState(false);
+  const dispatch = useAppDispatch();
+  const { success } = useAppSelector(AddLoginDetailsLoadingState);
+  React.useEffect(() => {
+    if (success) {
+      setShowHome(true);
+    }
+  }, [success]);
   const [login, setLogin] = useState({
     id: "",
     password: "",
@@ -18,33 +26,14 @@ function Login() {
     setLogin((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // const url = "https://gateway-dev.thevehicle.app/internal/user/login";
-    // const headers = {
-    //   Authorization:
-    //     "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTE2MzAzOTQzMzgyIiwiUk9MRSI6IntcInVzZXJJZFwiOlwiM1wiLFwidXNlclJvbGVcIjpcIlVTRVJfU0VSVklDRV9DRU5URVJfT1dORVJcIixcInNlcnZpY2VDZW50ZXJJZFwiOlwiMlwiLFwidGVjaG5pY2lhbklkXCI6XCIyXCIsXCJvbkJvYXJkaW5nQ29tcGxldGVGbGFnXCI6dHJ1ZSxcInZlcmljYXRpb25TdGF0dXNcIjpcIkFQUFJPVkVEXCIsXCJhcHBsaWNhdGlvbklkXCI6XCIyXCIsXCJib29raW5nTWFuYWdlclwiOnRydWV9IiwiVVNFUklEIjoiMyIsIlpNQVRFUl9JTlRFUk5BTF9TRVNTSU9OIjoiL0VVTUpaaVRDRGI1TEVYMVptaW8vQTFqcXlhdXB2OVhoaE5zZ0owbnZsUUk1eFRxNnFmZkVJVXU2WUk2TG1WMGlIeWVmMkhSTFpkYS9UcGljaHFPV3ZLVXpCR0ZrZ3U3RXpOTjc5UlBFQzQ9IiwiaWF0IjoxNzI4MDQ4MjQ2LCJleHAiOjE3NTk2MDU4NDZ9.StKfwXR3hMVJPUzgkYVqhv_6OwEgWxjk15VvamIKKPAmCkPIjimex5dX_JqHrnVggY6Q8p_NzsSErNk5Tjowcw",
-    // };
-    // axios
-    //   .post(
-    //     url,
-    //     {
-    //       employeeId: login.id,
-    //       password: login.password,
-    //       termsAndConditions: true,
-    //     },
-    //     { headers }
-    //   )
-    //   .then((res) => {
-    //     console.log(res.data);
-    if (login.id === "" || login.password === "") {
-      setIncorrect(true);
-    } else {
-      setShowHome(true);
-    }
-    // })
-    // .catch((err) => {
-    //   setIncorrect(true);
-    //   console.log("Incorrect Login Details");
-    // });
+    dispatch(
+      serviceCenterActions.addLoginDetails({
+        employeeId: login.id,
+        password: login.password,
+        termsAndConditions: true,
+      })
+    );
+    // setShowHome(true);
   };
 
   return (
