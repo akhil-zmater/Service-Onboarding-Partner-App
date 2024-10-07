@@ -35,11 +35,12 @@ function Login() {
     //   )
     //   .then((res) => {
     //     console.log(res.data);
-    if (login.id === "" || login.password === "") {
-      setIncorrect(true);
-    } else {
-      setShowHome(true);
-    }
+
+    // if (login.id === "" || login.password === "") {
+    //   setIncorrect(true);
+    // } else {
+    setShowHome(true);
+
     // })
     // .catch((err) => {
     //   setIncorrect(true);

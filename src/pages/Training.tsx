@@ -4,33 +4,45 @@ import Navbar from "./Navbar";
 import Main from "./Main";
 import NextFollowup from "./NextFollowup";
 import Submit from "../components/Submit";
+import { useAppDispatch, useAppSelector } from "../state";
+import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
+import { PTOStatusEnum } from "../state/serviceCenter/servicCenter.types";
+import { AddTrainingDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
 
 function TrainAndOnboard() {
   const [showMain, setShowMain] = useState(false);
+  const dispatch = useAppDispatch();
+  const { success } = useAppSelector(AddTrainingDetailsLoadingState);
+  React.useEffect(() => {
+    if (success) {
+      setShowMain(true);
+    }
+  }, [success]);
+  const TrainingStatusButtons = ["Training Pending", "Training Complete"];
   const [inputs, setInputsss] = useState({
-    phone: "",
-    sales_rep_id: "",
-    service_center_name: "",
-    service_center_owner: "",
-    service_center_phone: "",
-    service_center_location: "",
     status: "",
     additional_comments: "",
-    verifier_name: "",
-    transaction_id: "",
-    verifier_comments: "",
-    photographer_name: "",
-    technician_name: "",
-    installation_comments: "",
-    subscription_type: null,
   });
-  const [training, setTraining] = useState<string | null>("Training Pending");
+  const [training, setTraining] = useState<string | null>();
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInputsss({ ...inputs, [name]: value });
   };
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setShowMain(true);
+    console.log("details====>>", inputs);
+    if (inputs.status !== "") {
+      dispatch(
+        serviceCenterActions.addTrainingDetails({
+          comments: inputs.additional_comments,
+          repId: "BW102401",
+          status:
+            inputs.status === "Training Complete"
+              ? PTOStatusEnum.COMPLETE
+              : PTOStatusEnum.PENDING,
+          isFollowUpClicked: inputs.status === "Training Pending",
+        })
+      );
+    }
   };
 
   const handleTrainingToggle = (
@@ -45,8 +57,6 @@ function TrainAndOnboard() {
       setTraining(statuss);
     }
   };
-
-  const TrainingStatusButtons = ["Training Pending", "Training Complete"];
 
   const TrainingComp = TrainingStatusButtons.map((status, key) => (
     <div key={key} className="flex flex-col">
@@ -139,7 +149,7 @@ function TrainAndOnboard() {
                       </p>
                       <Input
                         type="text"
-                        name="comments"
+                        name="additional_comments"
                         value={inputs.additional_comments}
                         placeholder=""
                         onChange={handleInput}
