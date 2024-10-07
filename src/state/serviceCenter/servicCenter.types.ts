@@ -3,18 +3,17 @@ import { LoadingStateType } from "../common/common.types";
 export interface ServiceCenterStateTypes {
   activeSCDetails: GetSCDetailsResponse | null;
   scLoadingStates: ScLoadingStates;
-
   addFollowUpDetails: postScDetailsFollowUp;
 }
 export interface ScLoadingStates {
   getSCDetailsLoadingState: LoadingStateType;
   postSCDetailsLoadingState: LoadingStateType;
   addVerificationDetailsLoadingState: LoadingStateType;
-
+  addFlexDetailsLoadingState: LoadingStateType;
+  addPhotoGrapghyDetailsLoadingState: LoadingStateType;
 }
 export interface ScLoadingStates {
   getSCDetailsLoadingState: LoadingStateType;
-
 }
 export interface GetSCDetailsByPhoneNoReqBody {
   mobileNumber: string;
@@ -76,8 +75,8 @@ export enum RegistrationStatusEnum {
   REJECT = "Reject",
 }
 export enum FlexInstallationEnum {
-  FLEX_INSTALLATION_COMPLETE = "FlexInstallationcomplete",
-  FLEX_INSTALLATION_PENDING = "flexInstallationPending",
+  FLEX_INSTALLATION_COMPLETE = "FlexInstallationComplete",
+  FLEX_INSTALLATION_PENDING = "FlexInstallationPending",
 }
 export enum VerificationStatusEnum {
   VERIFIED = "Verified",
@@ -87,7 +86,6 @@ export enum PTOStatusEnum {
   COMPLETE = "complete",
   PENDING = "pending",
 }
-
 
 export enum BtnTypes {
   REGISTRATION = "Registration",
@@ -130,13 +128,38 @@ export interface AddVerificationDetailsPayload {
   verifierName: string;
   verifierRepId: string;
   verificationStatus: string;
-  flexInstallationDate: string;
-  flexDimensions: string;
+  flexInstallationDate?: string;
+  flexDimensions?: string;
   comments: string;
+  isFollowUpClicked?: boolean;
 }
 
 export interface AddVerificationDetailsReqBody
   extends AddVerificationDetailsPayload {
   phoneNumber: string;
+  followup?: postScDetailsFollowUp | null;
 }
 
+export interface AddFlexDetailsPayload {
+  repId: string;
+  status: string;
+  comments: string;
+  isFollowUpClicked?: boolean;
+}
+
+export interface AddFlexDetailsReqBody extends AddFlexDetailsPayload {
+  phoneNumber: string;
+  followup: postScDetailsFollowUp | null;
+}
+
+export interface AddPhotoGraphyDetalsPayload {
+  repId: string;
+  status: string;
+  comments: string;
+  isFollowUpClicked?: boolean;
+}
+export interface AddPhotoGraphyDetalsreqBody
+  extends AddPhotoGraphyDetalsPayload {
+  phoneNumber: string;
+  followup: postScDetailsFollowUp | null;
+}

@@ -1,26 +1,41 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import * as serviceCenterType from "./servicCenter.types";
-import { loadingState } from "../common/common.values";
+import { resetLoadingState } from "../common/common.values";
 import { LoadingStateType } from "../common/common.types";
 const initialState: serviceCenterType.ServiceCenterStateTypes = {
   activeSCDetails: null,
   scLoadingStates: {
-    getSCDetailsLoadingState: loadingState,
-
-    postSCDetailsLoadingState: loadingState,
-    addVerificationDetailsLoadingState: loadingState,
+    getSCDetailsLoadingState: resetLoadingState,
+    postSCDetailsLoadingState: resetLoadingState,
+    addVerificationDetailsLoadingState: resetLoadingState,
+    addFlexDetailsLoadingState: resetLoadingState,
+    addPhotoGrapghyDetailsLoadingState: resetLoadingState,
   },
   addFollowUpDetails: {
     followUpDate: "",
     reason: "",
-
   },
 };
 const serviceCenterSlice = createSlice({
   name: "serviceCenterSlice",
   initialState,
   reducers: {
-
+    //addPhotographyDetails
+    setAddPhotographyDetailsLoadingState: (
+      state,
+      action: PayloadAction<LoadingStateType>
+    ) => {
+      state.scLoadingStates.addPhotoGrapghyDetailsLoadingState = {
+        ...action.payload,
+      };
+    },
+    //addFlexDetails
+    setAddFlexDetailsLoadingState: (
+      state,
+      action: PayloadAction<LoadingStateType>
+    ) => {
+      state.scLoadingStates.addFlexDetailsLoadingState = { ...action.payload };
+    },
     //addVerification
     setAddVerificationDetailsLoadingState: (
       state,
@@ -52,7 +67,6 @@ const serviceCenterSlice = createSlice({
       state.scLoadingStates.getSCDetailsLoadingState = { ...action.payload };
     },
 
-
     //post_scDeatils
     setPostSCDetailsLoadingState: (
       state,
@@ -60,7 +74,15 @@ const serviceCenterSlice = createSlice({
     ) => {
       state.scLoadingStates.postSCDetailsLoadingState = { ...action.payload };
     },
-
+    resetSCloadingStates: (state) => {
+      state.scLoadingStates.getSCDetailsLoadingState = resetLoadingState;
+      state.scLoadingStates.postSCDetailsLoadingState = resetLoadingState;
+      state.scLoadingStates.addVerificationDetailsLoadingState =
+        resetLoadingState;
+      state.scLoadingStates.addFlexDetailsLoadingState = resetLoadingState;
+      state.scLoadingStates.addPhotoGrapghyDetailsLoadingState =
+        resetLoadingState;
+    },
   },
 });
 export const { actions: scActions, reducer: scReducer } = serviceCenterSlice;

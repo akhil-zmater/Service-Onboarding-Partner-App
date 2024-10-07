@@ -9,4 +9,7 @@ export const getFollowUpDetails = (state: RootState) =>
   state.serviceCenter.addFollowUpDetails;
 export const AddVerificationDetailsLoadingState = (state: RootState) =>
   state.serviceCenter.scLoadingStates.addVerificationDetailsLoadingState;
-
+export const AddFlexDetailsLoadingState = (state: RootState) =>
+  state.serviceCenter.scLoadingStates.addFlexDetailsLoadingState;
+export const AddPhotoGraphyDetailsLoadingState = (state: RootState) =>
+  state.serviceCenter.scLoadingStates.addPhotoGrapghyDetailsLoadingState;
