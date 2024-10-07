@@ -39,4 +39,6 @@ export const END_POINTS = {
     END_POINT_BASE + "/service/service-center/verification",
   addFlexDetails: END_POINT_BASE + "/service/service-center/flex",
   addPhotoDetails: END_POINT_BASE + "/service/service-center/photography",
+  addTrainingDetails: END_POINT_BASE + "/service/service-center/training",
+  addOnboardingDetails: END_POINT_BASE + "/service/service-center/onboard",
 };

@@ -12,8 +12,10 @@ const initialState: serviceCenterType.ServiceCenterStateTypes = {
     addFlexDetailsLoadingState: resetLoadingState,
     addPhotoGrapghyDetailsLoadingState: resetLoadingState,
     postLoginDetailsLoadingState: resetLoadingState,
+    addTrainingDetailsLoadingState: resetLoadingState,
+    addOnBoardingDetailsLoadingState: resetLoadingState,
   },
- 
+
   addFollowUpDetails: {
     followUpDate: "",
     reason: "",
@@ -23,6 +25,24 @@ const serviceCenterSlice = createSlice({
   name: "serviceCenterSlice",
   initialState,
   reducers: {
+    //addOnBoarding details
+    setAddOnboardingDetailsLoadingState: (
+      state,
+      action: PayloadAction<LoadingStateType>
+    ) => {
+      state.scLoadingStates.addOnBoardingDetailsLoadingState = {
+        ...action.payload,
+      };
+    },
+    //addTrainingDetails
+    setAddTrainingDetailsLoadingState: (
+      state,
+      action: PayloadAction<LoadingStateType>
+    ) => {
+      state.scLoadingStates.addTrainingDetailsLoadingState = {
+        ...action.payload,
+      };
+    },
     //addPhotographyDetails
     setAddPhotographyDetailsLoadingState: (
       state,
@@ -88,13 +108,12 @@ const serviceCenterSlice = createSlice({
     },
 
     setPostLoginDetailsLoadingState: (
-      state, action : PayloadAction<LoadingStateType>
+      state,
+      action: PayloadAction<LoadingStateType>
     ) => {
       state.scLoadingStates.postLoginDetailsLoadingState = {...action.payload}
     },
-   
-
-    setAddLoginDetails:(state,action:PayloadAction<serviceCenterType.postLoginDetailsResponse>)=>{
+     setAddLoginDetails:(state,action:PayloadAction<serviceCenterType.postLoginDetailsResponse>)=>{
       state.addLoginDetails=action.payload
     }
   },

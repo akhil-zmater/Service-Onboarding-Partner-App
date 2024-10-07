@@ -4,26 +4,25 @@ import Input from "../components/Input";
 import NextFollowup from "./NextFollowup";
 import Navbar from "./Navbar";
 import Main from "./Main";
+import { useAppDispatch, useAppSelector } from "../state";
+import { AddOnboadingDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
+import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
+import { PTOStatusEnum } from "../state/serviceCenter/servicCenter.types";
 
 function Onboarding() {
   const [showMain, setShowMain] = useState(false);
   const [onboarding, setOnboarding] = useState<string | null>("");
+  const OnboardingStatusButtons = ["Onboarding Pending", "Onboarding Complete"];
+  const dispatch = useAppDispatch();
+  const { success } = useAppSelector(AddOnboadingDetailsLoadingState);
+  React.useEffect(() => {
+    if (success) {
+      setShowMain(true);
+    }
+  }, [success]);
   const [inputs, setInputsss] = useState({
-    phone: "",
-    sales_rep_id: "",
-    service_center_name: "",
-    service_center_owner: "",
-    service_center_phone: "",
-    service_center_location: "",
     status: "",
     additional_comments: "",
-    verifier_name: "",
-    transaction_id: "",
-    verifier_comments: "",
-    photographer_name: "",
-    technician_name: "",
-    installation_comments: "",
-    subscription_type: null,
   });
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +31,18 @@ function Onboarding() {
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setShowMain(true);
+    // setShowMain(true);
+    dispatch(
+      serviceCenterActions.addOnBoardingDetails({
+        comments: inputs.additional_comments,
+        repId: "BW102403",
+        status:
+          inputs.status === "Onboarding Complete"
+            ? PTOStatusEnum.COMPLETE
+            : PTOStatusEnum.PENDING,
+        isFollowUpClicked: inputs.status === "Onboarding Pending",
+      })
+    );
   };
 
   const handleOnboardingToggle = (
@@ -47,8 +57,6 @@ function Onboarding() {
       setOnboarding(statuss);
     }
   };
-
-  const OnboardingStatusButtons = ["Onboarding Pending", "Onboarding Complete"];
 
   const onboardingComp = OnboardingStatusButtons.map((status, key) => (
     <div key={key} className="flex flex-col">
@@ -140,7 +148,7 @@ function Onboarding() {
                       </p>
                       <Input
                         type="text"
-                        name="comments"
+                        name="additional_comments"
                         value={inputs.additional_comments}
                         placeholder=""
                         onChange={handleInput}

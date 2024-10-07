@@ -190,18 +190,29 @@ function Main() {
         return StatusTypeEnum.NOT_STARTED;
       }
     } else if (btnName === BtnTypes.TRAINING) {
-      if (
-        activeScDetails?.trainingDetails !== null &&
-        activeScDetails?.onBoardingDetails !== null
-      ) {
+      if (activeScDetails?.trainingDetails !== null) {
         if (
-          activeScDetails?.trainingDetails?.status === PTOStatusEnum.COMPLETE &&
-          activeScDetails.onBoardingDetails?.status === PTOStatusEnum.COMPLETE
+          activeScDetails?.trainingDetails?.status === PTOStatusEnum.COMPLETE
         ) {
           return StatusTypeEnum.COMPLETED;
         } else if (
-          activeScDetails?.trainingDetails?.status === PTOStatusEnum.PENDING &&
-          activeScDetails.onBoardingDetails?.status === PTOStatusEnum.PENDING
+          activeScDetails?.trainingDetails?.status === PTOStatusEnum.PENDING
+        ) {
+          return StatusTypeEnum.PENDING;
+        } else {
+          return StatusTypeEnum.NOT_STARTED;
+        }
+      } else {
+        return StatusTypeEnum.NOT_STARTED;
+      }
+    } else if (btnName === BtnTypes.ONBOARDING) {
+      if (activeScDetails?.onBoardingDetails !== null) {
+        if (
+          activeScDetails?.onBoardingDetails?.status === PTOStatusEnum.COMPLETE
+        ) {
+          return StatusTypeEnum.COMPLETED;
+        } else if (
+          activeScDetails?.onBoardingDetails?.status === PTOStatusEnum.PENDING
         ) {
           return StatusTypeEnum.PENDING;
         } else {

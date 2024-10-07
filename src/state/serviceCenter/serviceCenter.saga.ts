@@ -124,9 +124,7 @@ const postLoginDetails = (body:scType.postLoginByDetailsBody) => {
 function* postLoginDetailsSaga(
   action: PayloadAction<scType.postLoginByDetailsBody>
 ) {
-
-
-  console.log(action.payload, "action.payloadd",);
+  console.log(action.payload, "action.payloadd");
 
   yield put(scStoreActions.setPostLoginDetailsLoadingState(loadingState));
 
@@ -136,7 +134,6 @@ function* postLoginDetailsSaga(
       action.payload
     );
     if (response.status === APPSTATES.SUCCESS) {
-
       console.log("resppp====>>>", response.data);
 
       yield put(scStoreActions.setAddLoginDetails(response.data));
@@ -333,6 +330,106 @@ function* addPhotographyDetailsSaga(
     );
   }
 }
+
+const addTrainingDetails = (body: scType.AddTrainingDetailsReqBody) => {
+  return HttpService({
+    method: EReqMethod.POST,
+    url: END_POINTS.addTrainingDetails,
+    body,
+  });
+};
+
+function* addTrainingDetailsSaga(
+  action: PayloadAction<scType.AddTrainingDetailsPayload>
+) {
+  try {
+    const { comments, repId, status, isFollowUpClicked } = action.payload;
+    const followUpdetails: scType.postScDetailsFollowUp = yield select(
+      getFollowUpDetails
+    );
+    const activeScDetails: scType.GetSCDetailsResponse = yield select(
+      getActiveScDetails
+    );
+    yield put(scStoreActions.setAddTrainingDetailsLoadingState(loadingState));
+
+    const details: scType.AddTrainingDetailsReqBody = {
+      comments,
+      followup: isFollowUpClicked ? followUpdetails : null,
+      phoneNumber: activeScDetails.phoneNumber,
+      repId,
+      status,
+    };
+
+    console.log("details IN Saga===>>>", details);
+    const resp: APIResponse<string> = yield call(addTrainingDetails, details);
+    if (resp.status === APPSTATES.SUCCESS) {
+      const payload = {
+        mobileNumber: activeScDetails.phoneNumber,
+      };
+      yield put({
+        type: scActionTypes.GET_SC_DETAILS_PHONENO,
+        payload: payload,
+      });
+      yield put(scStoreActions.setAddTrainingDetailsLoadingState(successState));
+    } else {
+      yield put(scStoreActions.setAddTrainingDetailsLoadingState(failureState));
+    }
+  } catch (error) {
+    console.log("Errorr===>>", error);
+    yield put(scStoreActions.setAddTrainingDetailsLoadingState(failureState));
+  }
+}
+
+const addOnboardingDetails = (body: scType.AddOnboadingDetailsReqBody) => {
+  return HttpService({
+    method: EReqMethod.POST,
+    url: END_POINTS.addOnboardingDetails,
+    body,
+  });
+};
+
+function* addOnBoardingDetailsSaga(
+  action: PayloadAction<scType.AddOnboadingDetailsPayload>
+) {
+  const { comments, repId, status, isFollowUpClicked } = action.payload;
+  try {
+    yield put(scStoreActions.setAddOnboardingDetailsLoadingState(loadingState));
+    const followUpdetails: scType.postScDetailsFollowUp = yield select(
+      getFollowUpDetails
+    );
+    const activeScDetails: scType.GetSCDetailsResponse = yield select(
+      getActiveScDetails
+    );
+    const details: scType.AddOnboadingDetailsReqBody = {
+      comments,
+      followup: isFollowUpClicked ? followUpdetails : null,
+      phoneNumber: activeScDetails.phoneNumber,
+      repId,
+      status,
+    };
+    console.log("onBoardingDetails====>>", details);
+    const resp: APIResponse<string> = yield call(addOnboardingDetails, details);
+    if (resp.status === APPSTATES.SUCCESS) {
+      const payload = {
+        mobileNumber: activeScDetails.phoneNumber,
+      };
+      yield put({
+        type: scActionTypes.GET_SC_DETAILS_PHONENO,
+        payload: payload,
+      });
+      yield put(
+        scStoreActions.setAddOnboardingDetailsLoadingState(successState)
+      );
+    } else {
+      yield put(
+        scStoreActions.setAddOnboardingDetailsLoadingState(failureState)
+      );
+    }
+  } catch (error) {
+    console.log("error==>>>", error);
+    yield put(scStoreActions.setAddOnboardingDetailsLoadingState(failureState));
+  }
+}
 export default function* watchServiceCenterActions() {
   yield takeLatest(scActionTypes.GET_SC_DETAILS_PHONENO, getSCDetailsSaga);
   yield takeLatest(scActionTypes.POST_SC_DETAILS, postSCDetailsSaga);
@@ -346,4 +443,9 @@ export default function* watchServiceCenterActions() {
     addPhotographyDetailsSaga
   );
   yield takeLatest(scActionTypes.POST_LOGIN_DETAILS,postLoginDetailsSaga)
+  yield takeLatest(scActionTypes.ADD_TRAINING_DETAILS, addTrainingDetailsSaga);
+  yield takeLatest(
+    scActionTypes.ADD_ONBOARDING_DETAILS,
+    addOnBoardingDetailsSaga
+  );
 }

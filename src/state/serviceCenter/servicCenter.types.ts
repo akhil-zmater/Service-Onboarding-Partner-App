@@ -14,7 +14,10 @@ export interface ScLoadingStates {
   addFlexDetailsLoadingState: LoadingStateType;
   addPhotoGrapghyDetailsLoadingState: LoadingStateType;
   postLoginDetailsLoadingState: LoadingStateType;
+  addTrainingDetailsLoadingState: LoadingStateType;
+  addOnBoardingDetailsLoadingState: LoadingStateType;
 }
+
 
 export interface postLoginByDetailsBody {
   employeeId: string;
@@ -35,6 +38,7 @@ export interface postLoginDetailsResponse {
   activeStatus: string;
   transactionId: string;
 }
+
 
 export interface GetSCDetailsByPhoneNoReqBody {
   mobileNumber: string;
@@ -113,7 +117,8 @@ export enum BtnTypes {
   VERIFICATION = "Verification",
   FLEX_INSTALLATION = "Flex Installation",
   PHOTOGRAPHY = "Photography",
-  TRAINING = "Training & Onboarding",
+  TRAINING = "Training",
+  ONBOARDING = "Onboarding",
 }
 export enum StatusTypeEnum {
   COMPLETED = "Completed",
@@ -181,6 +186,28 @@ export interface AddPhotoGraphyDetalsPayload {
 }
 export interface AddPhotoGraphyDetalsreqBody
   extends AddPhotoGraphyDetalsPayload {
+  phoneNumber: string;
+  followup: postScDetailsFollowUp | null;
+}
+
+export interface AddTrainingDetailsPayload {
+  repId: string;
+  status: string;
+  comments: string;
+  isFollowUpClicked?: boolean;
+}
+export interface AddTrainingDetailsReqBody extends AddTrainingDetailsPayload {
+  phoneNumber: string;
+  followup: postScDetailsFollowUp | null;
+}
+
+export interface AddOnboadingDetailsPayload {
+  repId: string;
+  status: string;
+  comments: string;
+  isFollowUpClicked?: boolean;
+}
+export interface AddOnboadingDetailsReqBody extends AddOnboadingDetailsPayload {
   phoneNumber: string;
   followup: postScDetailsFollowUp | null;
 }
