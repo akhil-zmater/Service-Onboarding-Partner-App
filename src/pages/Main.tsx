@@ -14,6 +14,14 @@ import { RootState } from "../redux/store";
 import Home from "./Home";
 import { useAppSelector } from "../state";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
+import {
+  BtnTypes,
+  FlexInstallationEnum,
+  PTOStatusEnum,
+  RegistrationStatusEnum,
+  StatusTypeEnum,
+  VerificationStatusEnum,
+} from "../state/serviceCenter/servicCenter.types";
 
 function Main() {
   const activeScDetails = useAppSelector(getActiveScDetails);
@@ -62,9 +70,9 @@ function Main() {
       }
     };
 
-  const registeredDate = new Date(activeScDetails?.registeredDate as string);
+  const currentDate = new Date();
 
-  const formattedDate = registeredDate.toLocaleDateString("en-GB", {
+  const formattedDate = currentDate.toLocaleDateString("en-GB", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -73,8 +81,8 @@ function Main() {
   const Buttons = [
     "Registration",
     "Verification",
-    "Photography",
     "Flex Installation",
+    "Photography",
     "Training & Onboarding",
   ];
 
@@ -93,6 +101,113 @@ function Main() {
   const handleCallClick = () => {
     if (phoneRef.current) {
       phoneRef.current.click();
+    }
+  };
+  const cardStatus = (btnName: string) => {
+    if (btnName === BtnTypes.REGISTRATION) {
+      if (
+        activeScDetails?.registrationStatus ===
+        RegistrationStatusEnum.REGISTERED
+      ) {
+        return StatusTypeEnum.COMPLETED;
+      } else if (
+        activeScDetails?.registrationStatus === RegistrationStatusEnum.FOLLOWUP
+      ) {
+        return StatusTypeEnum.PENDING;
+      } else if (
+        activeScDetails?.registrationStatus === RegistrationStatusEnum.REJECT
+      ) {
+        return StatusTypeEnum.REJECTED;
+      } else {
+        return StatusTypeEnum.NOT_STARTED;
+      }
+    } else if (btnName === BtnTypes.VERIFICATION) {
+      if (activeScDetails?.verificationDetails !== null) {
+        if (
+          activeScDetails?.verificationDetails.verificationStatus ===
+          VerificationStatusEnum.VERIFIED
+        ) {
+          return StatusTypeEnum.COMPLETED;
+        } else if (
+          activeScDetails?.verificationDetails.verificationStatus ===
+          VerificationStatusEnum.VERIFICATION_PENDING
+        ) {
+          return StatusTypeEnum.PENDING;
+        } else {
+          return StatusTypeEnum.NOT_STARTED;
+        }
+      } else {
+        return StatusTypeEnum.NOT_STARTED;
+      }
+    } else if (btnName === BtnTypes.FLEX_INSTALLATION) {
+      if (activeScDetails?.flexDetails !== null) {
+        if (
+          activeScDetails?.flexDetails.status ===
+          FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
+        ) {
+          return StatusTypeEnum.COMPLETED;
+        } else if (
+          activeScDetails?.flexDetails.status ===
+          FlexInstallationEnum.FLEX_INSTALLATION_PENDING
+        ) {
+          return StatusTypeEnum.PENDING;
+        } else {
+          return StatusTypeEnum.NOT_STARTED;
+        }
+      } else {
+        return StatusTypeEnum.NOT_STARTED;
+      }
+    } else if (btnName === BtnTypes.PHOTOGRAPHY) {
+      if (activeScDetails?.photographyDetails !== null) {
+        if (
+          activeScDetails?.photographyDetails?.status === PTOStatusEnum.COMPLETE
+        ) {
+          return StatusTypeEnum.COMPLETED;
+        } else if (
+          activeScDetails?.photographyDetails?.status === PTOStatusEnum.PENDING
+        ) {
+          return StatusTypeEnum.PENDING;
+        } else {
+          return StatusTypeEnum.NOT_STARTED;
+        }
+      } else {
+        return StatusTypeEnum.NOT_STARTED;
+      }
+    } else if (btnName === BtnTypes.TRAINING) {
+      if (
+        activeScDetails?.trainingDetails !== null &&
+        activeScDetails?.onBoardingDetails !== null
+      ) {
+        if (
+          activeScDetails?.trainingDetails?.status === PTOStatusEnum.COMPLETE &&
+          activeScDetails.onBoardingDetails?.status === PTOStatusEnum.COMPLETE
+        ) {
+          return StatusTypeEnum.COMPLETED;
+        } else if (
+          activeScDetails?.trainingDetails?.status === PTOStatusEnum.PENDING &&
+          activeScDetails.onBoardingDetails?.status === PTOStatusEnum.PENDING
+        ) {
+          return StatusTypeEnum.PENDING;
+        } else {
+          return StatusTypeEnum.NOT_STARTED;
+        }
+      } else {
+        return StatusTypeEnum.NOT_STARTED;
+      }
+    } else {
+      return StatusTypeEnum.NOT_STARTED;
+    }
+  };
+
+  const statusColor = (status: string) => {
+    if (status === StatusTypeEnum.COMPLETED) {
+      return "#0B9E0F";
+    } else if (status === StatusTypeEnum.PENDING) {
+      return "#D4820E";
+    } else if (status === StatusTypeEnum.REJECTED) {
+      return "red";
+    } else {
+      return "#737373";
     }
   };
 
@@ -126,8 +241,8 @@ function Main() {
   //   setResText(resFont);
   // }, [inputs.status, status]);
 
-  console.log("resClass:", resClass);
-  console.log("resText:", resText);
+  // console.log("resClass:", resClass);
+  // console.log("resText:", resText);
 
   return (
     <div className="h-screen w-screen">
@@ -197,21 +312,25 @@ function Main() {
                   <p className="font-medium">{formattedDate}</p>
                 </div>
 
-                {Buttons.map((button, key) => (
-                  <div
-                    className="mt-[0.75rem] flex flex-col gap-[1rem]"
-                    key={key}
-                  >
-                    <RegComp
-                      className={resClass}
-                      statusss={resText}
-                      data-name={button}
-                      name={button}
-                      date="---"
-                      onClick={handleButtons(button)}
-                    />
-                  </div>
-                ))}
+                {Buttons.map((button, key) => {
+                  const status = cardStatus(button);
+                  return (
+                    <div
+                      className="mt-[0.75rem] flex flex-col gap-[1rem]"
+                      key={key}
+                    >
+                      <RegComp
+                        className={resClass}
+                        statusss={status as string}
+                        data-name={button}
+                        name={button}
+                        date={formattedDate}
+                        statusColor={statusColor(status) as string}
+                        onClick={handleButtons(button)}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

@@ -12,35 +12,39 @@ import { useDispatch } from "react-redux";
 import NextFollowup from "./NextFollowup";
 import { setInputs } from "../redux/inputSlice";
 import Submit from "../components/Submit";
+import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
+import { VerificationStatusEnum } from "../state/serviceCenter/servicCenter.types";
+import { useAppSelector } from "../state";
+import { AddVerificationDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
 
 function Verification() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const { success } = useAppSelector(AddVerificationDetailsLoadingState);
+  React.useEffect(() => {
+    if (success) {
+      setShowMain(true);
+    }
+  }, [success]);
   const [inputs, setInputsss] = useState({
-    phone: "",
-    sales_rep_id: "",
-    service_center_name: "",
-    service_center_owner: "",
-    service_center_phone: "",
-    service_center_location: "",
     status: "",
-    additional_comments: "",
     verifier_name: "",
-    transaction_id: "",
+    flexDimensions: "",
+    // transaction_id: "",
     verifier_comments: "",
-    payment_status: null,
-    photographer_name: "",
-    technician_name: "",
-    installation_comments: "",
-    subscription_type: null,
+    // payment_status: null,
+    // photographer_name: "",
+    // technician_name: "",
+    // installation_comments: "",
+    // subscription_type: null,
   });
   const dispatch = useDispatch();
   const [showMain, setShowMain] = useState(false);
-  const [onboarding, setOnbarding] = useState<string | null>(
-    "Verification Pending"
-  );
+  // const [onboarding, setOnbarding] = useState<string | null>(
+  //   "Verification Pending"
+  // );
   const [payment, setPayment] = useState<string | null>(null);
 
-  const [file, setFile] = useState<string | null>(null);
+  // const [file, setFile] = useState<string | null>(null);
   const datePickerRef = useRef<DatePicker>(null);
 
   const handleVerFields = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,40 +53,63 @@ function Verification() {
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (onboarding !== null) {
-      dispatch(
-        setInputs({
-          verifier_name: inputs.verifier_name,
-          transaction_id: inputs.transaction_id,
-          verifier_comments: inputs.verifier_comments,
-          status: inputs.status,
-          payment_status: inputs.payment_status,
-        })
-      );
-      setShowMain(true);
+    if (inputs.status !== "") {
+      // dispatch(
+      //   setInputs({
+      //     verifier_name: inputs.verifier_name,
+      //     transaction_id: inputs.transaction_id,
+      //     verifier_comments: inputs.verifier_comments,
+      //     status: inputs.status,
+      //     payment_status: inputs.payment_status,
+      //   })
+      // );
+
+      if (selectedDate) {
+        const day = String(selectedDate?.getDate()).padStart(2, "0"); // Get day and pad with leading zero
+        const month = String(selectedDate?.getMonth() + 1).padStart(2, "0"); // Get month (0-indexed, so +1) and pad with leading zero
+        const year = selectedDate?.getFullYear(); // Get year
+        const formattedDate = `${day}-${month}-${year}`;
+        console.log("verificationDetails===>>>", inputs, formattedDate);
+
+        dispatch(
+          serviceCenterActions.addVerificationDetails({
+            comments: inputs.verifier_comments,
+            flexDimensions: inputs.flexDimensions,
+            flexInstallationDate: formattedDate,
+            verificationStatus:
+              inputs.status === "Approved"
+                ? VerificationStatusEnum.VERIFIED
+                : inputs.status === "Pending"
+                ? VerificationStatusEnum.VERIFICATION_PENDING
+                : inputs.status,
+            verifierName: inputs.verifier_name,
+            verifierRepId: "BW102403",
+          })
+        );
+      }
     } else {
       alert("Please Fill All Input Fields");
     }
   };
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleUpload = () => {
-    if (inputRef.current) inputRef.current.click();
-  };
+  // const handleUpload = () => {
+  //   if (inputRef.current) inputRef.current.click();
+  // };
 
-  const handleDelFile = () => {
-    setFile(null);
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
-  };
+  // const handleDelFile = () => {
+  //   setFile(null);
+  //   if (inputRef.current) {
+  //     inputRef.current.value = "";
+  //   }
+  // };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      setFile(selectedFile.name);
-    }
-  };
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const selectedFile = e.target.files?.[0];
+  //   if (selectedFile) {
+  //     setFile(selectedFile.name);
+  //   }
+  // };
 
   const handleToggle = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
@@ -93,10 +120,10 @@ function Verification() {
         ...prev,
         status: statuss,
       }));
-      setOnbarding(statuss);
+      // setOnbarding(statuss);
     }
   };
-  const statusButtons = ["Verification Pending", "Approved", "Rejected"];
+  const statusButtons = ["Pending", "Approved", "Rejected"];
 
   const statusComp = statusButtons.map((status, key) => (
     <div key={key} className="flex flex-col">
@@ -246,23 +273,23 @@ function Verification() {
                   </div>
                   <div className="flex flex-col gap-1">
                     <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                      Onboarding Status
+                      Verification Status
                     </p>
                     <div className="border border-border leading-[1.25rem] font-normal py-2 px-4 rounded-lg">
                       {statusComp}
                     </div>
                   </div>
-                  {onboarding === "Approved" && (
+                  {inputs.status === "Approved" && (
                     <div className="flex flex-col gap-2">
-                      <div className="flex flex-col gap-1">
-                        <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                          Payment Status
-                        </p>
-                        <div className="border border-border leading-[1.25rem] font-normal text-[0.75rem] py-2 px-4 rounded-lg">
-                          {payComp}
-                        </div>
-                      </div>
-                      {payment === "Payment Completed" && (
+                      {/* <div className="flex flex-col gap-1">
+                         <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                           Payment Status
+                         </p>
+                         <div className="border border-border leading-[1.25rem] font-normal text-[0.75rem] py-2 px-4 rounded-lg">
+                           {payComp}
+                         </div>
+                       </div> */}
+                      {/* {payment === "Payment Completed" && (
                         <div className="flex flex-col gap-1">
                           <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                             Transaction ID
@@ -276,7 +303,7 @@ function Verification() {
                             className="h-12 w-full pl-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg "
                           />
                         </div>
-                      )}
+                      )} */}
                       <div className="flex flex-col gap-1">
                         <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                           Flex Installation Date
@@ -305,14 +332,14 @@ function Verification() {
                         </p>
                         <Input
                           type="text"
-                          name=""
-                          value=""
-                          placeholder=""
+                          name="flexDimensions"
+                          value={inputs.flexDimensions}
+                          placeholder="Enter Flex Dimensions"
                           onChange={handleVerFields}
                           className="h-24 w-full pl-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg "
                         />
                       </div>
-                      <div className="flex flex-col gap-1">
+                      {/* <div className="flex flex-col gap-1"> // TODO: future
                         <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                           Verifier Selfie
                         </p>
@@ -348,10 +375,10 @@ function Verification() {
                             </div>
                           )}
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   )}
-                  {onboarding === "Verification Pending" ? (
+                  {inputs.status === "Pending" ? (
                     <NextFollowup />
                   ) : (
                     <div className="flex flex-col gap-1">
