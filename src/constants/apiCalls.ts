@@ -31,4 +31,12 @@ export const ERROR_MESSAGES = {
   loginExpiry: "loginExpiry",
 };
 
-export const END_POINT = "http://zmater.com/bluewheel";
+export const END_POINT_BASE = "http://zmater.com/bluewheel";
+
+export const END_POINTS = {
+  postSCDetails: END_POINT_BASE + "/service/service-center",
+  addVerificationDetails:
+    END_POINT_BASE + "/service/service-center/verification",
+  addFlexDetails: END_POINT_BASE + "/service/service-center/flex",
+  addPhotoDetails: END_POINT_BASE + "/service/service-center/photography",
+};

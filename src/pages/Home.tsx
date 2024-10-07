@@ -8,6 +8,7 @@ import open from "../images/open.svg";
 import { useAppDispatch, useAppSelector } from "../state";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 import { getSCDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
+import { scActions } from "../state/serviceCenter/serviceCenter.store";
 
 function Home() {
   const dispatch = useAppDispatch();
@@ -47,6 +48,7 @@ function Home() {
   React.useEffect(() => {
     if (success) {
       setShowMain(true);
+      dispatch(scActions.resetSCloadingStates());
     }
   }, [success]);
 

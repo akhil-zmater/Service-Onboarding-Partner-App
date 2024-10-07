@@ -16,6 +16,7 @@ import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.actio
 import { VerificationStatusEnum } from "../state/serviceCenter/servicCenter.types";
 import { useAppSelector } from "../state";
 import { AddVerificationDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
+import { scActions } from "../state/serviceCenter/serviceCenter.store";
 
 function Verification() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -23,6 +24,7 @@ function Verification() {
   React.useEffect(() => {
     if (success) {
       setShowMain(true);
+      dispatch(scActions.resetSCloadingStates());
     }
   }, [success]);
   const [inputs, setInputsss] = useState({
@@ -64,29 +66,30 @@ function Verification() {
       //   })
       // );
 
-      if (selectedDate) {
-        const day = String(selectedDate?.getDate()).padStart(2, "0"); // Get day and pad with leading zero
-        const month = String(selectedDate?.getMonth() + 1).padStart(2, "0"); // Get month (0-indexed, so +1) and pad with leading zero
-        const year = selectedDate?.getFullYear(); // Get year
-        const formattedDate = `${day}-${month}-${year}`;
-        console.log("verificationDetails===>>>", inputs, formattedDate);
+      const day =
+        selectedDate && String(selectedDate?.getDate()).padStart(2, "0"); // Get day and pad with leading zero
+      const month =
+        selectedDate && String(selectedDate?.getMonth() + 1).padStart(2, "0"); // Get month (0-indexed, so +1) and pad with leading zero
+      const year = selectedDate?.getFullYear(); // Get year
+      const formattedDate = `${day}-${month}-${year}`;
+      console.log("verificationDetails===>>>", inputs, formattedDate);
 
-        dispatch(
-          serviceCenterActions.addVerificationDetails({
-            comments: inputs.verifier_comments,
-            flexDimensions: inputs.flexDimensions,
-            flexInstallationDate: formattedDate,
-            verificationStatus:
-              inputs.status === "Approved"
-                ? VerificationStatusEnum.VERIFIED
-                : inputs.status === "Pending"
-                ? VerificationStatusEnum.VERIFICATION_PENDING
-                : inputs.status,
-            verifierName: inputs.verifier_name,
-            verifierRepId: "BW102403",
-          })
-        );
-      }
+      dispatch(
+        serviceCenterActions.addVerificationDetails({
+          comments: inputs.verifier_comments,
+          flexDimensions: inputs.flexDimensions,
+          flexInstallationDate: formattedDate,
+          verificationStatus:
+            inputs.status === "Approved"
+              ? VerificationStatusEnum.VERIFIED
+              : inputs.status === "Pending"
+              ? VerificationStatusEnum.VERIFICATION_PENDING
+              : inputs.status,
+          verifierName: inputs.verifier_name,
+          verifierRepId: "BW102403",
+          isFollowUpClicked: inputs.status === "Pending",
+        })
+      );
     } else {
       alert("Please Fill All Input Fields");
     }
@@ -171,46 +174,46 @@ function Verification() {
     setPayment(pp);
   };
 
-  const payButtons = ["Payment Pending", "Payment Completed"];
+  // const payButtons = ["Payment Pending", "Payment Completed"];
 
-  const payComp = payButtons.map((p, key) => (
-    <div key={key} className="flex flex-col">
-      <div className="text-sm text-black">
-        <div
-          data-namess={p}
-          onClick={handlePaymentStatus}
-          className={`${
-            key === payButtons.length - 1
-              ? "flex justify-between items-center pb-2 pt-2"
-              : "flex justify-between items-center pb-3 pt-2 border-b border-border"
-          }`}
-        >
-          <p className="text-black text-[0.8rem] leading-[1rem] font-normal">
-            {p}
-          </p>
-          <div
-            className={`${
-              payment === p
-                ? "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-blue"
-                : "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-border"
-            }`}
-          >
-            <button
-              type="button"
-              name={p}
-              data-namess={p}
-              onClick={handlePaymentStatus}
-              className={`${
-                payment === p
-                  ? "bg-blue rounded-full w-3 h-3"
-                  : "bg-gray-300 rounded-full w-3 h-3"
-              }`}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  ));
+  // const payComp = payButtons.map((p, key) => (
+  //   <div key={key} className="flex flex-col">
+  //     <div className="text-sm text-black">
+  //       <div
+  //         data-namess={p}
+  //         onClick={handlePaymentStatus}
+  //         className={`${
+  //           key === payButtons.length - 1
+  //             ? "flex justify-between items-center pb-2 pt-2"
+  //             : "flex justify-between items-center pb-3 pt-2 border-b border-border"
+  //         }`}
+  //       >
+  //         <p className="text-black text-[0.8rem] leading-[1rem] font-normal">
+  //           {p}
+  //         </p>
+  //         <div
+  //           className={`${
+  //             payment === p
+  //               ? "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-blue"
+  //               : "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-border"
+  //           }`}
+  //         >
+  //           <button
+  //             type="button"
+  //             name={p}
+  //             data-namess={p}
+  //             onClick={handlePaymentStatus}
+  //             className={`${
+  //               payment === p
+  //                 ? "bg-blue rounded-full w-3 h-3"
+  //                 : "bg-gray-300 rounded-full w-3 h-3"
+  //             }`}
+  //           />
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </div>
+  // ));
 
   const currDate = new Date();
 

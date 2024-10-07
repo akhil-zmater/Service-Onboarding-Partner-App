@@ -1,41 +1,41 @@
 import React, { useRef, useState } from "react";
 import Navbar from "./Navbar";
 import Input from "../components/Input";
-import cam from "../images/camera.svg";
-import del from "../images/deleteicon.svg";
-import down from "../images/download.svg";
+// import cam from "../images/camera.svg";
+// import del from "../images/deleteicon.svg";
+// import down from "../images/download.svg";
 import date from "../images/date.svg";
 import Main from "./Main";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.module.css";
 import { useDispatch } from "react-redux";
-import { setInputs } from "../redux/inputSlice";
 import NextFollowup from "./NextFollowup";
 import Submit from "../components/Submit";
+import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
+import { FlexInstallationEnum } from "../state/serviceCenter/servicCenter.types";
+import { useAppSelector } from "../state";
+import { AddFlexDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
+import { scActions } from "../state/serviceCenter/serviceCenter.store";
 
 function FlexInstallation() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const dispatch = useDispatch();
   const [showMain, setShowMain] = useState(false);
-  const [onboarding, setOnbarding] = useState<string | null>(
-    "Flex Installation Pending"
-  );
+  const { success } = useAppSelector(AddFlexDetailsLoadingState);
+  // const [onboarding, setOnbarding] = useState<string | null>(
+  //   "Flex Installation Pending"
+  // );
+  React.useEffect(() => {
+    if (success) {
+      setShowMain(true);
+      dispatch(scActions.resetSCloadingStates());
+    }
+  }, [success]);
+
   const [inputs, setInputsss] = useState({
-    phone: "",
-    sales_rep_id: "",
-    service_center_name: "",
-    service_center_owner: "",
-    service_center_phone: "",
-    service_center_location: "",
     status: "",
-    additional_comments: "",
-    verifier_name: "",
-    transaction_id: "",
-    verifier_comments: "",
-    photographer_name: "",
-    technician_name: "",
     installation_comments: "",
-    subscription_type: null,
+    technician_name: "",
   });
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -43,38 +43,46 @@ function FlexInstallation() {
   };
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const allInputFields = Object.values(inputs).every((value) => {
-      return value !== null && typeof value === "string" && value.trim() !== "";
-    });
+    // const allInputFields = Object.values(inputs).every((value) => {
+    //   return value !== null && typeof value === "string" && value.trim() !== "";
+    // });
+
     if (
-      allInputFields !== null &&
-      (onboarding !== "Flex Installation Pending" || null) &&
-      files.length !== 0
+      // allInputFields !== null &&
+      inputs.status !== null
     ) {
-      dispatch(setInputs(inputs));
-      setShowMain(true);
+      dispatch(
+        serviceCenterActions.addFlexDetails({
+          comments: inputs.installation_comments,
+          repId: "BW102405",
+          status: inputs.status.replace(/\s+/g, ""),
+          isFollowUpClicked:
+            inputs.status.replace(/\s+/g, "") ===
+            FlexInstallationEnum.FLEX_INSTALLATION_PENDING,
+        })
+      );
     } else {
       alert("Please Fill All Input Fields");
     }
   };
-  const [files, setFiles] = useState<string[]>([]);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  // const [files, setFiles] = useState<string[]>([]);
+  // const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleUpload = () => {
-    if (inputRef.current) inputRef.current.click();
-  };
+  // const handleUpload = () => {
+  //   if (inputRef.current) inputRef.current.click();
+  // };
 
-  const handleDelFile = (fileToDelete: string) => {
-    setFiles((prev) => prev.filter((file) => file !== fileToDelete));
-  };
+  // const handleDelFile = (fileToDelete: string) => {
+  //   setFiles((prev) => prev.filter((file) => file !== fileToDelete));
+  // };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = e.target.files;
-    if (selectedFiles) {
-      const newFiles = Array.from(selectedFiles).map((file) => file.name);
-      setFiles((prev) => [...prev, ...newFiles]);
-    }
-  };
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const selectedFiles = e.target.files;
+  //   if (selectedFiles) {
+  //     const newFiles = Array.from(selectedFiles).map((file) => file.name);
+  //     setFiles((prev) => [...prev, ...newFiles]);
+  //   }
+  // };
 
   const handleToggle = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
@@ -85,7 +93,7 @@ function FlexInstallation() {
         ...prev,
         status: statuss,
       }));
-      setOnbarding(statuss);
+      // setOnbarding(statuss);
     }
   };
 
@@ -109,7 +117,7 @@ function FlexInstallation() {
           <p>{status}</p>
           <div
             className={`${
-              onboarding === status
+              inputs.status === status
                 ? "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-blue"
                 : "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-border"
             }`}
@@ -120,7 +128,7 @@ function FlexInstallation() {
               data-name={status}
               onClick={handleToggle}
               className={`${
-                onboarding === status
+                inputs.status === status
                   ? "bg-blue rounded-full w-3 h-3"
                   : "bg-gray-300 rounded-full w-3 h-3"
               }`}
@@ -182,7 +190,7 @@ function FlexInstallation() {
                     />
                   </div>
 
-                  <div className="flex flex-col gap-1">
+                  {/* <div className="flex flex-col gap-1"> //TODO: in future
                     <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                       Installation Pics
                     </p>
@@ -226,7 +234,7 @@ function FlexInstallation() {
                         <p className="text-blue">Upload Image</p>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="flex flex-col gap-1">
                     <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                       Phtography Appointment Date
@@ -249,7 +257,7 @@ function FlexInstallation() {
                       {statusComp}
                     </div>
                   </div>
-                  {onboarding === "Flex Installation Pending" ? (
+                  {inputs.status === "Flex Installation Pending" ? (
                     <NextFollowup />
                   ) : (
                     <div className="flex flex-col gap-1">
