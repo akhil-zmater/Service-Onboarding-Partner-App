@@ -7,6 +7,7 @@ interface RegCompProps {
   date: string;
   statusss: string;
   className: string;
+  statusColor: string;
 }
 
 function RegComp(props: RegCompProps) {
@@ -23,7 +24,9 @@ function RegComp(props: RegCompProps) {
         <img src={op} alt="" className="" />
       </div>
       <div className="flex justify-between h-4 text-xs leading-2">
-        <p className={props.className}>{props.statusss}</p>
+        <p className={props.className} style={{ color: props.statusColor }}>
+          {props.statusss}
+        </p>
         <p className="text-prim font-normal leading-[1rem] text-[1rem]">
           {props.date}
         </p>

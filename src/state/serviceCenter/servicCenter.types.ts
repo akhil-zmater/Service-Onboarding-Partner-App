@@ -3,9 +3,18 @@ import { LoadingStateType } from "../common/common.types";
 export interface ServiceCenterStateTypes {
   activeSCDetails: GetSCDetailsResponse | null;
   scLoadingStates: ScLoadingStates;
+
+  addFollowUpDetails: postScDetailsFollowUp;
 }
 export interface ScLoadingStates {
   getSCDetailsLoadingState: LoadingStateType;
+  postSCDetailsLoadingState: LoadingStateType;
+  addVerificationDetailsLoadingState: LoadingStateType;
+
+}
+export interface ScLoadingStates {
+  getSCDetailsLoadingState: LoadingStateType;
+
 }
 export interface GetSCDetailsByPhoneNoReqBody {
   mobileNumber: string;
@@ -78,3 +87,56 @@ export enum PTOStatusEnum {
   COMPLETE = "complete",
   PENDING = "pending",
 }
+
+
+export enum BtnTypes {
+  REGISTRATION = "Registration",
+  VERIFICATION = "Verification",
+  FLEX_INSTALLATION = "Flex Installation",
+  PHOTOGRAPHY = "Photography",
+  TRAINING = "Training & Onboarding",
+}
+export enum StatusTypeEnum {
+  COMPLETED = "Completed",
+  PENDING = "Pending",
+  REJECTED = "Rejected",
+  NOT_STARTED = "Not Started",
+}
+
+export interface postSCDetailsReqBody {
+  salesRepId: string;
+  comments?: string;
+  registrationStatus: string;
+  subscriptionType: string;
+}
+export interface postSCDetailsPayload {
+  phoneNumber: string;
+  serviceCenterOwnerName: string;
+  serviceCenterAddress: string;
+  serviceCenterName: string;
+  salesRepId: string;
+  registeredDate?: string;
+  comments: string;
+  registrationStatus: string;
+  followup: postScDetailsFollowUp;
+  subscriptionType: string;
+}
+export interface postScDetailsFollowUp {
+  reason?: string;
+  followUpDate: string;
+}
+
+export interface AddVerificationDetailsPayload {
+  verifierName: string;
+  verifierRepId: string;
+  verificationStatus: string;
+  flexInstallationDate: string;
+  flexDimensions: string;
+  comments: string;
+}
+
+export interface AddVerificationDetailsReqBody
+  extends AddVerificationDetailsPayload {
+  phoneNumber: string;
+}
+
