@@ -3,12 +3,18 @@ import { LoadingStateType } from "../common/common.types";
 export interface ServiceCenterStateTypes {
   activeSCDetails: GetSCDetailsResponse | null;
   scLoadingStates: ScLoadingStates;
+
   addFollowUpDetails: postScDetailsFollowUp;
 }
 export interface ScLoadingStates {
   getSCDetailsLoadingState: LoadingStateType;
   postSCDetailsLoadingState: LoadingStateType;
   addVerificationDetailsLoadingState: LoadingStateType;
+
+}
+export interface ScLoadingStates {
+  getSCDetailsLoadingState: LoadingStateType;
+
 }
 export interface GetSCDetailsByPhoneNoReqBody {
   mobileNumber: string;
@@ -82,6 +88,7 @@ export enum PTOStatusEnum {
   PENDING = "pending",
 }
 
+
 export enum BtnTypes {
   REGISTRATION = "Registration",
   VERIFICATION = "Verification",
@@ -132,3 +139,4 @@ export interface AddVerificationDetailsReqBody
   extends AddVerificationDetailsPayload {
   phoneNumber: string;
 }
+

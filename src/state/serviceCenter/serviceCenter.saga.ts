@@ -1,4 +1,6 @@
+
 import { call, put, select, takeLatest } from "redux-saga/effects";
+
 import { scActionTypes } from "./serviceCenter.action";
 import { HttpService } from "../../services/https.services";
 import { APPSTATES, END_POINT, EReqMethod } from "../../constants/apiCalls";
@@ -11,23 +13,29 @@ import {
   loadingState,
   successState,
 } from "../common/common.values";
+
 import {
   getActiveScDetails,
   getFollowUpDetails,
 } from "./serviceCenter.selector";
 
+
 const getSCDetails = (mobileNum: string) => {
   return HttpService({
     method: EReqMethod.GET,
+
     url: END_POINT + `/service/service-center/${mobileNum}`,
+
   });
 };
 
 function* getSCDetailsSaga(
   action: PayloadAction<scType.GetSCDetailsByPhoneNoReqBody>
 ) {
+
   const { mobileNumber } = action.payload;
   console.log(action.payload, "action.payloadd", mobileNumber);
+
   yield put(scStoreActions.setGetSCDetailsLoadingState(loadingState));
 
   try {
@@ -36,7 +44,9 @@ function* getSCDetailsSaga(
       mobileNumber
     );
     if (response.status === APPSTATES.SUCCESS) {
+
       console.log("resppp====>>>", response.data);
+
       yield put(scStoreActions.setActiveSCDetails(response.data));
       yield put(scStoreActions.setGetSCDetailsLoadingState(successState));
     } else {
@@ -44,6 +54,7 @@ function* getSCDetailsSaga(
     }
   } catch (error) {
     yield put(scStoreActions.setGetSCDetailsLoadingState(failureState));
+
     console.log("error===>>", error);
   }
 }
@@ -172,4 +183,7 @@ export default function* watchServiceCenterActions() {
     scActionTypes.ADD_VERIFICATION_DETAILS,
     addVerificationDetailsSaga
   );
+
 }
+
+

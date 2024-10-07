@@ -14,6 +14,7 @@ import Submit from "../components/Submit";
 import Maps from "./Maps";
 import { useAppSelector } from "../state";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
+
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 
 interface RegistrationTabProps {

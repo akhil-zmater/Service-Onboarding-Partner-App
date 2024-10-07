@@ -14,6 +14,7 @@ import { RootState } from "../redux/store";
 import Home from "./Home";
 import { useAppSelector } from "../state";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
+
 import {
   BtnTypes,
   FlexInstallationEnum,
@@ -69,6 +70,7 @@ function Main() {
           break;
       }
     };
+
 
   const currentDate = new Date();
 
@@ -199,6 +201,7 @@ function Main() {
     }
   };
 
+
   const statusColor = (status: string) => {
     if (status === StatusTypeEnum.COMPLETED) {
       return "#0B9E0F";
@@ -210,6 +213,7 @@ function Main() {
       return "#737373";
     }
   };
+
 
   // useEffect(() => {
   //   console.log(status);

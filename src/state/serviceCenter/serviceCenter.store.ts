@@ -6,18 +6,21 @@ const initialState: serviceCenterType.ServiceCenterStateTypes = {
   activeSCDetails: null,
   scLoadingStates: {
     getSCDetailsLoadingState: loadingState,
+
     postSCDetailsLoadingState: loadingState,
     addVerificationDetailsLoadingState: loadingState,
   },
   addFollowUpDetails: {
     followUpDate: "",
     reason: "",
+
   },
 };
 const serviceCenterSlice = createSlice({
   name: "serviceCenterSlice",
   initialState,
   reducers: {
+
     //addVerification
     setAddVerificationDetailsLoadingState: (
       state,
@@ -35,6 +38,7 @@ const serviceCenterSlice = createSlice({
       state.addFollowUpDetails.reason = action.payload;
     },
     //activeScDetails
+
     setActiveSCDetails: (
       state,
       action: PayloadAction<serviceCenterType.GetSCDetailsResponse>
@@ -48,6 +52,7 @@ const serviceCenterSlice = createSlice({
       state.scLoadingStates.getSCDetailsLoadingState = { ...action.payload };
     },
 
+
     //post_scDeatils
     setPostSCDetailsLoadingState: (
       state,
@@ -55,6 +60,7 @@ const serviceCenterSlice = createSlice({
     ) => {
       state.scLoadingStates.postSCDetailsLoadingState = { ...action.payload };
     },
+
   },
 });
 export const { actions: scActions, reducer: scReducer } = serviceCenterSlice;
