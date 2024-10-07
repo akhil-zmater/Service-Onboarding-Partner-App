@@ -10,7 +10,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.module.css";
 import { useDispatch } from "react-redux";
 import NextFollowup from "./NextFollowup";
-import { setInputs } from "../redux/inputSlice";
 import Submit from "../components/Submit";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 import { VerificationStatusEnum } from "../state/serviceCenter/servicCenter.types";

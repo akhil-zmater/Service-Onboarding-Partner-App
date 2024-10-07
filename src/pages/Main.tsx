@@ -5,12 +5,11 @@ import RegistrationTab from "./RegistrationTab";
 import Verification from "./Verification";
 import Photography from "./Photography";
 import FlexInstallation from "./FlexInstallation";
-import TrainAndOnboard from "./TrainAndOnboard";
+import TrainAndOnboard from "./Training";
 import phone from "../images/phoneicon.svg";
 import mapii from "../images/mapsiconn.svg";
 import Maps from "./Maps";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
 import Home from "./Home";
 import { useAppSelector } from "../state";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
@@ -23,6 +22,7 @@ import {
   StatusTypeEnum,
   VerificationStatusEnum,
 } from "../state/serviceCenter/servicCenter.types";
+import Onboarding from "./Onboarding";
 
 function Main() {
   const activeScDetails = useAppSelector(getActiveScDetails);
@@ -31,14 +31,25 @@ function Main() {
   const [showFlexInstall, setShowFlexInstall] = useState(false);
   const [showPhotography, setShowPhotography] = useState(false);
   const [showTraining, setShowTraining] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const [showHome, setShowHome] = useState(false);
-  const inputs = useSelector((state: RootState) => state.input);
   const phoneRef = useRef<HTMLAnchorElement>(null);
   const [status, setStatus] = useState({
     newStatus: "",
     btnName: "",
   });
+
+  const [inputs, setInputsss] = useState({
+    additional_comments: "",
+    followUpDate: "",
+    subscription_type: "",
+  });
+
+  const handleRegFields = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setInputsss({ ...inputs, [name]: value });
+  };
 
   const [resClass, setResClass] = useState("text-background");
   const [resText, setResText] = useState("Not Started");
@@ -63,14 +74,16 @@ function Main() {
         case "Photography":
           setShowPhotography(true);
           break;
-        case "Training & Onboarding":
+        case "Training":
           setShowTraining(true);
+          break;
+        case "Onboarding":
+          setShowOnboarding(true);
           break;
         default:
           break;
       }
     };
-
 
   const currentDate = new Date();
 
@@ -85,7 +98,8 @@ function Main() {
     "Verification",
     "Flex Installation",
     "Photography",
-    "Training & Onboarding",
+    "Training",
+    "Onboarding",
   ];
 
   const handleMaps = (e: React.MouseEvent<HTMLParagraphElement>) => {
@@ -201,7 +215,6 @@ function Main() {
     }
   };
 
-
   const statusColor = (status: string) => {
     if (status === StatusTypeEnum.COMPLETED) {
       return "#0B9E0F";
@@ -213,40 +226,6 @@ function Main() {
       return "#737373";
     }
   };
-
-
-  // useEffect(() => {
-  //   console.log(status);
-  //   let resColor = "text-background";
-  //   let resFont = "Not Started";
-
-  //   if (
-  //     inputs.status === "Registered" ||
-  //     inputs.status === "Approved" ||
-  //     inputs.status === "Photography Complete" ||
-  //     inputs.status === "Flex Installation Complete" ||
-  //     inputs.status === "Training & Onboarding Complete"
-  //   ) {
-  //     resColor = "text-green";
-  //     resFont = "Completed";
-  //   } else if (
-  //     inputs.status === "Follow Up" ||
-  //     inputs.status === "Training Pending" ||
-  //     inputs.status === "Onboarding Pendning" ||
-  //     inputs.status === "Flex Installation Pending" ||
-  //     inputs.status === "Photography Pending" ||
-  //     inputs.status === "Verification Pending"
-  //   ) {
-  //     resColor = "text-yellow";
-  //     resFont = "Pending";
-  //   }
-
-  //   setResClass(resColor);
-  //   setResText(resFont);
-  // }, [inputs.status, status]);
-
-  // console.log("resClass:", resClass);
-  // console.log("resText:", resText);
 
   return (
     <div className="h-screen w-screen">
@@ -264,6 +243,8 @@ function Main() {
             <FlexInstallation />
           ) : showTraining ? (
             <TrainAndOnboard />
+          ) : showOnboarding ? (
+            <Onboarding />
           ) : (
             <div>
               <Navbar onClick={handleHome} />

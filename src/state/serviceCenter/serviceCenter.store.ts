@@ -10,7 +10,9 @@ const initialState: serviceCenterType.ServiceCenterStateTypes = {
     addVerificationDetailsLoadingState: resetLoadingState,
     addFlexDetailsLoadingState: resetLoadingState,
     addPhotoGrapghyDetailsLoadingState: resetLoadingState,
+     postLoginDetailsLoadingState: resetLoadingState,
   },
+ 
   addFollowUpDetails: {
     followUpDate: "",
     reason: "",
@@ -83,6 +85,13 @@ const serviceCenterSlice = createSlice({
       state.scLoadingStates.addPhotoGrapghyDetailsLoadingState =
         resetLoadingState;
     },
+
+    setPostLoginDetailsLoadingState: (
+      state, action : PayloadAction<LoadingStateType>
+    ) => {
+      state.scLoadingStates.postLoginDetailsLoadingState = {...action.payload}
+    }
+
   },
 });
 export const { actions: scActions, reducer: scReducer } = serviceCenterSlice;

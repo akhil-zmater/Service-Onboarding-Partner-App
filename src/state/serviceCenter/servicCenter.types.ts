@@ -11,10 +11,18 @@ export interface ScLoadingStates {
   addVerificationDetailsLoadingState: LoadingStateType;
   addFlexDetailsLoadingState: LoadingStateType;
   addPhotoGrapghyDetailsLoadingState: LoadingStateType;
+  postLoginDetailsLoadingState: LoadingStateType;
 }
-export interface ScLoadingStates {
-  getSCDetailsLoadingState: LoadingStateType;
+
+
+
+
+export interface postLoginDetailsPayload {
+  employeeId: string;
+  password: string;
+
 }
+
 export interface GetSCDetailsByPhoneNoReqBody {
   mobileNumber: string;
 }

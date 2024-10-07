@@ -112,6 +112,44 @@ function* postSCDetailsSaga(
     yield put(scStoreActions.setPostSCDetailsLoadingState(failureState));
   }
 }
+;
+const postLoginDetails = (body:scType.postLoginDetailsPayload) => {
+  return HttpService({
+    method: EReqMethod.POST,
+    url: "https://gateway-dev.thevehicle.app/internal/user/login",
+    body,
+  });
+};
+
+function* postLoginDetailsSaga(
+  action: PayloadAction<scType.postLoginDetailsPayload>
+) {
+
+
+  console.log(action.payload, "action.payloadd",);
+
+  yield put(scStoreActions.setPostLoginDetailsLoadingState(loadingState));
+
+  try {
+    const response: APIResponse<scType.postLoginDetailsPayload> = yield call(
+      postLoginDetails,
+      action.payload
+    );
+    if (response.status === APPSTATES.SUCCESS) {
+
+      console.log("resppp====>>>", response.data);
+
+      // yield put(scStoreActions.setActiveSCDetails(response.data));
+      yield put(scStoreActions.setPostLoginDetailsLoadingState(successState));
+    } else {
+      yield put(scStoreActions.setPostLoginDetailsLoadingState(failureState));
+    }
+  } catch (error) {
+    yield put(scStoreActions.setPostLoginDetailsLoadingState(failureState));
+
+    console.log("error===>>", error);
+  }
+}
 
 const addVerificationDetails = (body: scType.AddVerificationDetailsReqBody) => {
   return HttpService({

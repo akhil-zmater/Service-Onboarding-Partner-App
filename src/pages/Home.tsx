@@ -2,7 +2,6 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import logo from "../images/logo.svg";
 import Input from "../components/Input";
 import Main from "./Main";
-import { setInputs } from "../redux/inputSlice";
 import FollowUps from "./FollowUps";
 import open from "../images/open.svg";
 import { useAppDispatch, useAppSelector } from "../state";

@@ -3,6 +3,7 @@ import Input from "../components/Input";
 import logo from "../images/logo.svg";
 import Home from "./Home";
 import Submit from "../components/Submit";
+import axios from "axios";
 // import axios from "axios";
 
 function Login() {
@@ -20,7 +21,7 @@ function Login() {
     // const url = "https://gateway-dev.thevehicle.app/internal/user/login";
     // const headers = {
     //   Authorization:
-    //     "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTE3OTk3Njg1ODg2IiwiUk9MRSI6IntcInVzZXJJZFwiOlwiNDE2XCIsXCJ1c2VyUm9sZVwiOlwiVVNFUl9TRVJWSUNFX0NFTlRFUl9PV05FUlwiLFwic2VydmljZUNlbnRlcklkXCI6XCIxODlcIixcInRlY2huaWNpYW5JZFwiOlwiNDA2XCIsXCJvbkJvYXJkaW5nQ29tcGxldGVGbGFnXCI6dHJ1ZSxcInZlcmljYXRpb25TdGF0dXNcIjpcIkFQUFJPVkVEXCIsXCJhcHBsaWNhdGlvbklkXCI6XCIyNDhcIixcImJvb2tpbmdNYW5hZ2VyXCI6dHJ1ZX0iLCJVU0VSSUQiOiI0MTYiLCJaTUFURVJfSU5URVJOQUxfU0VTU0lPTiI6IkhZc0xORjExNndCb0VjbnFiMFRPLzMrRXEwRkxTUHlIY3RSQ3h0dVQ4UXVKUWlNTEJmTjJlNWw1aHpSdDhHelZFL1gzYUQ5bS8zajhBQ1M0WExUaGVPMEhscTNoNXRYVmsyWGxReTh2TjhzPSIsImlhdCI6MTcxOTkwNTI2OCwiZXhwIjoxNzUxNDYyODY4fQ.DHyushsQq_BtHOZV-KrAlhsBwHRvTOckMGGmruIVN3zwjObembVUF2iwF-nbt0D6XfoPcTHiwnWFCu4K-kcNwA",
+    //     "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTE2MzAzOTQzMzgyIiwiUk9MRSI6IntcInVzZXJJZFwiOlwiM1wiLFwidXNlclJvbGVcIjpcIlVTRVJfU0VSVklDRV9DRU5URVJfT1dORVJcIixcInNlcnZpY2VDZW50ZXJJZFwiOlwiMlwiLFwidGVjaG5pY2lhbklkXCI6XCIyXCIsXCJvbkJvYXJkaW5nQ29tcGxldGVGbGFnXCI6dHJ1ZSxcInZlcmljYXRpb25TdGF0dXNcIjpcIkFQUFJPVkVEXCIsXCJhcHBsaWNhdGlvbklkXCI6XCIyXCIsXCJib29raW5nTWFuYWdlclwiOnRydWV9IiwiVVNFUklEIjoiMyIsIlpNQVRFUl9JTlRFUk5BTF9TRVNTSU9OIjoiL0VVTUpaaVRDRGI1TEVYMVptaW8vQTFqcXlhdXB2OVhoaE5zZ0owbnZsUUk1eFRxNnFmZkVJVXU2WUk2TG1WMGlIeWVmMkhSTFpkYS9UcGljaHFPV3ZLVXpCR0ZrZ3U3RXpOTjc5UlBFQzQ9IiwiaWF0IjoxNzI4MDQ4MjQ2LCJleHAiOjE3NTk2MDU4NDZ9.StKfwXR3hMVJPUzgkYVqhv_6OwEgWxjk15VvamIKKPAmCkPIjimex5dX_JqHrnVggY6Q8p_NzsSErNk5Tjowcw",
     // };
     // axios
     //   .post(
@@ -34,16 +35,16 @@ function Login() {
     //   )
     //   .then((res) => {
     //     console.log(res.data);
-    //     if (login.id === "" || login.password === "") {
-    //       setIncorrect(true);
-    //     } else {
-    setShowHome(true);
-    //     }
-    //   })
-    //   .catch((err) => {
-    setIncorrect(true);
-    //     console.log("Incorrect Login Details");
-    //   });
+    if (login.id === "" || login.password === "") {
+      setIncorrect(true);
+    } else {
+      setShowHome(true);
+    }
+    // })
+    // .catch((err) => {
+    //   setIncorrect(true);
+    //   console.log("Incorrect Login Details");
+    // });
   };
 
   return (

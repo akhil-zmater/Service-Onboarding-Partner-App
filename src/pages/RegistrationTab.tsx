@@ -8,7 +8,6 @@ import down from "../images/download.svg";
 import Main from "./Main";
 import NextFollowup from "./NextFollowup";
 import { useDispatch } from "react-redux";
-import { setInputs } from "../redux/inputSlice";
 import loc from "../images/loc.svg";
 import Submit from "../components/Submit";
 import Maps from "./Maps";

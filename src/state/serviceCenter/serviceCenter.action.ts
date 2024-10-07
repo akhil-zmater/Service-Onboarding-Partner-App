@@ -5,6 +5,8 @@ export const scActionTypes = {
   ADD_VERIFICATION_DETAILS: "ADD_VERIFICATION_DETAILS",
   ADD_FLEX_DETAILS: "ADD_FLEX_DETAILS",
   ADD_PHOTOGRAPHY_DETAILS: "ADD_PHOTOGRAPHY_DETAILS",
+  POST_LOGIN_DETAILS: "POST_LOGIN_DETAILS"
+
 };
 export const serviceCenterActions = {
   getScDetailsByMobileNum: (payload: scTypes.GetSCDetailsByPhoneNoReqBody) => ({
@@ -25,7 +27,11 @@ export const serviceCenterActions = {
     payload,
   }),
   addPhotoGraphyDetails: (payload: scTypes.AddPhotoGraphyDetalsPayload) => ({
-    type: scActionTypes.ADD_PHOTOGRAPHY_DETAILS,
+    type: scActionTypes.ADD_PHOTOGRAPHY_DETAILS, payload,
+  }),
+
+  postLoginDetails: (payload: scTypes.postLoginDetailsPayload) => ({
+    type: scActionTypes.POST_LOGIN_DETAILS,
     payload,
   }),
 };
