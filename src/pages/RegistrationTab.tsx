@@ -2,9 +2,9 @@ import React, { useRef, useState } from "react";
 import Navbar from "./Navbar";
 import Input from "../components/Input";
 // import Button from "../components/Button";
-import cam from "../images/camera.svg";
-import del from "../images/deleteicon.svg";
-import down from "../images/download.svg";
+// import cam from "../images/camera.svg";
+// import del from "../images/deleteicon.svg";
+// import down from "../images/download.svg";
 import Main from "./Main";
 import NextFollowup from "./NextFollowup";
 import { useDispatch } from "react-redux";
@@ -12,7 +12,10 @@ import loc from "../images/loc.svg";
 import Submit from "../components/Submit";
 import Maps from "./Maps";
 import { useAppSelector } from "../state";
-import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
+import {
+  getActiveScDetails,
+  getEmployeeId,
+} from "../state/serviceCenter/serviceCenter.selector";
 
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 
@@ -24,6 +27,7 @@ export default function RegistrationTab(props: RegistrationTabProps) {
   const { status } = props;
 
   const dispatch = useDispatch();
+  const employeeId = useAppSelector(getEmployeeId);
   const activeSCDetails = useAppSelector(getActiveScDetails);
   const [showMain, setShowMain] = useState(false);
   // const [onboarding, setOnbarding] = useState<string | null>(null);
@@ -215,7 +219,7 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                     <Input
                       type="text"
                       name="sales_rep_id"
-                      value={activeSCDetails?.salesRepId as string}
+                      value={(employeeId as string) ?? ""}
                       placeholder=""
                       onChange={handleRegFields}
                       className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "

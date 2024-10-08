@@ -11,13 +11,18 @@ import Submit from "../components/Submit";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 import { PTOStatusEnum } from "../state/serviceCenter/servicCenter.types";
 import { useAppSelector } from "../state";
-import { AddPhotoGraphyDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
+import {
+  AddPhotoGraphyDetailsLoadingState,
+  getEmployeeId,
+} from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
 
 function Photography() {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const currDate = new Date();
+  const [selectedDate, setSelectedDate] = useState<Date | null>(currDate);
   const dispatch = useDispatch();
   const [showMain, setShowMain] = useState(false);
+  const employeeId = useAppSelector(getEmployeeId);
   const { success } = useAppSelector(AddPhotoGraphyDetailsLoadingState);
 
   React.useEffect(() => {
@@ -36,9 +41,16 @@ function Photography() {
     const { name, value } = e.target;
     setInputsss({ ...inputs, [name]: value });
   };
+
   const statusButtons = ["Photography Pending", "Photography Complete"];
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (inputs.status !== "") {
+      const day =
+        selectedDate && String(selectedDate?.getDate()).padStart(2, "0"); // Get day and pad with leading zero
+      const month =
+        selectedDate && String(selectedDate?.getMonth() + 1).padStart(2, "0"); // Get month (0-indexed, so +1) and pad with leading zero
+      const year = selectedDate?.getFullYear(); // Get year
+      const formattedDate = `${day}-${month}-${year}`;
       dispatch(
         serviceCenterActions.addPhotoGraphyDetails({
           comments: inputs.comments,
@@ -48,6 +60,7 @@ function Photography() {
               ? PTOStatusEnum.COMPLETE
               : PTOStatusEnum.PENDING,
           isFollowUpClicked: inputs.status === "Photography Pending",
+          phDate: formattedDate,
         })
       );
     } else {
@@ -108,8 +121,6 @@ function Photography() {
     </div>
   ));
 
-  const currDate = new Date();
-
   const formattedDate = currDate.toLocaleDateString("en-GB", {
     day: "numeric",
     month: "short",
@@ -148,30 +159,17 @@ function Photography() {
                 <div className="mt-[0.75rem] flex flex-col gap-[1.25rem]">
                   <div className="flex flex-col gap-1">
                     <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                      Photographer Name
+                      Photographer Id
                     </p>
                     <Input
                       type="text"
                       name="photographer_name"
-                      value={inputs.photographer_name}
+                      value={(employeeId as string) ?? ""}
                       placeholder=""
                       onChange={handleInput}
+                      isReadOnly={true}
                       className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol"
                     />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                      Photography Date
-                    </p>
-                    <div className="flex items-center justify-between h-12 w-full px-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol">
-                      <DatePicker
-                        selected={selectedDate}
-                        onChange={(date: Date | null) => setSelectedDate(date)}
-                        className="w-full outline-none"
-                        dateFormat="yyyy-MM-d"
-                      />
-                      <img src={date} alt="" className="w-5 h-5" />
-                    </div>
                   </div>
                   <div className="flex flex-col gap-1">
                     <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
@@ -181,6 +179,24 @@ function Photography() {
                       {statusComp}
                     </div>
                   </div>
+                  {inputs.status === "Photography Complete" && (
+                    <div className="flex flex-col gap-1">
+                      <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                        Photography Date
+                      </p>
+                      <div className="flex items-center justify-between h-12 w-full px-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol">
+                        <DatePicker
+                          selected={selectedDate}
+                          onChange={(date: Date | null) =>
+                            setSelectedDate(date)
+                          }
+                          className="w-full outline-none"
+                          dateFormat="yyyy-MM-d"
+                        />
+                        <img src={date} alt="" className="w-5 h-5" />
+                      </div>
+                    </div>
+                  )}
                   {inputs.status === "Photography Pending" ? (
                     <NextFollowup />
                   ) : (

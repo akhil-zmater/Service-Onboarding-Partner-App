@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../state";
 import { AddOnboadingDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 import { PTOStatusEnum } from "../state/serviceCenter/servicCenter.types";
+import { scActions } from "../state/serviceCenter/serviceCenter.store";
 
 function Onboarding() {
   const [showMain, setShowMain] = useState(false);
@@ -18,6 +19,7 @@ function Onboarding() {
   React.useEffect(() => {
     if (success) {
       setShowMain(true);
+      dispatch(scActions.resetSCloadingStates());
     }
   }, [success]);
   const [inputs, setInputsss] = useState({
@@ -35,7 +37,7 @@ function Onboarding() {
     dispatch(
       serviceCenterActions.addOnBoardingDetails({
         comments: inputs.additional_comments,
-        repId: "BW102403",
+        repId: "BW102409",
         status:
           inputs.status === "Onboarding Complete"
             ? PTOStatusEnum.COMPLETE

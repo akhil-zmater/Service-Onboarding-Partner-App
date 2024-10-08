@@ -33,7 +33,6 @@ function Login() {
         termsAndConditions: true,
       })
     );
-    // setShowHome(true);
   };
 
   return (

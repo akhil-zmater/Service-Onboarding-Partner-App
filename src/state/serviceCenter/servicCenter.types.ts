@@ -4,7 +4,7 @@ export interface ServiceCenterStateTypes {
   activeSCDetails: GetSCDetailsResponse | null;
   scLoadingStates: ScLoadingStates;
   addFollowUpDetails: postScDetailsFollowUp;
-  addLoginDetails: postLoginDetailsResponse | null
+  addLoginDetails: postLoginDetailsResponse | null;
 }
 
 export interface ScLoadingStates {
@@ -18,13 +18,11 @@ export interface ScLoadingStates {
   addOnBoardingDetailsLoadingState: LoadingStateType;
 }
 
-
 export interface postLoginByDetailsBody {
   employeeId: string;
   password: string;
-  termsAndConditions: boolean
+  termsAndConditions: boolean;
 }
-
 
 export interface postLoginDetailsResponse {
   status: string;
@@ -38,7 +36,6 @@ export interface postLoginDetailsResponse {
   activeStatus: string;
   transactionId: string;
 }
-
 
 export interface GetSCDetailsByPhoneNoReqBody {
   mobileNumber: string;
@@ -100,12 +97,13 @@ export enum RegistrationStatusEnum {
   REJECT = "Reject",
 }
 export enum FlexInstallationEnum {
-  FLEX_INSTALLATION_COMPLETE = "FlexInstallationComplete",
-  FLEX_INSTALLATION_PENDING = "FlexInstallationPending",
+  FLEX_INSTALLATION_COMPLETE = "FlexInstallationcomplete",
+  FLEX_INSTALLATION_PENDING = "flexInstallationPending",
 }
 export enum VerificationStatusEnum {
   VERIFIED = "Verified",
   VERIFICATION_PENDING = "VerificationPending",
+  REJECTED = "Rejected",
 }
 export enum PTOStatusEnum {
   COMPLETE = "complete",
@@ -170,12 +168,13 @@ export interface AddFlexDetailsPayload {
   repId: string;
   status: string;
   comments: string;
+  phDate?: string;
   isFollowUpClicked?: boolean;
 }
 
 export interface AddFlexDetailsReqBody extends AddFlexDetailsPayload {
   phoneNumber: string;
-  followup: postScDetailsFollowUp | null;
+  followup?: postScDetailsFollowUp | null;
 }
 
 export interface AddPhotoGraphyDetalsPayload {
@@ -183,11 +182,12 @@ export interface AddPhotoGraphyDetalsPayload {
   status: string;
   comments: string;
   isFollowUpClicked?: boolean;
+  phDate?: string;
 }
 export interface AddPhotoGraphyDetalsreqBody
   extends AddPhotoGraphyDetalsPayload {
   phoneNumber: string;
-  followup: postScDetailsFollowUp | null;
+  followup?: postScDetailsFollowUp | null;
 }
 
 export interface AddTrainingDetailsPayload {

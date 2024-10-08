@@ -18,4 +18,6 @@ export const AddLoginDetailsLoadingState = (state: RootState) =>
 export const AddTrainingDetailsLoadingState = (state: RootState) =>
   state.serviceCenter.scLoadingStates.addTrainingDetailsLoadingState;
 export const AddOnboadingDetailsLoadingState = (state: RootState) =>
-  state.serviceCenter.scLoadingStates.addTrainingDetailsLoadingState;
+  state.serviceCenter.scLoadingStates.addOnBoardingDetailsLoadingState;
+export const getEmployeeId = (state: RootState) =>
+  state.serviceCenter.addLoginDetails?.employeeId;

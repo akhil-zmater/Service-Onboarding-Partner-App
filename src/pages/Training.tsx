@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../state";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 import { PTOStatusEnum } from "../state/serviceCenter/servicCenter.types";
 import { AddTrainingDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
+import { scActions } from "../state/serviceCenter/serviceCenter.store";
 
 function TrainAndOnboard() {
   const [showMain, setShowMain] = useState(false);
@@ -16,6 +17,7 @@ function TrainAndOnboard() {
   React.useEffect(() => {
     if (success) {
       setShowMain(true);
+      dispatch(scActions.resetSCloadingStates());
     }
   }, [success]);
   const TrainingStatusButtons = ["Training Pending", "Training Complete"];
@@ -34,7 +36,7 @@ function TrainAndOnboard() {
       dispatch(
         serviceCenterActions.addTrainingDetails({
           comments: inputs.additional_comments,
-          repId: "BW102401",
+          repId: "BW102409",
           status:
             inputs.status === "Training Complete"
               ? PTOStatusEnum.COMPLETE
