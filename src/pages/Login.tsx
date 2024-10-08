@@ -9,18 +9,20 @@ import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.actio
 
 function Login() {
   const [showHome, setShowHome] = useState(false);
+  const [showError, setShowError] = useState(false);
   const dispatch = useAppDispatch();
   const { success } = useAppSelector(AddLoginDetailsLoadingState);
   React.useEffect(() => {
     if (success) {
       setShowHome(true);
+    } else {
+      setShowError(true);
     }
   }, [success]);
   const [login, setLogin] = useState({
     id: "",
     password: "",
   });
-  const [incorrect, setIncorrect] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLogin((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -78,8 +80,8 @@ function Login() {
                   className="h-[3.5rem] w-full pl-4 border border-border rounded-[0.5rem] text-[1rem] leading-[1.5rem] font-normal"
                 />
               </div>
-              {incorrect && (
-                <p className="text-[1rem] font-normal leading-[1rem] text-red">
+              {showError && (
+                <p className="text-[0.8rem] pl-1 font-normal leading-[1rem] text-red">
                   Incorrect User ID or Password
                 </p>
               )}

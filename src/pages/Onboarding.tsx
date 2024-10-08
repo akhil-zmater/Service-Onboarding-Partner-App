@@ -9,8 +9,14 @@ import { AddOnboadingDetailsLoadingState } from "../state/serviceCenter/serviceC
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 import { PTOStatusEnum } from "../state/serviceCenter/servicCenter.types";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
+import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
 
-function Onboarding() {
+interface OnboardingProps {
+  isEditing: boolean;
+}
+
+function Onboarding(porps: OnboardingProps) {
+  const activeSCDetails = useAppSelector(getActiveScDetails);
   const [showMain, setShowMain] = useState(false);
   const [onboarding, setOnboarding] = useState<string | null>("");
   const OnboardingStatusButtons = ["Onboarding Pending", "Onboarding Complete"];
@@ -158,7 +164,15 @@ function Onboarding() {
                       />
                     </div>
                   )}
-                  <Submit onClick={handleSubmit} />
+                  <Submit
+                    onClick={handleSubmit}
+                    isDisabled={
+                      activeSCDetails?.onBoardingDetails?.status ===
+                      PTOStatusEnum.COMPLETE
+                        ? true
+                        : false
+                    }
+                  />
                 </div>
               </div>
             </div>

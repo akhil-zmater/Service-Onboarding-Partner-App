@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import crosss from "../images/crossicon.svg";
+import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
+import { useAppSelector } from "../state";
 
 interface MapsProps {
   cross: (e: React.MouseEvent<HTMLImageElement>) => void;
 }
 
 function Maps({ cross }: MapsProps) {
+  const activeScDetails = useAppSelector(getActiveScDetails);
   const [currentPosition, setCurrentPosition] = useState<{
     lat: number;
     lng: number;
@@ -16,11 +19,13 @@ function Maps({ cross }: MapsProps) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        setCurrentPosition({ lat: latitude, lng: longitude });
+        setCurrentPosition({
+          lat: activeScDetails?.latitude as number,
+          lng: activeScDetails?.longitude as number,
+        });
       },
       (error) => {
         console.log("Error getting location", error);
-        setCurrentPosition({ lat: 17.385044, lng: 78.486671 });
       }
     );
   }, []);

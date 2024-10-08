@@ -6,6 +6,7 @@ type ButtonProps = {
   className: string;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   "data-name": string;
+  disabled?: boolean;
 };
 
 function Button(props: ButtonProps) {
@@ -16,6 +17,7 @@ function Button(props: ButtonProps) {
       onClick={props.onClick}
       data-name={props["data-name"]}
       className={props.className}
+      disabled={props.disabled}
     >
       {props.name}
     </button>

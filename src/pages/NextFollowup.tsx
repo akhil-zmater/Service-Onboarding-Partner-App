@@ -26,9 +26,9 @@ function NextFollowup() {
             onChange={(date: Date | null) => {
               setSelectedDate(date);
               if (date) {
-                const day = String(date.getDate()).padStart(2, "0"); // Get day and pad with leading zero
-                const month = String(date.getMonth() + 1).padStart(2, "0"); // Get month (0-indexed, so +1) and pad with leading zero
-                const year = date.getFullYear(); // Get year
+                const day = String(date.getDate()).padStart(2, "0");
+                const month = String(date.getMonth() + 1).padStart(2, "0");
+                const year = date.getFullYear();
                 const formattedDate = `${day}-${month}-${year}`;
                 dispatch(
                   scActions.setPostFollowUpDate(formattedDate as string)
@@ -42,7 +42,7 @@ function NextFollowup() {
         </div>
       </div>
       <div className="flex flex-col gap-1">
-        <p className="text-xs text-ipcol">Comments</p>
+        <p className="text-xs text-ipcol">Reason</p>
         <Input
           type="text"
           name="comments"

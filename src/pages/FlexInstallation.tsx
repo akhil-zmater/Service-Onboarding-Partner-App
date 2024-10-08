@@ -19,13 +19,20 @@ import {
   getEmployeeId,
 } from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
+import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
 
-function FlexInstallation() {
+interface FlexInstallationProps {
+  isEditing: boolean;
+}
+
+function FlexInstallation(props: FlexInstallationProps) {
+  const activeSCDetails = useAppSelector(getActiveScDetails);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const dispatch = useDispatch();
   const [showMain, setShowMain] = useState(false);
   const employeeId = useAppSelector(getEmployeeId);
   const { success } = useAppSelector(AddFlexDetailsLoadingState);
+  const [showError, setShowError] = useState(false);
   // const [onboarding, setOnbarding] = useState<string | null>(
   //   "Flex Installation Pending"
   // );
@@ -51,9 +58,12 @@ function FlexInstallation() {
     //   return value !== null && typeof value === "string" && value.trim() !== "";
     // });
 
+    console.log("heellloodsndsanbdhjsabdhsjadbhad");
+
     if (
-      // allInputFields !== null &&
-      inputs.status !== null
+      inputs.status !== null ||
+      inputs.installation_comments === "" ||
+      inputs.technician_name === ""
     ) {
       const day =
         selectedDate && String(selectedDate?.getDate()).padStart(2, "0"); // Get day and pad with leading zero
@@ -77,7 +87,7 @@ function FlexInstallation() {
         })
       );
     } else {
-      alert("Please Fill All Input Fields");
+      setShowError(true);
     }
   };
   // const [files, setFiles] = useState<string[]>([]);
@@ -295,7 +305,20 @@ function FlexInstallation() {
                       />
                     </div>
                   )}
-                  <Submit onClick={handleSubmit} />
+                  {showError && (
+                    <p className="text-[0.8rem] font-normal pl-2 leading-[1rem] text-red">
+                      Please Fill All Fields !
+                    </p>
+                  )}
+                  <Submit
+                    onClick={handleSubmit}
+                    isDisabled={
+                      activeSCDetails?.flexDetails.status ===
+                      FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
+                        ? true
+                        : false
+                    }
+                  />
                 </div>
               </div>
             </div>
