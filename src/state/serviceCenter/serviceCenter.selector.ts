@@ -13,6 +13,8 @@ export const AddFlexDetailsLoadingState = (state: RootState) =>
   state.serviceCenter.scLoadingStates.addFlexDetailsLoadingState;
 export const AddPhotoGraphyDetailsLoadingState = (state: RootState) =>
   state.serviceCenter.scLoadingStates.addPhotoGrapghyDetailsLoadingState;
+export const AddLoginDetailsLoadingState = (state: RootState) =>
+  state.serviceCenter.scLoadingStates.postLoginDetailsLoadingState;
 export const AddTrainingDetailsLoadingState = (state: RootState) =>
   state.serviceCenter.scLoadingStates.addTrainingDetailsLoadingState;
 export const AddOnboadingDetailsLoadingState = (state: RootState) =>

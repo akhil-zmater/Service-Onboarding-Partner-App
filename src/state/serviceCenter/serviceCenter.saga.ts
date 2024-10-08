@@ -16,7 +16,7 @@ import {
   failureState,
   loadingState,
   successState,
-} from "../common/common.values";
+} from "../common/common.values"; 
 
 import {
   getActiveScDetails,
@@ -112,7 +112,8 @@ function* postSCDetailsSaga(
     yield put(scStoreActions.setPostSCDetailsLoadingState(failureState));
   }
 }
-const postLoginDetails = (body: scType.postLoginDetailsPayload) => {
+;
+const postLoginDetails = (body:scType.postLoginByDetailsBody) => {
   return HttpService({
     method: EReqMethod.POST,
     url: "https://gateway-dev.thevehicle.app/internal/user/login",
@@ -121,29 +122,29 @@ const postLoginDetails = (body: scType.postLoginDetailsPayload) => {
 };
 
 function* postLoginDetailsSaga(
-  action: PayloadAction<scType.postLoginDetailsPayload>
+  action: PayloadAction<scType.postLoginByDetailsBody>
 ) {
   console.log(action.payload, "action.payloadd");
 
   yield put(scStoreActions.setPostLoginDetailsLoadingState(loadingState));
 
   try {
-    const response: APIResponse<scType.postLoginDetailsPayload> = yield call(
+    const response: APIResponse<scType.postLoginDetailsResponse> = yield call(
       postLoginDetails,
       action.payload
     );
     if (response.status === APPSTATES.SUCCESS) {
       console.log("resppp====>>>", response.data);
 
-      // yield put(scStoreActions.setActiveSCDetails(response.data));
+      yield put(scStoreActions.setAddLoginDetails(response.data));
       yield put(scStoreActions.setPostLoginDetailsLoadingState(successState));
     } else {
       yield put(scStoreActions.setPostLoginDetailsLoadingState(failureState));
     }
   } catch (error) {
+    console.log("error===>>", error);
     yield put(scStoreActions.setPostLoginDetailsLoadingState(failureState));
 
-    console.log("error===>>", error);
   }
 }
 
@@ -441,6 +442,7 @@ export default function* watchServiceCenterActions() {
     scActionTypes.ADD_PHOTOGRAPHY_DETAILS,
     addPhotographyDetailsSaga
   );
+  yield takeLatest(scActionTypes.POST_LOGIN_DETAILS,postLoginDetailsSaga)
   yield takeLatest(scActionTypes.ADD_TRAINING_DETAILS, addTrainingDetailsSaga);
   yield takeLatest(
     scActionTypes.ADD_ONBOARDING_DETAILS,

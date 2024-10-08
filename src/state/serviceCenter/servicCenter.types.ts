@@ -4,7 +4,9 @@ export interface ServiceCenterStateTypes {
   activeSCDetails: GetSCDetailsResponse | null;
   scLoadingStates: ScLoadingStates;
   addFollowUpDetails: postScDetailsFollowUp;
+  addLoginDetails: postLoginDetailsResponse | null
 }
+
 export interface ScLoadingStates {
   getSCDetailsLoadingState: LoadingStateType;
   postSCDetailsLoadingState: LoadingStateType;
@@ -16,10 +18,27 @@ export interface ScLoadingStates {
   addOnBoardingDetailsLoadingState: LoadingStateType;
 }
 
-export interface postLoginDetailsPayload {
+
+export interface postLoginByDetailsBody {
   employeeId: string;
   password: string;
+  termsAndConditions: boolean
 }
+
+
+export interface postLoginDetailsResponse {
+  status: string;
+  message: string;
+  userId: string;
+  employeeId: string;
+  userRole: string;
+  name: string;
+  emailId: string;
+  lastLoginTime: string;
+  activeStatus: string;
+  transactionId: string;
+}
+
 
 export interface GetSCDetailsByPhoneNoReqBody {
   mobileNumber: string;

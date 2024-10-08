@@ -4,6 +4,7 @@ import { resetLoadingState } from "../common/common.values";
 import { LoadingStateType } from "../common/common.types";
 const initialState: serviceCenterType.ServiceCenterStateTypes = {
   activeSCDetails: null,
+  addLoginDetails : null,
   scLoadingStates: {
     getSCDetailsLoadingState: resetLoadingState,
     postSCDetailsLoadingState: resetLoadingState,
@@ -110,10 +111,11 @@ const serviceCenterSlice = createSlice({
       state,
       action: PayloadAction<LoadingStateType>
     ) => {
-      state.scLoadingStates.postLoginDetailsLoadingState = {
-        ...action.payload,
-      };
+      state.scLoadingStates.postLoginDetailsLoadingState = {...action.payload}
     },
+     setAddLoginDetails:(state,action:PayloadAction<serviceCenterType.postLoginDetailsResponse>)=>{
+      state.addLoginDetails=action.payload
+    }
   },
 });
 export const { actions: scActions, reducer: scReducer } = serviceCenterSlice;
