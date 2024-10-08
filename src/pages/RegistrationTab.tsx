@@ -20,34 +20,24 @@ import {
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 
 interface RegistrationTabProps {
-  status: (newStatus: string, btnName: string) => void;
+  isEditing: boolean;
 }
 
 export default function RegistrationTab(props: RegistrationTabProps) {
-  const { status } = props;
-
   const dispatch = useDispatch();
   const employeeId = useAppSelector(getEmployeeId);
   const activeSCDetails = useAppSelector(getActiveScDetails);
   const [showMain, setShowMain] = useState(false);
-  // const [onboarding, setOnbarding] = useState<string | null>(null);
+  const [showError, setShowError] = useState(false);
   const [subscription, setSubscription] = useState<string | null>("");
-  // const [file, setFile] = useState<string | null>(null);
-  // const inputRef = useRef<HTMLInputElement | null>(null);
   const [showMap, setShowMap] = useState(false);
   const [inputs, setInputsss] = useState({
     additional_comments: "",
     followUpDate: "",
     subscription_type: "",
   });
-
-  const [state, setState] = React.useState<string>("");
-
-  const handleRegFields = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setInputsss({ ...inputs, [name]: value });
-  };
-
+  // const [file, setFile] = useState<string | null>(null);
+  // const inputRef = useRef<HTMLInputElement | null>(null);
   // const handleUpload = () => {
   //   if (inputRef.current) inputRef.current.click();
   // };
@@ -66,19 +56,19 @@ export default function RegistrationTab(props: RegistrationTabProps) {
   //   }
   // };
 
+  const [state, setState] = React.useState<string>("");
+
+  const handleRegFields = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setInputsss({ ...inputs, [name]: value });
+  };
+
   const handleToggle = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
   ) => {
     const statuss = e.currentTarget.getAttribute("data-name");
     setState(statuss as string);
     console.log("toggle===>>", statuss);
-    // if (statuss) {
-    //   setInputsss((prev) => ({
-    //     ...prev,
-    //     status: statuss,
-    //   }));
-    //   setOnbarding(statuss);
-    // }
   };
 
   const handleSubscription = (
@@ -145,18 +135,6 @@ export default function RegistrationTab(props: RegistrationTabProps) {
 
   const handleSubmit = () => {
     if (state !== "") {
-      // dispatch(
-      //   setInputs({
-      //     sales_rep_id: inputs.sales_rep_id,
-      //     service_center_name: inputs.service_center_name,
-      //     service_center_owner: inputs.service_center_owner,
-      //     service_center_phone: inputs.service_center_phone,
-      //     service_center_location: inputs.service_center_location,
-      //     status: inputs.status,
-      //     additional_comments: inputs.additional_comments,
-      //     subscription_type: inputs.subscription_type,
-      //   })
-      // );
       console.log("detailsss===>>", inputs, state);
       dispatch(
         serviceCenterActions.postSCDetails({
@@ -168,9 +146,8 @@ export default function RegistrationTab(props: RegistrationTabProps) {
         })
       );
       setShowMain(true);
-      // status(onboarding, "Registration");
     } else {
-      alert("Please Fill All Input Fields");
+      setShowError(true);
     }
   };
 
@@ -422,7 +399,21 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                       />
                     </div>
                   )}
-                  <Submit onClick={handleSubmit} />
+                  <div>
+                    {showError && (
+                      <p className="text-[0.8rem] font-normal pl-2 leading-[1rem] text-red">
+                        Please Fill All Fields !
+                      </p>
+                    )}
+                  </div>
+                  <Submit
+                    onClick={handleSubmit}
+                    isDisabled={
+                      activeSCDetails?.registrationStatus === "Registered"
+                        ? true
+                        : false
+                    }
+                  />
                 </div>
               </div>
             </div>

@@ -16,10 +16,16 @@ import {
   getEmployeeId,
 } from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
+import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
 
-function Photography() {
+interface PhotographyProps {
+  isEditing: boolean;
+}
+
+function Photography(props: PhotographyProps) {
   const currDate = new Date();
-  const [selectedDate, setSelectedDate] = useState<Date | null>(currDate);
+  const activeSCDetails = useAppSelector(getActiveScDetails);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const dispatch = useDispatch();
   const [showMain, setShowMain] = useState(false);
   const employeeId = useAppSelector(getEmployeeId);
@@ -214,7 +220,14 @@ function Photography() {
                       />
                     </div>
                   )}
-                  <Submit onClick={handleSubmit} />
+                  <Submit
+                    onClick={handleSubmit}
+                    isDisabled={
+                      activeSCDetails?.photographyDetails?.status === "complete"
+                        ? true
+                        : false
+                    }
+                  />
                 </div>
               </div>
             </div>

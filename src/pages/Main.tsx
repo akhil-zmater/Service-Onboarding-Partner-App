@@ -8,12 +8,10 @@ import FlexInstallation from "./FlexInstallation";
 import TrainAndOnboard from "./Training";
 import phone from "../images/phoneicon.svg";
 import mapii from "../images/mapsiconn.svg";
-import Maps from "./Maps";
-import { useSelector } from "react-redux";
+// import Maps from "./Maps";
 import Home from "./Home";
 import { useAppSelector } from "../state";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
-
 import {
   BtnTypes,
   FlexInstallationEnum,
@@ -23,6 +21,7 @@ import {
   VerificationStatusEnum,
 } from "../state/serviceCenter/servicCenter.types";
 import Onboarding from "./Onboarding";
+import Maps from "./Maps";
 
 function Main() {
   const activeScDetails = useAppSelector(getActiveScDetails);
@@ -66,19 +65,73 @@ function Main() {
           setShowRegistration(true);
           break;
         case "Verification":
-          setShowVerification(true);
+          if (
+            activeScDetails?.registrationStatus ===
+            RegistrationStatusEnum.REGISTERED
+          ) {
+            setShowVerification(true);
+          } else {
+            alert("Please complete Registration field");
+          }
           break;
         case "Flex Installation":
-          setShowFlexInstall(true);
+          if (
+            activeScDetails?.registrationStatus ===
+              RegistrationStatusEnum.REGISTERED &&
+            activeScDetails.verificationDetails.verificationStatus ===
+              VerificationStatusEnum.VERIFIED
+          ) {
+            setShowFlexInstall(true);
+          } else {
+            alert("Please complete Verification field");
+          }
           break;
         case "Photography":
-          setShowPhotography(true);
+          if (
+            activeScDetails?.registrationStatus ===
+              RegistrationStatusEnum.REGISTERED &&
+            activeScDetails.verificationDetails.verificationStatus ===
+              VerificationStatusEnum.VERIFIED &&
+            activeScDetails.flexDetails.status ===
+              FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
+          ) {
+            setShowPhotography(true);
+          } else {
+            alert("Please complete Flex Installation field");
+          }
           break;
         case "Training":
-          setShowTraining(true);
+          if (
+            activeScDetails?.registrationStatus ===
+              RegistrationStatusEnum.REGISTERED &&
+            activeScDetails.verificationDetails.verificationStatus ===
+              VerificationStatusEnum.VERIFIED &&
+            activeScDetails.flexDetails.status ===
+              FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE &&
+            activeScDetails.photographyDetails?.status ===
+              PTOStatusEnum.COMPLETE
+          ) {
+            setShowTraining(true);
+          } else {
+            alert("Please complete Photography field");
+          }
           break;
         case "Onboarding":
-          setShowOnboarding(true);
+          if (
+            activeScDetails?.registrationStatus ===
+              RegistrationStatusEnum.REGISTERED &&
+            activeScDetails.verificationDetails.verificationStatus ===
+              VerificationStatusEnum.VERIFIED &&
+            activeScDetails.flexDetails.status ===
+              FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE &&
+            activeScDetails.photographyDetails?.status ===
+              PTOStatusEnum.COMPLETE &&
+            activeScDetails.trainingDetails?.status === PTOStatusEnum.COMPLETE
+          ) {
+            setShowOnboarding(true);
+          } else {
+            alert("Please complete Training field");
+          }
           break;
         default:
           break;
@@ -119,6 +172,114 @@ function Main() {
       phoneRef.current.click();
     }
   };
+
+  const dateStatus = (btnName: string) => {
+    if (btnName === BtnTypes.REGISTRATION) {
+      if (
+        activeScDetails?.registrationStatus ===
+        RegistrationStatusEnum.REGISTERED
+      ) {
+        return activeScDetails.registeredDate;
+      } else if (
+        activeScDetails?.registrationStatus === RegistrationStatusEnum.FOLLOWUP
+      ) {
+        return activeScDetails.registrationFollowup?.followUpDate;
+      } else if (
+        activeScDetails?.registrationStatus === RegistrationStatusEnum.REJECT
+      ) {
+        return StatusTypeEnum.REJECTED;
+      } else {
+        return "---";
+      }
+    } else if (btnName === BtnTypes.VERIFICATION) {
+      if (activeScDetails?.verificationDetails !== null) {
+        if (
+          activeScDetails?.verificationDetails.verificationStatus ===
+          VerificationStatusEnum.VERIFIED
+        ) {
+          return "VERIFIED_DATE";
+        } else if (
+          activeScDetails?.verificationDetails.verificationStatus ===
+          VerificationStatusEnum.VERIFICATION_PENDING
+        ) {
+          return activeScDetails.verificationDetails.followup.followUpDate;
+        } else {
+          return StatusTypeEnum.NOT_STARTED;
+        }
+      } else {
+        return "---";
+      }
+    } else if (btnName === BtnTypes.FLEX_INSTALLATION) {
+      if (activeScDetails?.flexDetails !== null) {
+        if (
+          activeScDetails?.flexDetails.status ===
+          FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
+        ) {
+          return "FLEX_INSTALLED_DATE";
+        } else if (
+          activeScDetails?.flexDetails.status ===
+          FlexInstallationEnum.FLEX_INSTALLATION_PENDING
+        ) {
+          return activeScDetails.flexDetails.followup.followUpDate;
+        } else {
+          return StatusTypeEnum.NOT_STARTED;
+        }
+      } else {
+        return "---";
+      }
+    } else if (btnName === BtnTypes.PHOTOGRAPHY) {
+      if (activeScDetails?.photographyDetails !== null) {
+        if (
+          activeScDetails?.photographyDetails?.status === PTOStatusEnum.COMPLETE
+        ) {
+          return "PHOTOGRAPHY_DATE";
+        } else if (
+          activeScDetails?.photographyDetails?.status === PTOStatusEnum.PENDING
+        ) {
+          return activeScDetails.photographyDetails.followup.followUpDate;
+        } else {
+          return StatusTypeEnum.NOT_STARTED;
+        }
+      } else {
+        return "---";
+      }
+    } else if (btnName === BtnTypes.TRAINING) {
+      if (activeScDetails?.trainingDetails !== null) {
+        if (
+          activeScDetails?.trainingDetails?.status === PTOStatusEnum.COMPLETE
+        ) {
+          return "TRAINING_DATE";
+        } else if (
+          activeScDetails?.trainingDetails?.status === PTOStatusEnum.PENDING
+        ) {
+          return activeScDetails.trainingDetails.followup.followUpDate;
+        } else {
+          return StatusTypeEnum.NOT_STARTED;
+        }
+      } else {
+        return "---";
+      }
+    } else if (btnName === BtnTypes.ONBOARDING) {
+      if (activeScDetails?.onBoardingDetails !== null) {
+        if (
+          activeScDetails?.onBoardingDetails?.status === PTOStatusEnum.COMPLETE
+        ) {
+          return "ONBOARDING_DATE";
+        } else if (
+          activeScDetails?.onBoardingDetails?.status === PTOStatusEnum.PENDING
+        ) {
+          return activeScDetails.onBoardingDetails.followup.followUpDate;
+        } else {
+          return StatusTypeEnum.NOT_STARTED;
+        }
+      } else {
+        return "---";
+      }
+    } else {
+      return StatusTypeEnum.NOT_STARTED;
+    }
+  };
+
   const cardStatus = (btnName: string) => {
     if (btnName === BtnTypes.REGISTRATION) {
       if (
@@ -243,6 +404,11 @@ function Main() {
     }
   };
 
+  const handleRegistrationEdit = () => {
+    if (RegistrationStatusEnum.REGISTERED) {
+    }
+  };
+
   return (
     <div className="h-screen w-screen">
       {showHome ? (
@@ -250,17 +416,47 @@ function Main() {
       ) : (
         <div>
           {showRegistration ? (
-            <RegistrationTab status={handleStatus} />
+            <RegistrationTab
+              isEditing={
+                activeScDetails?.registrationStatus ===
+                RegistrationStatusEnum.REGISTERED
+              }
+            />
           ) : showVerification ? (
-            <Verification />
+            <Verification
+              isEditing={
+                activeScDetails?.verificationDetails.verificationStatus ===
+                VerificationStatusEnum.VERIFIED
+              }
+            />
           ) : showPhotography ? (
-            <Photography />
+            <Photography
+              isEditing={
+                activeScDetails?.photographyDetails?.status ===
+                PTOStatusEnum.COMPLETE
+              }
+            />
           ) : showFlexInstall ? (
-            <FlexInstallation />
+            <FlexInstallation
+              isEditing={
+                activeScDetails?.flexDetails.status ===
+                FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
+              }
+            />
           ) : showTraining ? (
-            <TrainAndOnboard />
+            <TrainAndOnboard
+              isEditing={
+                activeScDetails?.trainingDetails?.status ===
+                PTOStatusEnum.COMPLETE
+              }
+            />
           ) : showOnboarding ? (
-            <Onboarding />
+            <Onboarding
+              isEditing={
+                activeScDetails?.onBoardingDetails?.status ===
+                PTOStatusEnum.COMPLETE
+              }
+            />
           ) : (
             <div>
               <Navbar onClick={handleHome} />
@@ -292,20 +488,20 @@ function Main() {
                         Call
                       </p>
                     </div>
-                    {/* <div className="flex items-center w-max">
+                    <div className="flex items-center w-max">
                       <img src={mapii} alt="" className="w-6 h-6" />
                       <p
                         onClick={handleMaps}
                         className="underline text-blue text-[0.8rem] leading-[1rem] font-normal pb-[0.2rem]"
                       >
-                        {scDetails.}
+                        {activeScDetails?.serviceCenterAddress}
                       </p>
-                    </div> */}
-                    {/* {showMap && (
+                    </div>
+                    {showMap && (
                       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <Maps cross={handleCloseMap} />
                       </div>
-                    )} */}
+                    )}
                   </div>
                 </div>
                 <div className="flex gap-1 text-[0.8rem] mt-[0.45rem] text-ipcol">
@@ -315,6 +511,7 @@ function Main() {
 
                 {Buttons.map((button, key) => {
                   const status = cardStatus(button);
+                  const date = dateStatus(button);
                   return (
                     <div
                       className="mt-[0.75rem] flex flex-col gap-[1rem]"
@@ -325,7 +522,7 @@ function Main() {
                         statusss={status as string}
                         data-name={button}
                         name={button}
-                        date={formattedDate}
+                        date={date as string}
                         statusColor={statusColor(status) as string}
                         onClick={handleButtons(button)}
                       />

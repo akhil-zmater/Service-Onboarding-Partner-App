@@ -1,4 +1,5 @@
 import op from "../images/open.svg";
+import { StatusTypeEnum } from "../state/serviceCenter/servicCenter.types";
 
 interface RegCompProps {
   name: string;
@@ -27,9 +28,22 @@ function RegComp(props: RegCompProps) {
         <p className={props.className} style={{ color: props.statusColor }}>
           {props.statusss}
         </p>
-        <p className="text-prim font-normal leading-[1rem] text-[1rem]">
-          {props.date}
-        </p>
+        <div className="text-prim font-normal leading-[1rem] text-[0.7rem]">
+          {props.statusss === StatusTypeEnum.COMPLETED ? (
+            props.date
+          ) : props.statusss === StatusTypeEnum.PENDING ? (
+            <div className="flex gap-1">
+              <span className="text-ipcol font-normal leading-[1rem] text-[0.7rem]">
+                Next Follow Up:
+              </span>
+              <span>{props.date}</span>
+            </div>
+          ) : props.statusss === StatusTypeEnum.NOT_STARTED ? (
+            "---"
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </div>
   );

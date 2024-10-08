@@ -9,8 +9,14 @@ import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.actio
 import { PTOStatusEnum } from "../state/serviceCenter/servicCenter.types";
 import { AddTrainingDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
+import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
 
-function TrainAndOnboard() {
+interface TrainingProps {
+  isEditing: boolean;
+}
+
+function TrainAndOnboard(props: TrainingProps) {
+  const activeSCDetails = useAppSelector(getActiveScDetails);
   const [showMain, setShowMain] = useState(false);
   const dispatch = useAppDispatch();
   const { success } = useAppSelector(AddTrainingDetailsLoadingState);
@@ -159,7 +165,15 @@ function TrainAndOnboard() {
                       />
                     </div>
                   )}
-                  <Submit onClick={handleSubmit} />
+                  <Submit
+                    onClick={handleSubmit}
+                    isDisabled={
+                      activeSCDetails?.trainingDetails?.status ===
+                      PTOStatusEnum.COMPLETE
+                        ? true
+                        : false
+                    }
+                  />
                 </div>
               </div>
             </div>

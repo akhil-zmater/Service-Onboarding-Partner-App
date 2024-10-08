@@ -51,18 +51,22 @@ export interface GetSCDetailsResponse {
   registrationComments: string;
   registrationStatus: RegistrationStatusEnum;
   subscriptionType: string;
-  registrationFollowup?: any;
+  registrationFollowup?: Followup;
   verificationDetails: VerificationDetails;
   flexDetails: FlexDetails;
   photographyDetails?: PhotographyDetails;
   trainingDetails?: TrainingDetails;
   onBoardingDetails?: OnBoadingDetails;
+  latitude: number;
+  longitude: number;
 }
 interface TrainingDetails {
   status: PTOStatusEnum;
+  followup: Followup;
 }
 interface OnBoadingDetails {
   status: PTOStatusEnum;
+  followup: Followup;
 }
 interface FlexDetails {
   repId: string;
@@ -73,6 +77,7 @@ interface FlexDetails {
 }
 interface PhotographyDetails {
   status: PTOStatusEnum;
+  followup: Followup;
 }
 
 interface Followup {
@@ -88,7 +93,7 @@ interface VerificationDetails {
   flexDimensions: string;
   comments: string;
   phoneNumber?: any;
-  followup?: any;
+  followup: Followup;
 }
 
 export enum RegistrationStatusEnum {

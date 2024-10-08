@@ -15,9 +15,15 @@ import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.actio
 import { VerificationStatusEnum } from "../state/serviceCenter/servicCenter.types";
 import { useAppSelector } from "../state";
 import { AddVerificationDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
+import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
 
-function Verification() {
+interface VerificationProps {
+  isEditing: boolean;
+}
+
+function Verification(props: VerificationProps) {
+  const activeScDetails = useAppSelector(getActiveScDetails);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const { success } = useAppSelector(AddVerificationDetailsLoadingState);
   React.useEffect(() => {
@@ -30,7 +36,6 @@ function Verification() {
     status: "",
     verifier_name: "",
     flexDimensions: "",
-    // transaction_id: "",
     verifier_comments: "",
     // payment_status: null,
     // photographer_name: "",
@@ -44,6 +49,7 @@ function Verification() {
   //   "Verification Pending"
   // );
   const [payment, setPayment] = useState<string | null>(null);
+  const [showError, setShowError] = useState(false);
 
   // const [file, setFile] = useState<string | null>(null);
   const datePickerRef = useRef<DatePicker>(null);
@@ -90,7 +96,7 @@ function Verification() {
         })
       );
     } else {
-      alert("Please Fill All Input Fields");
+      setShowError(true);
     }
   };
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -397,7 +403,21 @@ function Verification() {
                       />
                     </div>
                   )}
-                  <Submit onClick={handleSubmit} />
+                  {showError && (
+                    <p className="text-[0.8rem] font-normal pl-2 leading-[1rem] text-red">
+                      Please Fill All Fields !
+                    </p>
+                  )}
+
+                  <Submit
+                    onClick={handleSubmit}
+                    isDisabled={
+                      activeScDetails?.verificationDetails
+                        .verificationStatus === VerificationStatusEnum.VERIFIED
+                        ? true
+                        : false
+                    }
+                  />
                 </div>
               </div>
             </div>
