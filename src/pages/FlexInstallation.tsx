@@ -14,13 +14,17 @@ import Submit from "../components/Submit";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 import { FlexInstallationEnum } from "../state/serviceCenter/servicCenter.types";
 import { useAppSelector } from "../state";
-import { AddFlexDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
+import {
+  AddFlexDetailsLoadingState,
+  getEmployeeId,
+} from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
 
 function FlexInstallation() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const dispatch = useDispatch();
   const [showMain, setShowMain] = useState(false);
+  const employeeId = useAppSelector(getEmployeeId);
   const { success } = useAppSelector(AddFlexDetailsLoadingState);
   // const [onboarding, setOnbarding] = useState<string | null>(
   //   "Flex Installation Pending"
@@ -51,14 +55,25 @@ function FlexInstallation() {
       // allInputFields !== null &&
       inputs.status !== null
     ) {
+      const day =
+        selectedDate && String(selectedDate?.getDate()).padStart(2, "0"); // Get day and pad with leading zero
+      const month =
+        selectedDate && String(selectedDate?.getMonth() + 1).padStart(2, "0"); // Get month (0-indexed, so +1) and pad with leading zero
+      const year = selectedDate?.getFullYear(); // Get year
+      const formattedDate = `${day}-${month}-${year}`;
       dispatch(
         serviceCenterActions.addFlexDetails({
           comments: inputs.installation_comments,
           repId: "BW102405",
-          status: inputs.status.replace(/\s+/g, ""),
+          status:
+            inputs.status.replace(/\s+/g, "").toLowerCase() ===
+            "flexinstallationpending"
+              ? FlexInstallationEnum.FLEX_INSTALLATION_PENDING
+              : FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE,
           isFollowUpClicked:
-            inputs.status.replace(/\s+/g, "") ===
-            FlexInstallationEnum.FLEX_INSTALLATION_PENDING,
+            inputs.status.replace(/\s+/g, "").toLowerCase() ===
+            "flexinstallationpending",
+          phDate: formattedDate,
         })
       );
     } else {
@@ -178,15 +193,16 @@ function FlexInstallation() {
                 <div className="mt-[0.75rem] flex flex-col gap-[1.25rem] ">
                   <div className="flex flex-col gap-1">
                     <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                      Technician Name
+                      Technician Id
                     </p>
                     <Input
                       type="text"
                       name="technician_name"
-                      value={inputs.technician_name}
+                      value={(employeeId as string) ?? ""}
                       placeholder=""
                       onChange={handleInput}
                       className="h-12 w-full pl-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol"
+                      isReadOnly={true}
                     />
                   </div>
 
@@ -237,26 +253,31 @@ function FlexInstallation() {
                   </div> */}
                   <div className="flex flex-col gap-1">
                     <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                      Phtography Appointment Date
-                    </p>
-                    <div className="flex items-center justify-between h-12 w-full px-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol">
-                      <DatePicker
-                        selected={selectedDate}
-                        onChange={(date: Date | null) => setSelectedDate(date)}
-                        className="w-full outline-none"
-                        dateFormat="yyyy-MM-d"
-                      />
-                      <img src={date} alt="" className="w-5 h-5" />
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                       Installation Status
                     </p>
                     <div className="border border-border p-2 rounded-lg">
                       {statusComp}
                     </div>
                   </div>
+                  {inputs.status === "Flex Installation Complete" && (
+                    <div className="flex flex-col gap-1">
+                      <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                        Phtography Appointment Date
+                      </p>
+                      <div className="flex items-center justify-between h-12 w-full px-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol">
+                        <DatePicker
+                          selected={selectedDate}
+                          onChange={(date: Date | null) =>
+                            setSelectedDate(date)
+                          }
+                          className="w-full outline-none"
+                          dateFormat="yyyy-MM-d"
+                        />
+                        <img src={date} alt="" className="w-5 h-5" />
+                      </div>
+                    </div>
+                  )}
+
                   {inputs.status === "Flex Installation Pending" ? (
                     <NextFollowup />
                   ) : (

@@ -83,7 +83,7 @@ function Verification() {
               ? VerificationStatusEnum.VERIFIED
               : inputs.status === "Pending"
               ? VerificationStatusEnum.VERIFICATION_PENDING
-              : inputs.status,
+              : VerificationStatusEnum.REJECTED,
           verifierName: inputs.verifier_name,
           verifierRepId: "BW102403",
           isFollowUpClicked: inputs.status === "Pending",

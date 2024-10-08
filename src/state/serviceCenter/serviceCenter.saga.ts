@@ -16,7 +16,7 @@ import {
   failureState,
   loadingState,
   successState,
-} from "../common/common.values"; 
+} from "../common/common.values";
 
 import {
   getActiveScDetails,
@@ -112,8 +112,7 @@ function* postSCDetailsSaga(
     yield put(scStoreActions.setPostSCDetailsLoadingState(failureState));
   }
 }
-;
-const postLoginDetails = (body:scType.postLoginByDetailsBody) => {
+const postLoginDetails = (body: scType.postLoginByDetailsBody) => {
   return HttpService({
     method: EReqMethod.POST,
     url: "https://gateway-dev.thevehicle.app/internal/user/login",
@@ -144,7 +143,6 @@ function* postLoginDetailsSaga(
   } catch (error) {
     console.log("error===>>", error);
     yield put(scStoreActions.setPostLoginDetailsLoadingState(failureState));
-
   }
 }
 
@@ -186,6 +184,14 @@ function* addVerificationDetailsSaga(
           verificationStatus,
           verifierName,
           verifierRepId,
+        }
+      : verificationStatus === scType.VerificationStatusEnum.REJECTED
+      ? {
+          comments,
+          phoneNumber: activeScDetails.phoneNumber,
+          verificationStatus,
+          verifierRepId,
+          verifierName,
         }
       : {
           comments,
@@ -238,7 +244,7 @@ const addFlexDetails = (body: scType.AddFlexDetailsReqBody) => {
 function* addFlexDetailsSaga(
   action: PayloadAction<scType.AddFlexDetailsPayload>
 ) {
-  const { comments, repId, status, isFollowUpClicked } = action.payload;
+  const { comments, repId, status, isFollowUpClicked, phDate } = action.payload;
   try {
     const followUpdetails: scType.postScDetailsFollowUp = yield select(
       getFollowUpDetails
@@ -247,13 +253,22 @@ function* addFlexDetailsSaga(
       getActiveScDetails
     );
     yield put(scStoreActions.setAddFlexDetailsLoadingState(loadingState));
-    const details: scType.AddFlexDetailsReqBody = {
-      comments,
-      repId,
-      status,
-      followup: isFollowUpClicked ? followUpdetails : null,
-      phoneNumber: activeScDetails.phoneNumber,
-    };
+    const details: scType.AddFlexDetailsReqBody = isFollowUpClicked
+      ? {
+          comments,
+          repId,
+          status,
+          followup: followUpdetails,
+          phoneNumber: activeScDetails.phoneNumber,
+        }
+      : {
+          comments,
+          repId,
+          status,
+          phoneNumber: activeScDetails.phoneNumber,
+          phDate,
+        };
+    console.log("flexInstallationDetails====>>>", details);
     const resp: APIResponse<string> = yield call(addFlexDetails, details);
     if (resp.status === APPSTATES.SUCCESS) {
       const payload = {
@@ -285,7 +300,8 @@ function* addPhotographyDetailsSaga(
   action: PayloadAction<scType.AddPhotoGraphyDetalsPayload>
 ) {
   try {
-    const { comments, repId, status, isFollowUpClicked } = action.payload;
+    const { comments, repId, status, isFollowUpClicked, phDate } =
+      action.payload;
     const followUpdetails: scType.postScDetailsFollowUp = yield select(
       getFollowUpDetails
     );
@@ -295,14 +311,22 @@ function* addPhotographyDetailsSaga(
     yield put(
       scStoreActions.setAddPhotographyDetailsLoadingState(loadingState)
     );
-    const details: scType.AddPhotoGraphyDetalsreqBody = {
-      comments,
-      followup: isFollowUpClicked ? followUpdetails : null,
-      phoneNumber: activeScDetails.phoneNumber,
-      repId,
-      status,
-    };
-    console.log("details===>>>", details);
+    const details: scType.AddPhotoGraphyDetalsreqBody = isFollowUpClicked
+      ? {
+          comments,
+          followup: followUpdetails,
+          phoneNumber: activeScDetails.phoneNumber,
+          repId,
+          status,
+        }
+      : {
+          comments,
+          phoneNumber: activeScDetails.phoneNumber,
+          repId,
+          status,
+          phDate,
+        };
+    console.log("photoGraphydetailss===>>>", details);
     const resp: APIResponse<string> = yield call(
       addPhotoGraphyDetails,
       details
@@ -442,7 +466,7 @@ export default function* watchServiceCenterActions() {
     scActionTypes.ADD_PHOTOGRAPHY_DETAILS,
     addPhotographyDetailsSaga
   );
-  yield takeLatest(scActionTypes.POST_LOGIN_DETAILS,postLoginDetailsSaga)
+  yield takeLatest(scActionTypes.POST_LOGIN_DETAILS, postLoginDetailsSaga);
   yield takeLatest(scActionTypes.ADD_TRAINING_DETAILS, addTrainingDetailsSaga);
   yield takeLatest(
     scActionTypes.ADD_ONBOARDING_DETAILS,

@@ -146,6 +146,11 @@ function Main() {
           return StatusTypeEnum.COMPLETED;
         } else if (
           activeScDetails?.verificationDetails.verificationStatus ===
+          VerificationStatusEnum.REJECTED
+        ) {
+          return StatusTypeEnum.REJECTED;
+        } else if (
+          activeScDetails?.verificationDetails.verificationStatus ===
           VerificationStatusEnum.VERIFICATION_PENDING
         ) {
           return StatusTypeEnum.PENDING;
