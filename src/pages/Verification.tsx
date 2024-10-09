@@ -299,6 +299,7 @@ function Verification(props: VerificationProps) {
                       value={inputs.verifier_name}
                       placeholder=""
                       onChange={handleVerFields}
+                      isReadOnly={props.isEditing}
                       className="h-12 w-full pl-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg "
                     />
                   </div>

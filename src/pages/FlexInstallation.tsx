@@ -57,8 +57,17 @@ function FlexInstallation(props: FlexInstallationProps) {
     photoDate: "",
   });
 
+  const dateStr =
+    activeSCDetails?.flexDetails && activeSCDetails?.flexDetails.phDate;
+  let photoDate: Date | null = null;
+
+  if (dateStr && dateStr.includes("-")) {
+    const [day, month, year] = dateStr.split("-");
+    photoDate = new Date(`${year}-${month}-${day}`);
+  }
+
   React.useEffect(() => {
-    if (activeSCDetails?.flexDetails.status !== null) {
+    if (activeSCDetails?.flexDetails !== null) {
       if (
         activeSCDetails?.flexDetails.status ===
         FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
@@ -66,7 +75,9 @@ function FlexInstallation(props: FlexInstallationProps) {
         setInputsss((prev) => ({
           ...prev,
           status: "Flex Installation Complete",
+          installation_comments: activeSCDetails.flexDetails.comments,
         }));
+        setSelectedDate(photoDate);
       }
       if (
         activeSCDetails?.flexDetails.status ===
@@ -77,19 +88,6 @@ function FlexInstallation(props: FlexInstallationProps) {
           status: "Flex Installation Pending",
         }));
       }
-    }
-    if (activeSCDetails?.flexDetails.followup.reason !== null) {
-      setInputsss((prev) => ({
-        ...prev,
-        installation_comments:
-          activeSCDetails?.flexDetails.followup.reason || "",
-      }));
-    }
-    if (activeSCDetails?.flexDetails.phDate !== null) {
-      setInputsss((prev) => ({
-        ...prev,
-        photoDate: activeSCDetails?.flexDetails.phDate || "",
-      }));
     }
   }, [activeSCDetails]);
 
@@ -324,6 +322,7 @@ function FlexInstallation(props: FlexInstallationProps) {
                           }
                           className="w-full outline-none"
                           dateFormat="yyyy-MM-d"
+                          disabled={props.isEditing}
                         />
                         <img src={date} alt="" className="w-5 h-5" />
                       </div>
@@ -343,6 +342,7 @@ function FlexInstallation(props: FlexInstallationProps) {
                         value={inputs.installation_comments}
                         placeholder=""
                         onChange={handleInput}
+                        isReadOnly={props.isEditing}
                         className="h-24 w-full pl-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol"
                       />
                     </div>
