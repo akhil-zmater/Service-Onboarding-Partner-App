@@ -74,6 +74,7 @@ interface FlexDetails {
   comments: string;
   phoneNumber?: any;
   followup: Followup;
+  phDate?: string;
 }
 interface PhotographyDetails {
   status: PTOStatusEnum;

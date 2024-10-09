@@ -23,18 +23,45 @@ function TrainAndOnboard(props: TrainingProps) {
   const [showMain, setShowMain] = useState(false);
   const dispatch = useAppDispatch();
   const { success } = useAppSelector(AddTrainingDetailsLoadingState);
+  const [inputs, setInputsss] = useState({
+    status: "",
+    additional_comments: "",
+  });
+  const TrainingStatusButtons = ["Training Pending", "Training Complete"];
+
   React.useEffect(() => {
     if (success) {
       setShowMain(true);
       dispatch(scActions.resetSCloadingStates());
     }
   }, [success]);
-  const TrainingStatusButtons = ["Training Pending", "Training Complete"];
-  const [inputs, setInputsss] = useState({
-    status: "",
-    additional_comments: "",
-  });
-  const [training, setTraining] = useState<string | null>();
+
+  React.useEffect(() => {
+    if (activeSCDetails?.trainingDetails?.status !== null) {
+      console.log("hdhsjkjas", activeSCDetails?.trainingDetails?.status);
+      if (activeSCDetails?.trainingDetails?.status === PTOStatusEnum.COMPLETE) {
+        setInputsss((prev) => ({
+          ...prev,
+          status: "Training Complete",
+        }));
+      }
+      if (activeSCDetails?.trainingDetails?.status === PTOStatusEnum.PENDING) {
+        setInputsss((prev) => ({
+          ...prev,
+          status: "Training Pending",
+        }));
+        console.log(inputs);
+      }
+    }
+    if (activeSCDetails?.trainingDetails?.followup.reason !== null) {
+      setInputsss((prev) => ({
+        ...prev,
+        additional_comments:
+          activeSCDetails?.trainingDetails?.followup.reason || "",
+      }));
+    }
+  }, [activeSCDetails]);
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInputsss({ ...inputs, [name]: value });
@@ -59,13 +86,15 @@ function TrainAndOnboard(props: TrainingProps) {
   const handleTrainingToggle = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
   ) => {
-    const statuss = e.currentTarget.getAttribute("data-name");
-    if (statuss) {
-      setInputsss((prev) => ({
-        ...prev,
-        status: statuss,
-      }));
-      setTraining(statuss);
+    if (!props.isEditing) {
+      const statuss = e.currentTarget.getAttribute("data-name");
+      console.log("Status====>>>>>", statuss);
+      if (statuss) {
+        setInputsss((prev) => ({
+          ...prev,
+          status: statuss,
+        }));
+      }
     }
   };
 
@@ -84,7 +113,7 @@ function TrainAndOnboard(props: TrainingProps) {
           <p>{status}</p>
           <div
             className={`${
-              training === status
+              inputs.status === status
                 ? "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-blue"
                 : "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-border"
             }`}
@@ -95,7 +124,7 @@ function TrainAndOnboard(props: TrainingProps) {
               data-name={status}
               onClick={handleTrainingToggle}
               className={`${
-                training === status
+                inputs.status === status
                   ? "bg-blue rounded-full w-3 h-3"
                   : "bg-gray-300 rounded-full w-3 h-3"
               }`}
@@ -151,7 +180,7 @@ function TrainAndOnboard(props: TrainingProps) {
                       {TrainingComp}
                     </div>
                   </div>
-                  {training === "Training Pending" ? (
+                  {inputs.status === "Training Pending" ? (
                     <NextFollowup tab={BtnTypes.TRAINING} />
                   ) : (
                     <div className="flex flex-col gap-1">

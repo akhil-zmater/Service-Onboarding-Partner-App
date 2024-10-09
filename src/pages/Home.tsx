@@ -32,7 +32,8 @@ function Home() {
           mobileNumber: mobileNumber,
         })
       );
-    } else {
+    }
+    if (!success || mobileNumber === "") {
       setShowError(true);
     }
   };

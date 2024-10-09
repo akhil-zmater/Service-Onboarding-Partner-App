@@ -36,6 +36,10 @@ function FlexInstallation(props: FlexInstallationProps) {
   const employeeId = useAppSelector(getEmployeeId);
   const { success } = useAppSelector(AddFlexDetailsLoadingState);
   const [showError, setShowError] = useState(false);
+  const statusButtons = [
+    "Flex Installation Pending",
+    "Flex Installation Complete",
+  ];
   // const [onboarding, setOnbarding] = useState<string | null>(
   //   "Flex Installation Pending"
   // );
@@ -50,11 +54,50 @@ function FlexInstallation(props: FlexInstallationProps) {
     status: "",
     installation_comments: "",
     technician_name: "",
+    photoDate: "",
   });
+
+  React.useEffect(() => {
+    if (activeSCDetails?.flexDetails.status !== null) {
+      if (
+        activeSCDetails?.flexDetails.status ===
+        FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
+      ) {
+        setInputsss((prev) => ({
+          ...prev,
+          status: "Flex Installation Complete",
+        }));
+      }
+      if (
+        activeSCDetails?.flexDetails.status ===
+        FlexInstallationEnum.FLEX_INSTALLATION_PENDING
+      ) {
+        setInputsss((prev) => ({
+          ...prev,
+          status: "Flex Installation Pending",
+        }));
+      }
+    }
+    if (activeSCDetails?.flexDetails.followup.reason !== null) {
+      setInputsss((prev) => ({
+        ...prev,
+        installation_comments:
+          activeSCDetails?.flexDetails.followup.reason || "",
+      }));
+    }
+    if (activeSCDetails?.flexDetails.phDate !== null) {
+      setInputsss((prev) => ({
+        ...prev,
+        photoDate: activeSCDetails?.flexDetails.phDate || "",
+      }));
+    }
+  }, [activeSCDetails]);
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInputsss({ ...inputs, [name]: value });
   };
+
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     // const allInputFields = Object.values(inputs).every((value) => {
@@ -115,20 +158,16 @@ function FlexInstallation(props: FlexInstallationProps) {
   const handleToggle = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
   ) => {
-    const statuss = e.currentTarget.getAttribute("data-name");
-    if (statuss) {
-      setInputsss((prev) => ({
-        ...prev,
-        status: statuss,
-      }));
-      // setOnbarding(statuss);
+    if (!props.isEditing) {
+      const statuss = e.currentTarget.getAttribute("data-name");
+      if (statuss) {
+        setInputsss((prev) => ({
+          ...prev,
+          status: statuss,
+        }));
+      }
     }
   };
-
-  const statusButtons = [
-    "Flex Installation Pending",
-    "Flex Installation Complete",
-  ];
 
   const statusComp = statusButtons.map((status, key) => (
     <div key={key} className="flex flex-col">

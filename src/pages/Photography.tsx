@@ -46,6 +46,33 @@ function Photography(props: PhotographyProps) {
     comments: "",
   });
 
+  React.useEffect(() => {
+    if (activeSCDetails?.photographyDetails?.status !== null) {
+      if (
+        activeSCDetails?.photographyDetails?.status === PTOStatusEnum.COMPLETE
+      ) {
+        setInputsss((prev) => ({
+          ...prev,
+          status: "Photography Complete",
+        }));
+      }
+      if (
+        activeSCDetails?.photographyDetails?.status === PTOStatusEnum.PENDING
+      ) {
+        setInputsss((prev) => ({
+          ...prev,
+          status: "Photography Pending",
+        }));
+      }
+    }
+    if (activeSCDetails?.photographyDetails?.followup.reason !== null) {
+      setInputsss((prev) => ({
+        ...prev,
+        comments: activeSCDetails?.photographyDetails?.followup.reason || "",
+      }));
+    }
+  }, [activeSCDetails]);
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInputsss({ ...inputs, [name]: value });
@@ -84,12 +111,14 @@ function Photography(props: PhotographyProps) {
   const handleToggle = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
   ) => {
-    const statuss = e.currentTarget.getAttribute("data-name");
-    if (statuss) {
-      setInputsss((prev) => ({
-        ...prev,
-        status: statuss,
-      }));
+    if (!props.isEditing) {
+      const statuss = e.currentTarget.getAttribute("data-name");
+      if (statuss) {
+        setInputsss((prev) => ({
+          ...prev,
+          status: statuss,
+        }));
+      }
     }
   };
 

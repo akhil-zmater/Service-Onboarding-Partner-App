@@ -144,13 +144,15 @@ function Verification(props: VerificationProps) {
   const handleToggle = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
   ) => {
-    const statuss = e.currentTarget.getAttribute("data-name");
-    if (statuss) {
-      setInputsss((prev) => ({
-        ...prev,
-        status: statuss,
-      }));
-      // setOnbarding(statuss);
+    if (!props.isEditing) {
+      const statuss = e.currentTarget.getAttribute("data-name");
+      if (statuss) {
+        setInputsss((prev) => ({
+          ...prev,
+          status: statuss,
+        }));
+        // setOnbarding(statuss);
+      }
     }
   };
 
@@ -346,6 +348,7 @@ function Verification(props: VerificationProps) {
                             }
                             className="w-full outline-none text-base"
                             dateFormat="yyyy-MM-d"
+                            disabled={props.isEditing}
                           />
                           <img
                             src={date}
@@ -365,6 +368,7 @@ function Verification(props: VerificationProps) {
                           value={inputs.flexDimensions}
                           placeholder="Enter Flex Dimensions"
                           onChange={handleVerFields}
+                          isReadOnly={props.isEditing}
                           className="h-24 w-full pl-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg "
                         />
                       </div>
@@ -421,6 +425,7 @@ function Verification(props: VerificationProps) {
                         placeholder=""
                         onChange={handleVerFields}
                         className="h-24 w-full pl-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg "
+                        isReadOnly={props.isEditing}
                       />
                     </div>
                   )}

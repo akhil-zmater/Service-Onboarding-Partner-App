@@ -15,8 +15,6 @@ function Login() {
   React.useEffect(() => {
     if (success) {
       setShowHome(true);
-    } else {
-      setShowError(true);
     }
   }, [success]);
   const [login, setLogin] = useState({
@@ -35,6 +33,9 @@ function Login() {
         termsAndConditions: true,
       })
     );
+    if (!success || login.id === "" || login.password === "") {
+      setShowError(true);
+    }
   };
 
   return (
