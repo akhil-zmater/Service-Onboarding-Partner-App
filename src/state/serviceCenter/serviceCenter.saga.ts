@@ -131,7 +131,7 @@ function* postLoginDetailsSaga(
   try {
     const response: APIResponse<scType.postLoginDetailsResponse> = yield call(
       postLoginDetails,
-      action.payload
+      action.payload 
     );
     if (response.status === APPSTATES.SUCCESS) {
       console.log("resppp====>>>", response.data);

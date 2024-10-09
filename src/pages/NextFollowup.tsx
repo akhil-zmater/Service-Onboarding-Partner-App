@@ -18,26 +18,26 @@ function NextFollowup(props: NextFollowUpProps) {
     if (props.tab === BtnTypes.REGISTRATION) {
       return activeScDetails?.registrationFollowup?.followUpDate as string;
     } else if (props.tab === BtnTypes.VERIFICATION) {
-      if (activeScDetails?.verificationDetails?.followup !== null) {
+      if (activeScDetails?.verificationDetails !== null) {
         return activeScDetails?.verificationDetails.followup
           .followUpDate as string;
       }
     } else if (props.tab === BtnTypes.FLEX_INSTALLATION) {
-      if (activeScDetails?.flexDetails?.followup !== null) {
+      if (activeScDetails?.flexDetails !== null) {
         return activeScDetails?.flexDetails.followup.followUpDate as string;
       }
     } else if (props.tab === BtnTypes.PHOTOGRAPHY) {
-      if (activeScDetails?.photographyDetails?.followup !== null) {
+      if (activeScDetails?.photographyDetails !== null) {
         return activeScDetails?.photographyDetails?.followup
           .followUpDate as string;
       }
     } else if (props.tab === BtnTypes.TRAINING) {
-      if (activeScDetails?.trainingDetails?.followup !== null) {
+      if (activeScDetails?.trainingDetails !== null) {
         return activeScDetails?.trainingDetails?.followup
           .followUpDate as string;
       }
     } else if (props.tab === BtnTypes.ONBOARDING) {
-      if (activeScDetails?.onBoardingDetails?.followup !== null) {
+      if (activeScDetails?.onBoardingDetails !== null) {
         return activeScDetails?.onBoardingDetails?.followup
           .followUpDate as string;
       }
@@ -61,33 +61,33 @@ function NextFollowup(props: NextFollowUpProps) {
         setComments(activeScDetails?.registrationFollowup?.reason as string);
       }
     } else if (props.tab === BtnTypes.VERIFICATION) {
-      if (activeScDetails?.verificationDetails.followup !== null) {
+      if (activeScDetails?.verificationDetails !== null) {
         setSelectedDate(formattedDate);
         setComments(
           activeScDetails?.verificationDetails.followup.reason as string
         );
       }
     } else if (props.tab === BtnTypes.FLEX_INSTALLATION) {
-      if (activeScDetails?.flexDetails.followup !== null) {
+      if (activeScDetails?.flexDetails !== null) {
         setSelectedDate(formattedDate);
         setComments(activeScDetails?.flexDetails.followup.reason as string);
       }
     } else if (props.tab === BtnTypes.PHOTOGRAPHY) {
-      if (activeScDetails?.photographyDetails?.followup !== null) {
+      if (activeScDetails?.photographyDetails !== null) {
         setSelectedDate(formattedDate);
         setComments(
           activeScDetails?.photographyDetails?.followup.reason as string
         );
       }
     } else if (props.tab === BtnTypes.TRAINING) {
-      if (activeScDetails?.trainingDetails?.followup !== null) {
+      if (activeScDetails?.trainingDetails !== null) {
         setSelectedDate(formattedDate);
         setComments(
           activeScDetails?.trainingDetails?.followup.reason as string
         );
       }
     } else if (props.tab === BtnTypes.ONBOARDING) {
-      if (activeScDetails?.onBoardingDetails?.followup !== null) {
+      if (activeScDetails?.onBoardingDetails !== null) {
         setSelectedDate(formattedDate);
         setComments(
           activeScDetails?.onBoardingDetails?.followup.reason as string
@@ -111,6 +111,7 @@ function NextFollowup(props: NextFollowUpProps) {
         <div className="flex items-center justify-between h-12 w-full px-4 border border-border rounded-lg text-ipcol text-[0.8rem]">
           <DatePicker
             selected={selectedDate}
+            minDate={new Date()}
             onChange={(date: Date | null) => {
               setSelectedDate(date);
               if (date) {

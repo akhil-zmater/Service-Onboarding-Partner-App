@@ -38,8 +38,7 @@ function Home() {
           mobileNumber: mobileNumber,
         })
       );
-    }
-    if (!success || mobileNumber === "") {
+    } else {
       setShowError(true);
     }
   };
@@ -53,7 +52,7 @@ function Home() {
   return (
     <div>
       {showMain ? (
-        <Main />
+        <Main isHome={true} />
       ) : showFollowUps ? (
         <FollowUps />
       ) : (
@@ -102,10 +101,11 @@ function Home() {
                       value={mobileNumber}
                       placeholder="Enter Phone Number"
                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        setMobileNumber(e.target.value);
+                        if (/^\d{0,10}$/.test(e.target.value))
+                          setMobileNumber(e.target.value);
                       }}
                       className="focus:outline-none"
-                      maxLength={10}
+                      maxLength={10 as number}
                     />
                   </div>
                   <div
