@@ -62,14 +62,18 @@ export default function RegistrationTab(props: RegistrationTabProps) {
         activeSCDetails?.registrationStatus === RegistrationStatusEnum.FOLLOWUP
       ) {
         setState("Follow Up");
-      } else {
+      } else if (
+        activeSCDetails?.registrationStatus === RegistrationStatusEnum.REJECT
+      ) {
         setState("Reject");
       }
     }
     if (activeSCDetails?.subscriptionType !== null) {
       if (activeSCDetails?.subscriptionType === SubscriptionTypeEnum.PAID) {
         setSubscription(SubscriptionTypeEnum.PAID);
-      } else {
+      } else if (
+        activeSCDetails?.subscriptionType === SubscriptionTypeEnum.UNPAID
+      ) {
         setSubscription(SubscriptionTypeEnum.UNPAID);
       }
     }
@@ -98,7 +102,6 @@ export default function RegistrationTab(props: RegistrationTabProps) {
   //     setFile(selectedFile.name);
   //   }
   // };
-
   const [state, setState] = React.useState<string>("");
 
   const handleRegFields = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -312,7 +315,7 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                       />
                     </div>
                     {showMap && (
-                      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                      <div className="fixed inset-0 bg-black opacity-95 flex items-center justify-center z-50">
                         <Maps
                           cross={handleCloseMap}
                           latitude={activeSCDetails?.latitude as number}
