@@ -22,8 +22,15 @@ import {
 } from "../state/serviceCenter/servicCenter.types";
 import Onboarding from "./Onboarding";
 import Maps from "./Maps";
+import ErrorBox from "./ErrorBox";
+import FollowUDetails from "../components/FollowUDetails";
+import FollowUps from "./FollowUps";
+interface MainProps {
+  isHome?: boolean;
+}
 
-function Main() {
+function Main(props: MainProps) {
+  console.log("isHOme===>>>", props.isHome);
   const activeScDetails = useAppSelector(getActiveScDetails);
   const [showRegistration, setShowRegistration] = useState(false);
   const [showVerification, setShowVerification] = useState(false);
@@ -32,7 +39,10 @@ function Main() {
   const [showTraining, setShowTraining] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  const [showHome, setShowHome] = useState(false);
+  const [showBack, setShowBack] = useState({
+    home: false,
+    followUp: false,
+  });
   const phoneRef = useRef<HTMLAnchorElement>(null);
   const [status, setStatus] = useState({
     newStatus: "",
@@ -76,12 +86,19 @@ function Main() {
           break;
         case "Flex Installation":
           if (
-            activeScDetails?.registrationStatus ===
-              RegistrationStatusEnum.REGISTERED &&
-            activeScDetails.verificationDetails.verificationStatus ===
-              VerificationStatusEnum.VERIFIED
+            activeScDetails?.registrationStatus &&
+            activeScDetails.verificationDetails
           ) {
-            setShowFlexInstall(true);
+            if (
+              activeScDetails?.registrationStatus ===
+                RegistrationStatusEnum.REGISTERED &&
+              activeScDetails.verificationDetails.verificationStatus ===
+                VerificationStatusEnum.VERIFIED
+            ) {
+              setShowFlexInstall(true);
+            } else {
+              alert("Please complete Verification field");
+            }
           } else {
             alert("Please complete Verification field");
           }
@@ -192,7 +209,11 @@ function Main() {
   };
 
   const handleHome = (e: React.MouseEvent<HTMLImageElement>) => {
-    setShowHome(true);
+    if (props.isHome) {
+      setShowBack((prev) => ({ ...prev, home: true, followUp: false }));
+    } else {
+      setShowBack((prev) => ({ ...prev, home: false, followUp: true }));
+    }
   };
 
   const handleCallClick = () => {
@@ -434,8 +455,10 @@ function Main() {
 
   return (
     <div className="h-screen w-screen">
-      {showHome ? (
+      {showBack.home ? (
         <Home />
+      ) : showBack.followUp ? (
+        <FollowUps />
       ) : (
         <div>
           {showRegistration ? (

@@ -12,6 +12,7 @@ function Login() {
   const [showError, setShowError] = useState(false);
   const dispatch = useAppDispatch();
   const { success } = useAppSelector(AddLoginDetailsLoadingState);
+
   React.useEffect(() => {
     if (success) {
       setShowHome(true);
@@ -33,9 +34,10 @@ function Login() {
         termsAndConditions: true,
       })
     );
-    if (!success || login.id === "" || login.password === "") {
+    if (login.id === "" || login.password === "") {
       setShowError(true);
     }
+    // setShowHome(true);
   };
 
   return (
