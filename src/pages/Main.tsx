@@ -532,7 +532,11 @@ function Main() {
                     </div>
                     {showMap && (
                       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <Maps cross={handleCloseMap} />
+                        <Maps
+                          cross={handleCloseMap}
+                          latitude={activeScDetails?.latitude as number}
+                          longitude={activeScDetails?.longitude as number}
+                        />
                       </div>
                     )}
                   </div>

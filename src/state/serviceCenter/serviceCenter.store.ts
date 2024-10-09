@@ -5,6 +5,7 @@ import { LoadingStateType } from "../common/common.types";
 const initialState: serviceCenterType.ServiceCenterStateTypes = {
   activeSCDetails: null,
   addLoginDetails: null,
+  getAssignedFollowupDetailsData: [],
   scLoadingStates: {
     getSCDetailsLoadingState: resetLoadingState,
     postSCDetailsLoadingState: resetLoadingState,
@@ -14,6 +15,7 @@ const initialState: serviceCenterType.ServiceCenterStateTypes = {
     postLoginDetailsLoadingState: resetLoadingState,
     addTrainingDetailsLoadingState: resetLoadingState,
     addOnBoardingDetailsLoadingState: resetLoadingState,
+    getAssignedFollowUpDetailsLoadingState: resetLoadingState,
   },
 
   addFollowUpDetails: {
@@ -25,6 +27,21 @@ const serviceCenterSlice = createSlice({
   name: "serviceCenterSlice",
   initialState,
   reducers: {
+    //assignedLoadingstate
+    setAssignedFollowupDetailsData: (
+      state,
+      action: PayloadAction<serviceCenterType.getAssignedFollowupDetails[]>
+    ) => {
+      state.getAssignedFollowupDetailsData = action.payload;
+    },
+    setAssignedFollowUpLoadingState: (
+      state,
+      action: PayloadAction<LoadingStateType>
+    ) => {
+      state.scLoadingStates.getAssignedFollowUpDetailsLoadingState = {
+        ...action.payload,
+      };
+    },
     //addOnBoarding details
     setAddOnboardingDetailsLoadingState: (
       state,

@@ -8,9 +8,13 @@ export const scActionTypes = {
   POST_LOGIN_DETAILS: "POST_LOGIN_DETAILS",
   ADD_TRAINING_DETAILS: "ADD_TRAINING_DETAILS",
   ADD_ONBOARDING_DETAILS: "ADD_ONBOARDING_DETAILS",
+  ASSIGNED_FOLLOWUP_DETAILS: "ASSIGNED_FOLLOWUP_DETAILS",
 };
 
 export const serviceCenterActions = {
+  getAssignedFollowUpDetails: () => ({
+    type: scActionTypes.ASSIGNED_FOLLOWUP_DETAILS,
+  }),
   getScDetailsByMobileNum: (payload: scTypes.GetSCDetailsByPhoneNoReqBody) => ({
     type: scActionTypes.GET_SC_DETAILS_PHONENO,
     payload,

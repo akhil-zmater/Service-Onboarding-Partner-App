@@ -41,4 +41,5 @@ export const END_POINTS = {
   addPhotoDetails: END_POINT_BASE + "/service/service-center/photography",
   addTrainingDetails: END_POINT_BASE + "/service/service-center/training",
   addOnboardingDetails: END_POINT_BASE + "/service/service-center/onboard",
+  getFollowUps: END_POINT_BASE + "/service/service-center/followups",
 };
