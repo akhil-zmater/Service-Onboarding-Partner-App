@@ -6,7 +6,10 @@ import NextFollowup from "./NextFollowup";
 import Submit from "../components/Submit";
 import { useAppDispatch, useAppSelector } from "../state";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
-import { PTOStatusEnum } from "../state/serviceCenter/servicCenter.types";
+import {
+  BtnTypes,
+  PTOStatusEnum,
+} from "../state/serviceCenter/servicCenter.types";
 import { AddTrainingDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
@@ -149,7 +152,7 @@ function TrainAndOnboard(props: TrainingProps) {
                     </div>
                   </div>
                   {training === "Training Pending" ? (
-                    <NextFollowup />
+                    <NextFollowup tab={BtnTypes.TRAINING} />
                   ) : (
                     <div className="flex flex-col gap-1">
                       <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
@@ -168,9 +171,9 @@ function TrainAndOnboard(props: TrainingProps) {
                   <Submit
                     onClick={handleSubmit}
                     isDisabled={
-                      activeSCDetails?.trainingDetails?.status ===
-                      PTOStatusEnum.COMPLETE
-                        ? true
+                      activeSCDetails?.trainingDetails !== null
+                        ? activeSCDetails?.trainingDetails?.status ===
+                          PTOStatusEnum.COMPLETE
                         : false
                     }
                   />

@@ -78,6 +78,7 @@ interface FlexDetails {
 interface PhotographyDetails {
   status: PTOStatusEnum;
   followup: Followup;
+  phDate?: string;
 }
 
 interface Followup {
@@ -215,4 +216,8 @@ export interface AddOnboadingDetailsPayload {
 export interface AddOnboadingDetailsReqBody extends AddOnboadingDetailsPayload {
   phoneNumber: string;
   followup: postScDetailsFollowUp | null;
+}
+export enum SubscriptionTypeEnum {
+  PAID = "Paid",
+  UNPAID = "Unpaid",
 }
