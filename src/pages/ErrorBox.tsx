@@ -3,15 +3,13 @@ import crosss from "../images/crossicon.svg";
 
 interface ErrorBoxProps {
   cross: (e: React.MouseEvent<HTMLImageElement>) => void;
+  message: string;
 }
 
-function ErrorBox({ cross }: ErrorBoxProps) {
+function ErrorBox({ cross, message }: ErrorBoxProps) {
   return (
     <div className=" bg-white w-full mx-5 h-max rounded-lg font-poppins flex  justify-between gap-5 px-3 py-5">
-      <h2 className="text-pretty w-[90%]">
-        ERROR MESSAGE ERROR MESSAGE ERROR MESSAGE ERROR MESSAGE ERROR MESSAGE
-        ERROR MESSAGE ERROR MESSAGE ERROR MESSAGE !!
-      </h2>
+      <h2 className="text-pretty w-[90%]">{message}</h2>
       <img
         src={crosss}
         onClick={cross}

@@ -6,6 +6,7 @@ export interface ServiceCenterStateTypes {
   addFollowUpDetails: postScDetailsFollowUp;
   addLoginDetails: postLoginDetailsResponse | null;
   getAssignedFollowupDetailsData: getAssignedFollowupDetails[];
+  apiState: ApiErrorState;
 }
 
 export interface ScLoadingStates {
@@ -20,6 +21,10 @@ export interface ScLoadingStates {
   getAssignedFollowUpDetailsLoadingState: LoadingStateType;
 }
 
+export interface ApiErrorState {
+  message: string;
+  isVisible: boolean;
+}
 export interface getAssignedFollowupDetails {
   serviceCenterName: string;
   serviceCenterOwnerName: string;

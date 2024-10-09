@@ -27,17 +27,17 @@ function Login() {
     setLogin((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    dispatch(
-      serviceCenterActions.addLoginDetails({
-        employeeId: login.id,
-        password: login.password,
-        termsAndConditions: true,
-      })
-    );
     if (login.id === "" || login.password === "") {
       setShowError(true);
+    } else {
+      dispatch(
+        serviceCenterActions.addLoginDetails({
+          employeeId: login.id,
+          password: login.password,
+          termsAndConditions: true,
+        })
+      );
     }
-    // setShowHome(true);
   };
 
   return (
@@ -62,7 +62,7 @@ function Login() {
                   User ID
                 </p>
                 <Input
-                  type="number"
+                  type="text"
                   name="id"
                   value={login.id}
                   placeholder="Enter ID"

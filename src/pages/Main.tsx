@@ -11,7 +11,10 @@ import mapii from "../images/mapsiconn.svg";
 // import Maps from "./Maps";
 import Home from "./Home";
 import { useAppSelector } from "../state";
-import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
+import {
+  getActiveScDetails,
+  getSCDetailsLoadingState,
+} from "../state/serviceCenter/serviceCenter.selector";
 import {
   BtnTypes,
   FlexInstallationEnum,
@@ -25,12 +28,12 @@ import Maps from "./Maps";
 import ErrorBox from "./ErrorBox";
 import FollowUDetails from "../components/FollowUDetails";
 import FollowUps from "./FollowUps";
+import Loader from "./Loader";
 interface MainProps {
   isHome?: boolean;
 }
 
 function Main(props: MainProps) {
-  console.log("isHOme===>>>", props.isHome);
   const activeScDetails = useAppSelector(getActiveScDetails);
   const [showRegistration, setShowRegistration] = useState(false);
   const [showVerification, setShowVerification] = useState(false);
@@ -43,6 +46,8 @@ function Main(props: MainProps) {
     home: false,
     followUp: false,
   });
+
+  const { loading } = useAppSelector(getSCDetailsLoadingState);
   const phoneRef = useRef<HTMLAnchorElement>(null);
   const [status, setStatus] = useState({
     newStatus: "",
@@ -455,141 +460,152 @@ function Main(props: MainProps) {
 
   return (
     <div className="h-screen w-screen">
-      {showBack.home ? (
-        <Home />
-      ) : showBack.followUp ? (
-        <FollowUps />
+      {loading ? (
+        <div>
+          <Loader />{" "}
+        </div>
       ) : (
         <div>
-          {showRegistration ? (
-            <RegistrationTab
-              isEditing={
-                activeScDetails?.registrationStatus ===
-                RegistrationStatusEnum.REGISTERED
-              }
-            />
-          ) : showVerification ? (
-            <Verification
-              isEditing={
-                activeScDetails?.verificationDetails !== null
-                  ? activeScDetails?.verificationDetails.verificationStatus ===
-                    VerificationStatusEnum.VERIFIED
-                  : false
-              }
-            />
-          ) : showPhotography ? (
-            <Photography
-              isEditing={
-                activeScDetails?.photographyDetails !== null
-                  ? activeScDetails?.photographyDetails?.status ===
-                    PTOStatusEnum.COMPLETE
-                  : false
-              }
-            />
-          ) : showFlexInstall ? (
-            <FlexInstallation
-              isEditing={
-                activeScDetails?.flexDetails !== null
-                  ? activeScDetails?.flexDetails.status ===
-                    FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
-                  : false
-              }
-            />
-          ) : showTraining ? (
-            <TrainAndOnboard
-              isEditing={
-                activeScDetails?.trainingDetails !== null
-                  ? activeScDetails?.trainingDetails?.status ===
-                    PTOStatusEnum.COMPLETE
-                  : false
-              }
-            />
-          ) : showOnboarding ? (
-            <Onboarding
-              isEditing={
-                activeScDetails?.onBoardingDetails !== null
-                  ? activeScDetails?.onBoardingDetails?.status ===
-                    PTOStatusEnum.COMPLETE
-                  : false
-              }
-            />
+          {showBack.home ? (
+            <Home />
+          ) : showBack.followUp ? (
+            <FollowUps />
           ) : (
             <div>
-              <Navbar onClick={handleHome} />
-              <div className="ml-[0.7rem] mt-[1.2rem] mr-[0.5rem]">
-                <h1 className="text-black text-[1.1rem] font-medium leading-[1.7rem]">
-                  {activeScDetails?.serviceCenterName}
-                </h1>
-                <div className="flex flex-col gap-[0.25rem] mt-[0.3rem]">
-                  <div className="flex gap-1 text-xs font-normal leading-[1rem] text-[1rem]">
-                    <p className="text-background pl-[0.32rem] ">Owner Name:</p>
-                    <span className="font-normal text-black leading-[1rem]  ">
-                      {activeScDetails?.serviceCenterOwnerName}
-                    </span>
-                  </div>
-                  <div className=" flex items-center gap-2">
-                    <div className="flex items-center">
-                      <img src={phone} alt="" className="w-6 h-6" />
-                      <a
-                        href={`tel: ${activeScDetails?.phoneNumber}`}
-                        className="hidden"
-                        ref={phoneRef}
-                      >
-                        {activeScDetails?.phoneNumber}
-                      </a>
-                      <p
-                        onClick={handleCallClick}
-                        className="text-blue text-[0.8rem] pb-[0.2rem] leading-[1rem] font-medium "
-                      >
-                        Call
-                      </p>
-                    </div>
-                    <div className="flex items-center w-max">
-                      <img src={mapii} alt="" className="w-6 h-6" />
-                      <p
-                        onClick={handleMaps}
-                        className="underline text-blue text-[0.8rem] leading-[1rem] font-normal pb-[0.2rem]"
-                      >
-                        {activeScDetails?.serviceCenterAddress}
-                      </p>
-                    </div>
-                    {showMap && (
-                      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <Maps
-                          cross={handleCloseMap}
-                          latitude={activeScDetails?.latitude as number}
-                          longitude={activeScDetails?.longitude as number}
-                        />
+              {showRegistration ? (
+                <RegistrationTab
+                  isEditing={
+                    activeScDetails?.registrationStatus ===
+                    RegistrationStatusEnum.REGISTERED
+                  }
+                />
+              ) : showVerification ? (
+                <Verification
+                  isEditing={
+                    activeScDetails?.verificationDetails !== null
+                      ? activeScDetails?.verificationDetails
+                          .verificationStatus ===
+                        VerificationStatusEnum.VERIFIED
+                      : false
+                  }
+                />
+              ) : showPhotography ? (
+                <Photography
+                  isEditing={
+                    activeScDetails?.photographyDetails !== null
+                      ? activeScDetails?.photographyDetails?.status ===
+                        PTOStatusEnum.COMPLETE
+                      : false
+                  }
+                />
+              ) : showFlexInstall ? (
+                <FlexInstallation
+                  isEditing={
+                    activeScDetails?.flexDetails !== null
+                      ? activeScDetails?.flexDetails.status ===
+                        FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
+                      : false
+                  }
+                />
+              ) : showTraining ? (
+                <TrainAndOnboard
+                  isEditing={
+                    activeScDetails?.trainingDetails !== null
+                      ? activeScDetails?.trainingDetails?.status ===
+                        PTOStatusEnum.COMPLETE
+                      : false
+                  }
+                />
+              ) : showOnboarding ? (
+                <Onboarding
+                  isEditing={
+                    activeScDetails?.onBoardingDetails !== null
+                      ? activeScDetails?.onBoardingDetails?.status ===
+                        PTOStatusEnum.COMPLETE
+                      : false
+                  }
+                />
+              ) : (
+                <div>
+                  <Navbar onClick={handleHome} />
+                  <div className="ml-[0.7rem] mt-[1.2rem] mr-[0.5rem]">
+                    <h1 className="text-black text-[1.1rem] font-medium leading-[1.7rem]">
+                      {activeScDetails?.serviceCenterName}
+                    </h1>
+                    <div className="flex flex-col gap-[0.25rem] mt-[0.3rem]">
+                      <div className="flex gap-1 text-xs font-normal leading-[1rem] text-[1rem]">
+                        <p className="text-background pl-[0.32rem] ">
+                          Owner Name:
+                        </p>
+                        <span className="font-normal text-black leading-[1rem]  ">
+                          {activeScDetails?.serviceCenterOwnerName}
+                        </span>
                       </div>
-                    )}
+                      <div className=" flex items-center gap-2">
+                        <div className="flex items-center">
+                          <img src={phone} alt="" className="w-6 h-6" />
+                          <a
+                            href={`tel: ${activeScDetails?.phoneNumber}`}
+                            className="hidden"
+                            ref={phoneRef}
+                          >
+                            {activeScDetails?.phoneNumber}
+                          </a>
+                          <p
+                            onClick={handleCallClick}
+                            className="text-blue text-[0.8rem] pb-[0.2rem] leading-[1rem] font-medium "
+                          >
+                            Call
+                          </p>
+                        </div>
+                        <div className="flex items-center w-max">
+                          <img src={mapii} alt="" className="w-6 h-6" />
+                          <p
+                            onClick={handleMaps}
+                            className="underline text-blue text-[0.8rem] leading-[1rem] font-normal pb-[0.2rem]"
+                          >
+                            {activeScDetails?.serviceCenterAddress}
+                          </p>
+                        </div>
+                        {showMap && (
+                          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                            <Maps
+                              cross={handleCloseMap}
+                              latitude={activeScDetails?.latitude as number}
+                              longitude={activeScDetails?.longitude as number}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex gap-1 text-[0.8rem] mt-[0.45rem] text-ipcol">
+                      <p className="font-normal">Date:</p>
+                      <p className="font-medium">{formattedDate}</p>
+                    </div>
+
+                    {Buttons.map((button, key) => {
+                      const status = cardStatus(button);
+                      const date = dateStatus(button);
+                      return (
+                        <div
+                          className="mt-[0.75rem] flex flex-col gap-[1rem]"
+                          key={key}
+                        >
+                          <RegComp
+                            className={resClass}
+                            statusss={status as string}
+                            data-name={button}
+                            name={button}
+                            date={date as string}
+                            statusColor={statusColor(status) as string}
+                            onClick={handleButtons(button)}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
-                <div className="flex gap-1 text-[0.8rem] mt-[0.45rem] text-ipcol">
-                  <p className="font-normal">Date:</p>
-                  <p className="font-medium">{formattedDate}</p>
-                </div>
-
-                {Buttons.map((button, key) => {
-                  const status = cardStatus(button);
-                  const date = dateStatus(button);
-                  return (
-                    <div
-                      className="mt-[0.75rem] flex flex-col gap-[1rem]"
-                      key={key}
-                    >
-                      <RegComp
-                        className={resClass}
-                        statusss={status as string}
-                        data-name={button}
-                        name={button}
-                        date={date as string}
-                        statusColor={statusColor(status) as string}
-                        onClick={handleButtons(button)}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+              )}
             </div>
           )}
         </div>

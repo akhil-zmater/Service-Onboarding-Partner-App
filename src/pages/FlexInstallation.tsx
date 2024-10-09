@@ -96,13 +96,13 @@ function FlexInstallation(props: FlexInstallationProps) {
     setInputsss({ ...inputs, [name]: value });
   };
 
+  const empId = useAppSelector(getEmployeeId);
+
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     // const allInputFields = Object.values(inputs).every((value) => {
     //   return value !== null && typeof value === "string" && value.trim() !== "";
     // });
-
-    console.log("heellloodsndsanbdhjsabdhsjadbhad");
 
     if (
       inputs.status !== null ||
@@ -118,7 +118,7 @@ function FlexInstallation(props: FlexInstallationProps) {
       dispatch(
         serviceCenterActions.addFlexDetails({
           comments: inputs.installation_comments,
-          repId: "BW102405",
+          repId: empId as string,
           status:
             inputs.status.replace(/\s+/g, "").toLowerCase() ===
             "flexinstallationpending"

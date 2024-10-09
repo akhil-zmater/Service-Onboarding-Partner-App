@@ -179,6 +179,7 @@ export default function RegistrationTab(props: RegistrationTabProps) {
     month: "short",
     year: "numeric",
   });
+  const empId = useAppSelector(getEmployeeId);
 
   const handleSubmit = () => {
     if (state !== "") {
@@ -187,7 +188,7 @@ export default function RegistrationTab(props: RegistrationTabProps) {
         serviceCenterActions.postSCDetails({
           registrationStatus:
             state === "Follow Up" ? "Followup" : (state as string),
-          salesRepId: "BW102402",
+          salesRepId: empId as string,
           comments: inputs.additional_comments,
           subscriptionType: inputs.subscription_type,
         })

@@ -6,6 +6,10 @@ const initialState: serviceCenterType.ServiceCenterStateTypes = {
   activeSCDetails: null,
   addLoginDetails: null,
   getAssignedFollowupDetailsData: [],
+  apiState: {
+    isVisible: false,
+    message: "",
+  },
   scLoadingStates: {
     getSCDetailsLoadingState: resetLoadingState,
     postSCDetailsLoadingState: resetLoadingState,
@@ -27,6 +31,13 @@ const serviceCenterSlice = createSlice({
   name: "serviceCenterSlice",
   initialState,
   reducers: {
+    //ErrorState
+    setApiError: (
+      state,
+      action: PayloadAction<serviceCenterType.ApiErrorState>
+    ) => {
+      state.apiState = action.payload;
+    },
     //assignedLoadingstate
     setAssignedFollowupDetailsData: (
       state,

@@ -17,7 +17,10 @@ import {
   VerificationStatusEnum,
 } from "../state/serviceCenter/servicCenter.types";
 import { useAppSelector } from "../state";
-import { AddVerificationDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
+import {
+  AddVerificationDetailsLoadingState,
+  getEmployeeId,
+} from "../state/serviceCenter/serviceCenter.selector";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
 
@@ -73,7 +76,11 @@ function Verification(props: VerificationProps) {
         activeScDetails?.verificationDetails.verificationStatus ===
         VerificationStatusEnum.VERIFICATION_PENDING
       ) {
-        setInputsss((prev) => ({ ...prev, status: "Pending" }));
+        setInputsss((prev) => ({
+          ...prev,
+          verifier_name: activeScDetails?.verificationDetails.verifierName,
+          status: "Pending",
+        }));
       } else {
         setInputsss((prev) => ({ ...prev, status: "Rejected" }));
       }
@@ -90,6 +97,7 @@ function Verification(props: VerificationProps) {
     const { name, value } = e.target;
     setInputsss({ ...inputs, [name]: value });
   };
+  const empId = useAppSelector(getEmployeeId);
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (inputs.status !== "") {
@@ -113,7 +121,7 @@ function Verification(props: VerificationProps) {
               ? VerificationStatusEnum.VERIFICATION_PENDING
               : VerificationStatusEnum.REJECTED,
           verifierName: inputs.verifier_name,
-          verifierRepId: "BW102403",
+          verifierRepId: empId as string,
           isFollowUpClicked: inputs.status === "Pending",
         })
       );

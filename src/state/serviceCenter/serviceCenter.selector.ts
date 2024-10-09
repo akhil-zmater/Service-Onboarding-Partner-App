@@ -46,3 +46,7 @@ export const getFollowUpDetailsData = createSelector(
     return data;
   }
 );
+
+export const isApiError = (state: RootState) => state.serviceCenter.apiState;
+export const getAssignedFollowupDetailsLoadingState = (state: RootState) =>
+  state.serviceCenter.scLoadingStates.getAssignedFollowUpDetailsLoadingState;
