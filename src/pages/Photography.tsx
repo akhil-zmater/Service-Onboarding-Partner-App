@@ -73,6 +73,7 @@ function Photography(props: PhotographyProps) {
     const { name, value } = e.target;
     setInputsss({ ...inputs, [name]: value });
   };
+  const empId = useAppSelector(getEmployeeId);
 
   const statusButtons = ["Photography Pending", "Photography Complete"];
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -86,7 +87,7 @@ function Photography(props: PhotographyProps) {
       dispatch(
         serviceCenterActions.addPhotoGraphyDetails({
           comments: inputs.comments,
-          repId: "BW102407",
+          repId: empId as string,
           status:
             inputs.status === "Photography Complete"
               ? PTOStatusEnum.COMPLETE

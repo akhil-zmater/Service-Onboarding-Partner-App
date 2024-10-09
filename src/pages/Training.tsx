@@ -10,7 +10,10 @@ import {
   BtnTypes,
   PTOStatusEnum,
 } from "../state/serviceCenter/servicCenter.types";
-import { AddTrainingDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
+import {
+  AddTrainingDetailsLoadingState,
+  getEmployeeId,
+} from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
 
@@ -61,13 +64,14 @@ function TrainAndOnboard(props: TrainingProps) {
     const { name, value } = e.target;
     setInputsss({ ...inputs, [name]: value });
   };
+  const empId = useAppSelector(getEmployeeId);
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     console.log("details====>>", inputs);
     if (inputs.status !== "") {
       dispatch(
         serviceCenterActions.addTrainingDetails({
           comments: inputs.additional_comments,
-          repId: "BW102409",
+          repId: empId as string,
           status:
             inputs.status === "Training Complete"
               ? PTOStatusEnum.COMPLETE

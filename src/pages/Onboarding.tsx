@@ -5,7 +5,10 @@ import NextFollowup from "./NextFollowup";
 import Navbar from "./Navbar";
 import Main from "./Main";
 import { useAppDispatch, useAppSelector } from "../state";
-import { AddOnboadingDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
+import {
+  AddOnboadingDetailsLoadingState,
+  getEmployeeId,
+} from "../state/serviceCenter/serviceCenter.selector";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 import {
   BtnTypes,
@@ -63,12 +66,12 @@ function Onboarding(porps: OnboardingProps) {
     setInputsss({ ...inputs, [name]: value });
   };
 
+  const empId = useAppSelector(getEmployeeId);
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // setShowMain(true);
     dispatch(
       serviceCenterActions.addOnBoardingDetails({
         comments: inputs.additional_comments,
-        repId: "BW102409",
+        repId: empId as string,
         status:
           inputs.status === "Onboarding Complete"
             ? PTOStatusEnum.COMPLETE

@@ -1,10 +1,38 @@
 import React from "react";
 import Login from "./pages/Login";
+import ErrorBox from "./pages/ErrorBox";
+import { useAppDispatch, useAppSelector } from "./state";
+import { isApiError } from "./state/serviceCenter/serviceCenter.selector";
+import { scActions } from "./state/serviceCenter/serviceCenter.store";
 
 function App() {
+  const [isErrorVisible, setIsErrorVisible] = React.useState(false);
+  const { isVisible, message } = useAppSelector(isApiError);
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    if (isVisible) {
+      setIsErrorVisible(true);
+    }
+  }, [isVisible]);
+  const errorHandler = () => {
+    setIsErrorVisible(false);
+    dispatch(
+      scActions.setApiError({
+        isVisible: false,
+        message: "",
+      })
+    );
+  };
   return (
     <div className="!font-poppins">
       <Login />
+      {isErrorVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <ErrorBox cross={errorHandler} message={message} />
+        </div>
+      )}
+
       {/* <Home /> */}
       {/* <Main /> */}
       {/* <RegistrationTab /> */}

@@ -55,6 +55,12 @@ function* getSCDetailsSaga(
     }
   } catch (error) {
     yield put(scStoreActions.setGetSCDetailsLoadingState(failureState));
+    yield put(
+      scStoreActions.setApiError({
+        isVisible: true,
+        message: error as string,
+      })
+    );
 
     console.log("error===>>", error);
   }
@@ -110,6 +116,12 @@ function* postSCDetailsSaga(
     }
   } catch (error) {
     console.log("Error===>>", error);
+    yield put(
+      scStoreActions.setApiError({
+        isVisible: true,
+        message: error as string,
+      })
+    );
     yield put(scStoreActions.setPostSCDetailsLoadingState(failureState));
   }
 }
@@ -131,7 +143,7 @@ function* postLoginDetailsSaga(
   try {
     const response: APIResponse<scType.postLoginDetailsResponse> = yield call(
       postLoginDetails,
-      action.payload 
+      action.payload
     );
     if (response.status === APPSTATES.SUCCESS) {
       console.log("resppp====>>>", response.data);
@@ -145,6 +157,12 @@ function* postLoginDetailsSaga(
   } catch (error) {
     console.log("error===>>", error);
     yield put(scStoreActions.setPostLoginDetailsLoadingState(failureState));
+    yield put(
+      scStoreActions.setApiError({
+        isVisible: true,
+        message: error as string,
+      })
+    );
   }
 }
 
@@ -227,7 +245,12 @@ function* addVerificationDetailsSaga(
       );
     }
   } catch (error) {
-    console.log("error===>>>", error);
+    yield put(
+      scStoreActions.setApiError({
+        isVisible: true,
+        message: error as string,
+      })
+    );
 
     yield put(
       scStoreActions.setAddVerificationDetailsLoadingState(failureState)
@@ -285,7 +308,12 @@ function* addFlexDetailsSaga(
       yield put(scStoreActions.setAddFlexDetailsLoadingState(failureState));
     }
   } catch (error) {
-    console.log("ERROORRR===>>", error);
+    yield put(
+      scStoreActions.setApiError({
+        isVisible: true,
+        message: error as string,
+      })
+    );
     yield put(scStoreActions.setAddFlexDetailsLoadingState(failureState));
   }
 }
@@ -350,7 +378,12 @@ function* addPhotographyDetailsSaga(
       );
     }
   } catch (error) {
-    console.log("ERROR===>>>>", error);
+    yield put(
+      scStoreActions.setApiError({
+        isVisible: true,
+        message: error as string,
+      })
+    );
     yield put(
       scStoreActions.setAddPhotographyDetailsLoadingState(failureState)
     );
@@ -401,7 +434,12 @@ function* addTrainingDetailsSaga(
       yield put(scStoreActions.setAddTrainingDetailsLoadingState(failureState));
     }
   } catch (error) {
-    console.log("Errorr===>>", error);
+    yield put(
+      scStoreActions.setApiError({
+        isVisible: true,
+        message: error as string,
+      })
+    );
     yield put(scStoreActions.setAddTrainingDetailsLoadingState(failureState));
   }
 }
@@ -452,7 +490,12 @@ function* addOnBoardingDetailsSaga(
       );
     }
   } catch (error) {
-    console.log("error==>>>", error);
+    yield put(
+      scStoreActions.setApiError({
+        isVisible: true,
+        message: error as string,
+      })
+    );
     yield put(scStoreActions.setAddOnboardingDetailsLoadingState(failureState));
   }
 }
@@ -469,9 +512,8 @@ function* getAssignedFollowUpDetailsSaga() {
     yield put(scStoreActions.setAssignedFollowUpLoadingState(loadingState));
     //TODO: Need to change
     const empId: string = yield select(getEmployeeId);
-    const data = "BW102402";
     const resp: APIResponse<Array<scType.getAssignedFollowupDetails>> =
-      yield call(getAssignedFollowUpDetails, data);
+      yield call(getAssignedFollowUpDetails, empId);
     if (resp.status === APPSTATES.SUCCESS) {
       yield put(scStoreActions.setAssignedFollowupDetailsData(resp.data));
       yield put(scStoreActions.setAssignedFollowUpLoadingState(successState));
@@ -479,7 +521,12 @@ function* getAssignedFollowUpDetailsSaga() {
       yield put(scStoreActions.setAssignedFollowUpLoadingState(failureState));
     }
   } catch (error) {
-    console.log("ERRORR===>>", error);
+    yield put(
+      scStoreActions.setApiError({
+        isVisible: true,
+        message: error as string,
+      })
+    );
     yield put(scStoreActions.setAssignedFollowUpLoadingState(failureState));
   }
 }
