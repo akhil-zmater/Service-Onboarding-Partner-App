@@ -47,14 +47,16 @@ function Photography(props: PhotographyProps) {
   });
 
   React.useEffect(() => {
-    if (activeSCDetails?.photographyDetails?.status !== null) {
+    if (activeSCDetails?.photographyDetails !== null) {
       if (
         activeSCDetails?.photographyDetails?.status === PTOStatusEnum.COMPLETE
       ) {
         setInputsss((prev) => ({
           ...prev,
           status: "Photography Complete",
+          comments: activeSCDetails.photographyDetails?.comments as string,
         }));
+        setSelectedDate(phDate);
       }
       if (
         activeSCDetails?.photographyDetails?.status === PTOStatusEnum.PENDING
@@ -64,12 +66,6 @@ function Photography(props: PhotographyProps) {
           status: "Photography Pending",
         }));
       }
-    }
-    if (activeSCDetails?.photographyDetails?.followup.reason !== null) {
-      setInputsss((prev) => ({
-        ...prev,
-        comments: activeSCDetails?.photographyDetails?.followup.reason || "",
-      }));
     }
   }, [activeSCDetails]);
 
@@ -177,11 +173,6 @@ function Photography(props: PhotographyProps) {
     const [day, month, year] = dateStr.split("-");
     phDate = new Date(`${year}-${month}-${day}`);
   }
-  React.useEffect(() => {
-    if (activeSCDetails?.photographyDetails) {
-      setSelectedDate(phDate);
-    }
-  }, [activeSCDetails]);
 
   return (
     <div>
@@ -244,6 +235,7 @@ function Photography(props: PhotographyProps) {
                           }
                           className="w-full outline-none"
                           dateFormat="yyyy-MM-d"
+                          disabled={props.isEditing}
                         />
                         <img src={date} alt="" className="w-5 h-5" />
                       </div>
@@ -262,6 +254,7 @@ function Photography(props: PhotographyProps) {
                         value={inputs.comments}
                         placeholder=""
                         onChange={handleInput}
+                        isReadOnly={props.isEditing}
                         className="h-24 w-full pl-4 border border-border rounded-lg text-[1rem] leading-[1.25rem] text-ipcol font-normal "
                       />
                     </div>

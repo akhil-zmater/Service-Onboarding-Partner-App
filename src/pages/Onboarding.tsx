@@ -36,13 +36,15 @@ function Onboarding(porps: OnboardingProps) {
   });
 
   React.useEffect(() => {
-    if (activeSCDetails?.onBoardingDetails?.status !== null) {
+    if (activeSCDetails?.onBoardingDetails !== null) {
       if (
         activeSCDetails?.onBoardingDetails?.status === PTOStatusEnum.COMPLETE
       ) {
         setInputsss((prev) => ({
           ...prev,
           status: "Onboarding Complete",
+          additional_comments: activeSCDetails.onBoardingDetails
+            ?.comments as string,
         }));
       }
       if (
@@ -53,13 +55,6 @@ function Onboarding(porps: OnboardingProps) {
           status: "Onboarding Pending",
         }));
       }
-    }
-    if (activeSCDetails?.onBoardingDetails?.followup.reason !== null) {
-      setInputsss((prev) => ({
-        ...prev,
-        additional_comments:
-          activeSCDetails?.onBoardingDetails?.followup.reason || "",
-      }));
     }
   }, [activeSCDetails]);
 
@@ -191,6 +186,7 @@ function Onboarding(porps: OnboardingProps) {
                         value={inputs.additional_comments}
                         placeholder=""
                         onChange={handleInput}
+                        isReadOnly={porps.isEditing}
                         className="h-24 w-full pl-4 border border-border leading-[1rem] text-ipcol font-normal rounded-lg text-[1rem]"
                       />
                     </div>

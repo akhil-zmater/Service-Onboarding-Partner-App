@@ -37,12 +37,14 @@ function TrainAndOnboard(props: TrainingProps) {
   }, [success]);
 
   React.useEffect(() => {
-    if (activeSCDetails?.trainingDetails?.status !== null) {
+    if (activeSCDetails?.trainingDetails !== null) {
       console.log("hdhsjkjas", activeSCDetails?.trainingDetails?.status);
       if (activeSCDetails?.trainingDetails?.status === PTOStatusEnum.COMPLETE) {
         setInputsss((prev) => ({
           ...prev,
           status: "Training Complete",
+          additional_comments: activeSCDetails.trainingDetails
+            ?.comments as string,
         }));
       }
       if (activeSCDetails?.trainingDetails?.status === PTOStatusEnum.PENDING) {
@@ -52,13 +54,6 @@ function TrainAndOnboard(props: TrainingProps) {
         }));
         console.log(inputs);
       }
-    }
-    if (activeSCDetails?.trainingDetails?.followup.reason !== null) {
-      setInputsss((prev) => ({
-        ...prev,
-        additional_comments:
-          activeSCDetails?.trainingDetails?.followup.reason || "",
-      }));
     }
   }, [activeSCDetails]);
 
@@ -193,6 +188,7 @@ function TrainAndOnboard(props: TrainingProps) {
                         value={inputs.additional_comments}
                         placeholder=""
                         onChange={handleInput}
+                        isReadOnly={props.isEditing}
                         className="h-24 w-full pl-4 border border-border leading-[1rem] text-ipcol font-normal rounded-lg text-[1rem]"
                       />
                     </div>

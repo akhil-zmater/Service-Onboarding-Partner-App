@@ -63,10 +63,12 @@ export interface GetSCDetailsResponse {
 interface TrainingDetails {
   status: PTOStatusEnum;
   followup: Followup;
+  comments?: string;
 }
 interface OnBoadingDetails {
   status: PTOStatusEnum;
   followup: Followup;
+  comments?: string;
 }
 interface FlexDetails {
   repId: string;
@@ -80,6 +82,7 @@ interface PhotographyDetails {
   status: PTOStatusEnum;
   followup: Followup;
   phDate?: string;
+  comments?: string;
 }
 
 interface Followup {
