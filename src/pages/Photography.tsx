@@ -9,7 +9,10 @@ import { useDispatch } from "react-redux";
 import NextFollowup from "./NextFollowup";
 import Submit from "../components/Submit";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
-import { PTOStatusEnum } from "../state/serviceCenter/servicCenter.types";
+import {
+  BtnTypes,
+  PTOStatusEnum,
+} from "../state/serviceCenter/servicCenter.types";
 import { useAppSelector } from "../state";
 import {
   AddPhotoGraphyDetailsLoadingState,
@@ -136,6 +139,20 @@ function Photography(props: PhotographyProps) {
   const handleMain = (e: React.MouseEvent<HTMLImageElement>) => {
     setShowMain(true);
   };
+  const dateStr =
+    activeSCDetails?.photographyDetails &&
+    activeSCDetails?.photographyDetails.phDate;
+  let phDate: Date | null = null;
+
+  if (dateStr && dateStr.includes("-")) {
+    const [day, month, year] = dateStr.split("-");
+    phDate = new Date(`${year}-${month}-${day}`);
+  }
+  React.useEffect(() => {
+    if (activeSCDetails?.photographyDetails) {
+      setSelectedDate(phDate);
+    }
+  }, [activeSCDetails]);
 
   return (
     <div>
@@ -204,7 +221,7 @@ function Photography(props: PhotographyProps) {
                     </div>
                   )}
                   {inputs.status === "Photography Pending" ? (
-                    <NextFollowup />
+                    <NextFollowup tab={BtnTypes.PHOTOGRAPHY} />
                   ) : (
                     <div className="flex flex-col gap-1">
                       <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">

@@ -12,7 +12,10 @@ import { useDispatch } from "react-redux";
 import NextFollowup from "./NextFollowup";
 import Submit from "../components/Submit";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
-import { FlexInstallationEnum } from "../state/serviceCenter/servicCenter.types";
+import {
+  BtnTypes,
+  FlexInstallationEnum,
+} from "../state/serviceCenter/servicCenter.types";
 import { useAppSelector } from "../state";
 import {
   AddFlexDetailsLoadingState,
@@ -289,7 +292,7 @@ function FlexInstallation(props: FlexInstallationProps) {
                   )}
 
                   {inputs.status === "Flex Installation Pending" ? (
-                    <NextFollowup />
+                    <NextFollowup tab={BtnTypes.FLEX_INSTALLATION} />
                   ) : (
                     <div className="flex flex-col gap-1">
                       <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
@@ -313,9 +316,11 @@ function FlexInstallation(props: FlexInstallationProps) {
                   <Submit
                     onClick={handleSubmit}
                     isDisabled={
-                      activeSCDetails?.flexDetails.status ===
-                      FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
-                        ? true
+                      activeSCDetails?.flexDetails !== null
+                        ? activeSCDetails?.flexDetails.status ===
+                          FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
+                          ? true
+                          : false
                         : false
                     }
                   />

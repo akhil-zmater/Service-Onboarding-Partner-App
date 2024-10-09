@@ -7,7 +7,10 @@ import Main from "./Main";
 import { useAppDispatch, useAppSelector } from "../state";
 import { AddOnboadingDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
-import { PTOStatusEnum } from "../state/serviceCenter/servicCenter.types";
+import {
+  BtnTypes,
+  PTOStatusEnum,
+} from "../state/serviceCenter/servicCenter.types";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
 
@@ -148,7 +151,7 @@ function Onboarding(porps: OnboardingProps) {
                     </div>
                   </div>
                   {onboarding === "Onboarding Pending" ? (
-                    <NextFollowup />
+                    <NextFollowup tab={BtnTypes.ONBOARDING} />
                   ) : (
                     <div className="flex flex-col gap-1">
                       <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">

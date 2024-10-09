@@ -88,14 +88,22 @@ function Main() {
           break;
         case "Photography":
           if (
-            activeScDetails?.registrationStatus ===
-              RegistrationStatusEnum.REGISTERED &&
-            activeScDetails.verificationDetails.verificationStatus ===
-              VerificationStatusEnum.VERIFIED &&
-            activeScDetails.flexDetails.status ===
-              FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
+            activeScDetails?.verificationDetails &&
+            activeScDetails.registrationStatus &&
+            activeScDetails.flexDetails
           ) {
-            setShowPhotography(true);
+            if (
+              activeScDetails?.registrationStatus ===
+                RegistrationStatusEnum.REGISTERED &&
+              activeScDetails.verificationDetails.verificationStatus ===
+                VerificationStatusEnum.VERIFIED &&
+              activeScDetails.flexDetails.status ===
+                FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
+            ) {
+              setShowPhotography(true);
+            } else {
+              alert("Please complete Flex Installation field");
+            }
           } else {
             alert("Please complete Flex Installation field");
           }
@@ -104,31 +112,51 @@ function Main() {
           if (
             activeScDetails?.registrationStatus ===
               RegistrationStatusEnum.REGISTERED &&
-            activeScDetails.verificationDetails.verificationStatus ===
-              VerificationStatusEnum.VERIFIED &&
-            activeScDetails.flexDetails.status ===
-              FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE &&
-            activeScDetails.photographyDetails?.status ===
-              PTOStatusEnum.COMPLETE
+            activeScDetails.verificationDetails &&
+            activeScDetails.flexDetails &&
+            activeScDetails.photographyDetails
           ) {
-            setShowTraining(true);
+            if (
+              activeScDetails?.registrationStatus ===
+                RegistrationStatusEnum.REGISTERED &&
+              activeScDetails.verificationDetails.verificationStatus ===
+                VerificationStatusEnum.VERIFIED &&
+              activeScDetails.flexDetails.status ===
+                FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE &&
+              activeScDetails.photographyDetails?.status ===
+                PTOStatusEnum.COMPLETE
+            ) {
+              setShowTraining(true);
+            } else {
+              alert("Please complete Photography field");
+            }
           } else {
             alert("Please complete Photography field");
           }
           break;
         case "Onboarding":
           if (
-            activeScDetails?.registrationStatus ===
-              RegistrationStatusEnum.REGISTERED &&
-            activeScDetails.verificationDetails.verificationStatus ===
-              VerificationStatusEnum.VERIFIED &&
-            activeScDetails.flexDetails.status ===
-              FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE &&
-            activeScDetails.photographyDetails?.status ===
-              PTOStatusEnum.COMPLETE &&
-            activeScDetails.trainingDetails?.status === PTOStatusEnum.COMPLETE
+            activeScDetails?.registrationStatus &&
+            activeScDetails.verificationDetails &&
+            activeScDetails.flexDetails &&
+            activeScDetails.photographyDetails &&
+            activeScDetails.trainingDetails
           ) {
-            setShowOnboarding(true);
+            if (
+              activeScDetails?.registrationStatus ===
+                RegistrationStatusEnum.REGISTERED &&
+              activeScDetails.verificationDetails.verificationStatus ===
+                VerificationStatusEnum.VERIFIED &&
+              activeScDetails.flexDetails.status ===
+                FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE &&
+              activeScDetails.photographyDetails?.status ===
+                PTOStatusEnum.COMPLETE &&
+              activeScDetails.trainingDetails?.status === PTOStatusEnum.COMPLETE
+            ) {
+              setShowOnboarding(true);
+            } else {
+              alert("Please complete Training field");
+            }
           } else {
             alert("Please complete Training field");
           }
@@ -404,11 +432,6 @@ function Main() {
     }
   };
 
-  const handleRegistrationEdit = () => {
-    if (RegistrationStatusEnum.REGISTERED) {
-    }
-  };
-
   return (
     <div className="h-screen w-screen">
       {showHome ? (
@@ -425,36 +448,46 @@ function Main() {
           ) : showVerification ? (
             <Verification
               isEditing={
-                activeScDetails?.verificationDetails.verificationStatus ===
-                VerificationStatusEnum.VERIFIED
+                activeScDetails?.verificationDetails !== null
+                  ? activeScDetails?.verificationDetails.verificationStatus ===
+                    VerificationStatusEnum.VERIFIED
+                  : false
               }
             />
           ) : showPhotography ? (
             <Photography
               isEditing={
-                activeScDetails?.photographyDetails?.status ===
-                PTOStatusEnum.COMPLETE
+                activeScDetails?.photographyDetails !== null
+                  ? activeScDetails?.photographyDetails?.status ===
+                    PTOStatusEnum.COMPLETE
+                  : false
               }
             />
           ) : showFlexInstall ? (
             <FlexInstallation
               isEditing={
-                activeScDetails?.flexDetails.status ===
-                FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
+                activeScDetails?.flexDetails !== null
+                  ? activeScDetails?.flexDetails.status ===
+                    FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
+                  : false
               }
             />
           ) : showTraining ? (
             <TrainAndOnboard
               isEditing={
-                activeScDetails?.trainingDetails?.status ===
-                PTOStatusEnum.COMPLETE
+                activeScDetails?.trainingDetails !== null
+                  ? activeScDetails?.trainingDetails?.status ===
+                    PTOStatusEnum.COMPLETE
+                  : false
               }
             />
           ) : showOnboarding ? (
             <Onboarding
               isEditing={
-                activeScDetails?.onBoardingDetails?.status ===
-                PTOStatusEnum.COMPLETE
+                activeScDetails?.onBoardingDetails !== null
+                  ? activeScDetails?.onBoardingDetails?.status ===
+                    PTOStatusEnum.COMPLETE
+                  : false
               }
             />
           ) : (

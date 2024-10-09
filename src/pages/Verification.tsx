@@ -12,7 +12,10 @@ import { useDispatch } from "react-redux";
 import NextFollowup from "./NextFollowup";
 import Submit from "../components/Submit";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
-import { VerificationStatusEnum } from "../state/serviceCenter/servicCenter.types";
+import {
+  BtnTypes,
+  VerificationStatusEnum,
+} from "../state/serviceCenter/servicCenter.types";
 import { useAppSelector } from "../state";
 import { AddVerificationDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
@@ -25,6 +28,7 @@ interface VerificationProps {
 function Verification(props: VerificationProps) {
   const activeScDetails = useAppSelector(getActiveScDetails);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const statusButtons = ["Pending", "Approved", "Rejected"];
   const { success } = useAppSelector(AddVerificationDetailsLoadingState);
   React.useEffect(() => {
     if (success) {
@@ -32,22 +36,50 @@ function Verification(props: VerificationProps) {
       dispatch(scActions.resetSCloadingStates());
     }
   }, [success]);
+
+  const dateStr =
+    activeScDetails?.verificationDetails &&
+    activeScDetails?.verificationDetails.flexInstallationDate;
+  let flexInstallationDate: Date | null = null;
+
+  if (dateStr && dateStr.includes("-")) {
+    const [day, month, year] = dateStr.split("-");
+    flexInstallationDate = new Date(`${year}-${month}-${day}`);
+  }
   const [inputs, setInputsss] = useState({
     status: "",
     verifier_name: "",
     flexDimensions: "",
     verifier_comments: "",
-    // payment_status: null,
-    // photographer_name: "",
-    // technician_name: "",
-    // installation_comments: "",
-    // subscription_type: null,
   });
   const dispatch = useDispatch();
   const [showMain, setShowMain] = useState(false);
-  // const [onboarding, setOnbarding] = useState<string | null>(
-  //   "Verification Pending"
-  // );
+  React.useEffect(() => {
+    if (activeScDetails?.verificationDetails !== null) {
+      if (
+        activeScDetails?.verificationDetails.verificationStatus ===
+        VerificationStatusEnum.VERIFIED
+      ) {
+        const verificationDetails = activeScDetails.verificationDetails;
+        setInputsss((prev) => ({
+          ...prev,
+          status: "Approved",
+          flexDimensions: verificationDetails.flexDimensions,
+          verifier_comments: verificationDetails.comments,
+          verifier_name: verificationDetails.verifierName,
+        }));
+        setSelectedDate(flexInstallationDate);
+      } else if (
+        activeScDetails?.verificationDetails.verificationStatus ===
+        VerificationStatusEnum.VERIFICATION_PENDING
+      ) {
+        setInputsss((prev) => ({ ...prev, status: "Pending" }));
+      } else {
+        setInputsss((prev) => ({ ...prev, status: "Rejected" }));
+      }
+    }
+  }, [activeScDetails]);
+
   const [payment, setPayment] = useState<string | null>(null);
   const [showError, setShowError] = useState(false);
 
@@ -61,16 +93,6 @@ function Verification(props: VerificationProps) {
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (inputs.status !== "") {
-      // dispatch(
-      //   setInputs({
-      //     verifier_name: inputs.verifier_name,
-      //     transaction_id: inputs.transaction_id,
-      //     verifier_comments: inputs.verifier_comments,
-      //     status: inputs.status,
-      //     payment_status: inputs.payment_status,
-      //   })
-      // );
-
       const day =
         selectedDate && String(selectedDate?.getDate()).padStart(2, "0"); // Get day and pad with leading zero
       const month =
@@ -131,7 +153,6 @@ function Verification(props: VerificationProps) {
       // setOnbarding(statuss);
     }
   };
-  const statusButtons = ["Pending", "Approved", "Rejected"];
 
   const statusComp = statusButtons.map((status, key) => (
     <div key={key} className="flex flex-col">
@@ -387,7 +408,7 @@ function Verification(props: VerificationProps) {
                     </div>
                   )}
                   {inputs.status === "Pending" ? (
-                    <NextFollowup />
+                    <NextFollowup tab={BtnTypes.VERIFICATION} />
                   ) : (
                     <div className="flex flex-col gap-1">
                       <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
@@ -412,9 +433,10 @@ function Verification(props: VerificationProps) {
                   <Submit
                     onClick={handleSubmit}
                     isDisabled={
-                      activeScDetails?.verificationDetails
-                        .verificationStatus === VerificationStatusEnum.VERIFIED
-                        ? true
+                      activeScDetails?.verificationDetails !== null
+                        ? activeScDetails?.verificationDetails
+                            .verificationStatus ===
+                          VerificationStatusEnum.VERIFIED
                         : false
                     }
                   />

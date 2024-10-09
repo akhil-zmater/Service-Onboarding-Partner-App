@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Navbar from "./Navbar";
 import Input from "../components/Input";
 // import Button from "../components/Button";
@@ -13,11 +13,17 @@ import Submit from "../components/Submit";
 import Maps from "./Maps";
 import { useAppSelector } from "../state";
 import {
+  addScDetailsLOadingState,
   getActiveScDetails,
   getEmployeeId,
 } from "../state/serviceCenter/serviceCenter.selector";
 
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
+import {
+  BtnTypes,
+  RegistrationStatusEnum,
+  SubscriptionTypeEnum,
+} from "../state/serviceCenter/servicCenter.types";
 
 interface RegistrationTabProps {
   isEditing: boolean;
@@ -27,6 +33,12 @@ export default function RegistrationTab(props: RegistrationTabProps) {
   const dispatch = useDispatch();
   const employeeId = useAppSelector(getEmployeeId);
   const activeSCDetails = useAppSelector(getActiveScDetails);
+  const { success } = useAppSelector(addScDetailsLOadingState);
+  React.useEffect(() => {
+    if (success) {
+      setShowMain(true);
+    }
+  }, [success]);
   const [showMain, setShowMain] = useState(false);
   const [showError, setShowError] = useState(false);
   const [subscription, setSubscription] = useState<string | null>("");
@@ -38,6 +50,37 @@ export default function RegistrationTab(props: RegistrationTabProps) {
   });
   // const [file, setFile] = useState<string | null>(null);
   // const inputRef = useRef<HTMLInputElement | null>(null);
+
+  React.useEffect(() => {
+    if (activeSCDetails?.registrationStatus !== null) {
+      if (
+        activeSCDetails?.registrationStatus ===
+        RegistrationStatusEnum.REGISTERED
+      ) {
+        setState(RegistrationStatusEnum.REGISTERED);
+      } else if (
+        activeSCDetails?.registrationStatus === RegistrationStatusEnum.FOLLOWUP
+      ) {
+        setState("Follow Up");
+      } else {
+        setState("Reject");
+      }
+    }
+    if (activeSCDetails?.subscriptionType !== null) {
+      if (activeSCDetails?.subscriptionType === SubscriptionTypeEnum.PAID) {
+        setSubscription(SubscriptionTypeEnum.PAID);
+      } else {
+        setSubscription(SubscriptionTypeEnum.UNPAID);
+      }
+    }
+    if (activeSCDetails?.registrationComments !== "") {
+      setInputsss((prev) => ({
+        ...prev,
+        additional_comments: activeSCDetails?.registrationComments as string,
+      }));
+    }
+  }, [activeSCDetails]);
+
   // const handleUpload = () => {
   //   if (inputRef.current) inputRef.current.click();
   // };
@@ -66,22 +109,26 @@ export default function RegistrationTab(props: RegistrationTabProps) {
   const handleToggle = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
   ) => {
-    const statuss = e.currentTarget.getAttribute("data-name");
-    setState(statuss as string);
-    console.log("toggle===>>", statuss);
+    if (!props.isEditing) {
+      const statuss = e.currentTarget.getAttribute("data-name");
+      setState(statuss as string);
+      console.log("toggle===>>", statuss);
+    }
   };
 
   const handleSubscription = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
   ) => {
-    const sub = e.currentTarget.getAttribute("data-name");
-    if (sub) {
-      setInputsss((prev) => ({
-        ...prev,
-        subscription_type: sub,
-      }));
+    if (!props.isEditing) {
+      const sub = e.currentTarget.getAttribute("data-name");
+      if (sub) {
+        setInputsss((prev) => ({
+          ...prev,
+          subscription_type: sub,
+        }));
+      }
+      setSubscription(sub);
     }
-    setSubscription(sub);
   };
 
   const statusButtons = ["Registered", "Follow Up", "Reject"];
@@ -140,12 +187,11 @@ export default function RegistrationTab(props: RegistrationTabProps) {
         serviceCenterActions.postSCDetails({
           registrationStatus:
             state === "Follow Up" ? "Followup" : (state as string),
-          salesRepId: "BW102401",
+          salesRepId: "BW102402",
           comments: inputs.additional_comments,
           subscriptionType: inputs.subscription_type,
         })
       );
-      setShowMain(true);
     } else {
       setShowError(true);
     }
@@ -383,7 +429,7 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                     </div>
                   )}
                   {state === "Follow Up" ? (
-                    <NextFollowup />
+                    <NextFollowup tab={BtnTypes.REGISTRATION} />
                   ) : (
                     <div className="flex flex-col gap-1">
                       <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
@@ -396,6 +442,7 @@ export default function RegistrationTab(props: RegistrationTabProps) {
                         placeholder=""
                         onChange={handleRegFields}
                         className="h-24 w-full pl-4 border border-border leading-[1rem] text-ipcol font-normal rounded-lg text-[1rem]"
+                        isReadOnly={props.isEditing}
                       />
                     </div>
                   )}

@@ -3,11 +3,99 @@ import Input from "../components/Input";
 import date from "../images/date.svg";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.module.css";
-import { useAppDispatch } from "../state";
+import { useAppDispatch, useAppSelector } from "../state";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
+import { BtnTypes } from "../state/serviceCenter/servicCenter.types";
+import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
 
-function NextFollowup() {
+interface NextFollowUpProps {
+  tab?: BtnTypes;
+}
+function NextFollowup(props: NextFollowUpProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const activeScDetails = useAppSelector(getActiveScDetails);
+  const followUpDateString = () => {
+    if (props.tab === BtnTypes.REGISTRATION) {
+      return activeScDetails?.registrationFollowup?.followUpDate as string;
+    } else if (props.tab === BtnTypes.VERIFICATION) {
+      if (activeScDetails?.verificationDetails?.followup !== null) {
+        return activeScDetails?.verificationDetails.followup
+          .followUpDate as string;
+      }
+    } else if (props.tab === BtnTypes.FLEX_INSTALLATION) {
+      if (activeScDetails?.flexDetails?.followup !== null) {
+        return activeScDetails?.flexDetails.followup.followUpDate as string;
+      }
+    } else if (props.tab === BtnTypes.PHOTOGRAPHY) {
+      if (activeScDetails?.photographyDetails?.followup !== null) {
+        return activeScDetails?.photographyDetails?.followup
+          .followUpDate as string;
+      }
+    } else if (props.tab === BtnTypes.TRAINING) {
+      if (activeScDetails?.trainingDetails?.followup !== null) {
+        return activeScDetails?.trainingDetails?.followup
+          .followUpDate as string;
+      }
+    } else if (props.tab === BtnTypes.ONBOARDING) {
+      if (activeScDetails?.onBoardingDetails?.followup !== null) {
+        return activeScDetails?.onBoardingDetails?.followup
+          .followUpDate as string;
+      }
+    } else {
+      return "";
+    }
+  };
+
+  const dateStr = followUpDateString();
+  let formattedDate: Date | null = null;
+
+  if (dateStr && dateStr.includes("-")) {
+    const [day, month, year] = dateStr.split("-");
+    formattedDate = new Date(`${year}-${month}-${day}`);
+  }
+
+  React.useEffect(() => {
+    if (props.tab === BtnTypes.REGISTRATION) {
+      if (activeScDetails?.registrationFollowup !== null) {
+        setSelectedDate(formattedDate);
+        setComments(activeScDetails?.registrationFollowup?.reason as string);
+      }
+    } else if (props.tab === BtnTypes.VERIFICATION) {
+      if (activeScDetails?.verificationDetails.followup !== null) {
+        setSelectedDate(formattedDate);
+        setComments(
+          activeScDetails?.verificationDetails.followup.reason as string
+        );
+      }
+    } else if (props.tab === BtnTypes.FLEX_INSTALLATION) {
+      if (activeScDetails?.flexDetails.followup !== null) {
+        setSelectedDate(formattedDate);
+        setComments(activeScDetails?.flexDetails.followup.reason as string);
+      }
+    } else if (props.tab === BtnTypes.PHOTOGRAPHY) {
+      if (activeScDetails?.photographyDetails?.followup !== null) {
+        setSelectedDate(formattedDate);
+        setComments(
+          activeScDetails?.photographyDetails?.followup.reason as string
+        );
+      }
+    } else if (props.tab === BtnTypes.TRAINING) {
+      if (activeScDetails?.trainingDetails?.followup !== null) {
+        setSelectedDate(formattedDate);
+        setComments(
+          activeScDetails?.trainingDetails?.followup.reason as string
+        );
+      }
+    } else if (props.tab === BtnTypes.ONBOARDING) {
+      if (activeScDetails?.onBoardingDetails?.followup !== null) {
+        setSelectedDate(formattedDate);
+        setComments(
+          activeScDetails?.onBoardingDetails?.followup.reason as string
+        );
+      }
+    }
+  }, [props.tab, activeScDetails]);
+
   const [comments, setComments] = useState("");
   const dispatch = useAppDispatch();
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
