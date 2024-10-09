@@ -21,7 +21,6 @@ interface OnboardingProps {
 function Onboarding(porps: OnboardingProps) {
   const activeSCDetails = useAppSelector(getActiveScDetails);
   const [showMain, setShowMain] = useState(false);
-  const [onboarding, setOnboarding] = useState<string | null>("");
   const OnboardingStatusButtons = ["Onboarding Pending", "Onboarding Complete"];
   const dispatch = useAppDispatch();
   const { success } = useAppSelector(AddOnboadingDetailsLoadingState);
@@ -35,6 +34,34 @@ function Onboarding(porps: OnboardingProps) {
     status: "",
     additional_comments: "",
   });
+
+  React.useEffect(() => {
+    if (activeSCDetails?.onBoardingDetails?.status !== null) {
+      if (
+        activeSCDetails?.onBoardingDetails?.status === PTOStatusEnum.COMPLETE
+      ) {
+        setInputsss((prev) => ({
+          ...prev,
+          status: "Onboarding Complete",
+        }));
+      }
+      if (
+        activeSCDetails?.onBoardingDetails?.status === PTOStatusEnum.PENDING
+      ) {
+        setInputsss((prev) => ({
+          ...prev,
+          status: "Onboarding Pending",
+        }));
+      }
+    }
+    if (activeSCDetails?.onBoardingDetails?.followup.reason !== null) {
+      setInputsss((prev) => ({
+        ...prev,
+        additional_comments:
+          activeSCDetails?.onBoardingDetails?.followup.reason || "",
+      }));
+    }
+  }, [activeSCDetails]);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -59,13 +86,14 @@ function Onboarding(porps: OnboardingProps) {
   const handleOnboardingToggle = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
   ) => {
-    const statuss = e.currentTarget.getAttribute("data-name");
-    if (statuss) {
-      setInputsss((prev) => ({
-        ...prev,
-        status: statuss,
-      }));
-      setOnboarding(statuss);
+    if (!porps.isEditing) {
+      const statuss = e.currentTarget.getAttribute("data-name");
+      if (statuss) {
+        setInputsss((prev) => ({
+          ...prev,
+          status: statuss,
+        }));
+      }
     }
   };
 
@@ -84,7 +112,7 @@ function Onboarding(porps: OnboardingProps) {
           <p>{status}</p>
           <div
             className={`${
-              onboarding === status
+              inputs.status === status
                 ? "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-blue"
                 : "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-border"
             }`}
@@ -95,7 +123,7 @@ function Onboarding(porps: OnboardingProps) {
               data-name={status}
               onClick={handleOnboardingToggle}
               className={`${
-                onboarding === status
+                inputs.status === status
                   ? "bg-blue rounded-full w-3 h-3"
                   : "bg-gray-300 rounded-full w-3 h-3"
               }`}
@@ -150,7 +178,7 @@ function Onboarding(porps: OnboardingProps) {
                       {onboardingComp}
                     </div>
                   </div>
-                  {onboarding === "Onboarding Pending" ? (
+                  {inputs.status === "Onboarding Pending" ? (
                     <NextFollowup tab={BtnTypes.ONBOARDING} />
                   ) : (
                     <div className="flex flex-col gap-1">
