@@ -5,6 +5,7 @@ export interface ServiceCenterStateTypes {
   scLoadingStates: ScLoadingStates;
   addFollowUpDetails: postScDetailsFollowUp;
   addLoginDetails: postLoginDetailsResponse | null;
+  getAssignedFollowupDetailsData: getAssignedFollowupDetails[];
 }
 
 export interface ScLoadingStates {
@@ -16,6 +17,18 @@ export interface ScLoadingStates {
   postLoginDetailsLoadingState: LoadingStateType;
   addTrainingDetailsLoadingState: LoadingStateType;
   addOnBoardingDetailsLoadingState: LoadingStateType;
+  getAssignedFollowUpDetailsLoadingState: LoadingStateType;
+}
+
+export interface getAssignedFollowupDetails {
+  serviceCenterName: string;
+  serviceCenterOwnerName: string;
+  serviceCenterAddress: string;
+  serviceCenterPhonenumber: string;
+  latitude: number;
+  longitude: number;
+  status: string;
+  followUpDetails?: Followup;
 }
 
 export interface postLoginByDetailsBody {
@@ -102,6 +115,7 @@ export enum RegistrationStatusEnum {
   REGISTERED = "Registered",
   FOLLOWUP = "Followup",
   REJECT = "Reject",
+  ASSIGNED = "Assigned",
 }
 export enum FlexInstallationEnum {
   FLEX_INSTALLATION_COMPLETE = "FlexInstallationcomplete",

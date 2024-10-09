@@ -1,39 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import crosss from "../images/crossicon.svg";
-import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
-import { useAppSelector } from "../state";
+import useCheckMobileScreen from "../hooks/useCheckMobileScreen";
 
 interface MapsProps {
   cross: (e: React.MouseEvent<HTMLImageElement>) => void;
+  latitude: number;
+  longitude: number;
 }
 
-function Maps({ cross }: MapsProps) {
-  const activeScDetails = useAppSelector(getActiveScDetails);
-  const [currentPosition, setCurrentPosition] = useState<{
-    lat: number;
-    lng: number;
-  } | null>(null);
+function Maps({ cross, latitude, longitude }: MapsProps) {
+  const isMobile = useCheckMobileScreen();
+  const handleMarkerClick = () => {
+    const googleMapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    const googleMapsAppUrl = `comgooglemaps://?q=${latitude},${longitude}`;
+    if (isMobile) {
+      window.location.href = googleMapsAppUrl;
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setCurrentPosition({
-          lat: activeScDetails?.latitude as number,
-          lng: activeScDetails?.longitude as number,
-        });
-      },
-      (error) => {
-        console.log("Error getting location", error);
-      }
-    );
-  }, []);
-
-  const handleCurrentLoc = () => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      console.log(position);
-    });
+      setTimeout(() => {
+        window.open(googleMapsUrl, "_blank");
+      }, 200);
+    } else {
+      window.open(googleMapsUrl, "_blank");
+    }
   };
 
   return (
@@ -51,17 +40,17 @@ function Maps({ cross }: MapsProps) {
       </div>
       <div className="shadow-xl rounded-lg h-96">
         <LoadScript googleMapsApiKey="AIzaSyAzSqpJ-p03fX8AeKhrIGfxRSpi1ercS10">
-          {currentPosition ? (
+          {latitude ? (
             <GoogleMap
               mapContainerClassName="w-full h-full rounded-lg shadow-lg"
-              center={currentPosition}
+              center={{ lat: latitude, lng: longitude }}
               zoom={15}
               clickableIcons={true}
             >
               <Marker
-                onClick={handleCurrentLoc}
+                onClick={handleMarkerClick}
                 draggable={true}
-                position={currentPosition}
+                position={{ lat: latitude, lng: longitude }}
               />
             </GoogleMap>
           ) : (

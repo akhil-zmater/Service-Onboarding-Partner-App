@@ -20,6 +20,7 @@ import {
 
 import {
   getActiveScDetails,
+  getEmployeeId,
   getFollowUpDetails,
 } from "./serviceCenter.selector";
 
@@ -136,6 +137,7 @@ function* postLoginDetailsSaga(
       console.log("resppp====>>>", response.data);
 
       yield put(scStoreActions.setAddLoginDetails(response.data));
+      yield put({ type: scActionTypes.ASSIGNED_FOLLOWUP_DETAILS });
       yield put(scStoreActions.setPostLoginDetailsLoadingState(successState));
     } else {
       yield put(scStoreActions.setPostLoginDetailsLoadingState(failureState));
@@ -454,7 +456,38 @@ function* addOnBoardingDetailsSaga(
     yield put(scStoreActions.setAddOnboardingDetailsLoadingState(failureState));
   }
 }
+
+const getAssignedFollowUpDetails = (empId: string) => {
+  return HttpService({
+    method: EReqMethod.GET,
+    url: END_POINTS.getFollowUps + `/${empId}`,
+  });
+};
+
+function* getAssignedFollowUpDetailsSaga() {
+  try {
+    yield put(scStoreActions.setAssignedFollowUpLoadingState(loadingState));
+    //TODO: Need to change
+    const empId: string = yield select(getEmployeeId);
+    const data = "BW102402";
+    const resp: APIResponse<Array<scType.getAssignedFollowupDetails>> =
+      yield call(getAssignedFollowUpDetails, data);
+    if (resp.status === APPSTATES.SUCCESS) {
+      yield put(scStoreActions.setAssignedFollowupDetailsData(resp.data));
+      yield put(scStoreActions.setAssignedFollowUpLoadingState(successState));
+    } else {
+      yield put(scStoreActions.setAssignedFollowUpLoadingState(failureState));
+    }
+  } catch (error) {
+    console.log("ERRORR===>>", error);
+    yield put(scStoreActions.setAssignedFollowUpLoadingState(failureState));
+  }
+}
 export default function* watchServiceCenterActions() {
+  yield takeLatest(
+    scActionTypes.ASSIGNED_FOLLOWUP_DETAILS,
+    getAssignedFollowUpDetailsSaga
+  );
   yield takeLatest(scActionTypes.GET_SC_DETAILS_PHONENO, getSCDetailsSaga);
   yield takeLatest(scActionTypes.POST_SC_DETAILS, postSCDetailsSaga);
   yield takeLatest(

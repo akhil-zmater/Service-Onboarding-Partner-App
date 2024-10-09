@@ -8,15 +8,16 @@ interface FollowUDetailsProps {
   phone: number;
   address: string;
   onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
-  status: string;
+  status?: string;
 }
 
 function FollowUDetails(props: FollowUDetailsProps) {
   const phoneRef = useRef<HTMLAnchorElement>(null);
 
-  const handleCallClick = () => {
+  const handleCallClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (phoneRef.current) {
       phoneRef.current.click();
+      e.stopPropagation();
     }
   };
 
@@ -30,15 +31,12 @@ function FollowUDetails(props: FollowUDetailsProps) {
           {props.status}
         </h1>
         <div className="flex gap-2">
-          <div className="flex items-center">
+          <div onClick={handleCallClick} className="flex items-center">
             <img src={call} alt="" className="w-6 h-6" />
-            <a href={`tel: ${"9866957717"}`} className="hidden" ref={phoneRef}>
-              {"9866957717"}
+            <a href={`tel: ${props.phone}`} className="hidden" ref={phoneRef}>
+              {props.phone}
             </a>
-            <p
-              onClick={handleCallClick}
-              className="text-blue text-[0.8rem] pb-[0.2rem] leading-[1rem] font-medium "
-            >
+            <p className="text-blue text-[0.8rem] pb-[0.2rem] leading-[1rem] font-medium ">
               Call
             </p>
           </div>

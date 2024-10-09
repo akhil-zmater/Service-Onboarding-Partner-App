@@ -6,7 +6,11 @@ import FollowUps from "./FollowUps";
 import open from "../images/open.svg";
 import { useAppDispatch, useAppSelector } from "../state";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
-import { getSCDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
+import {
+  getAssignedDetails,
+  getFollowUpDetailsData,
+  getSCDetailsLoadingState,
+} from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
 
 function Home() {
@@ -16,6 +20,8 @@ function Home() {
   const [showFollowUps, setShowFollowUps] = useState(false);
   const [mobileNumber, setMobileNumber] = useState<string>("");
   const { success } = useAppSelector(getSCDetailsLoadingState);
+  const assignedDetails = useAppSelector(getAssignedDetails);
+  const followUpDetails = useAppSelector(getFollowUpDetailsData);
 
   React.useEffect(() => {
     if (success) {
@@ -63,11 +69,15 @@ function Home() {
                 <div className="flex items-center justify-center gap-16">
                   <div className="flex flex-col gap-2">
                     <h1 className="text-[0.8rem] text-ipcol ">ASSIGNED</h1>
-                    <h1 className="text-[1.2rem] text-blue">3</h1>
+                    <h1 className="text-[1.2rem] text-blue">
+                      {assignedDetails.length}
+                    </h1>
                   </div>
                   <div className="flex flex-col gap-2">
                     <h1 className="text-[0.8rem] text-ipcol ">FOLLOWUP</h1>
-                    <h1 className="text-[1.2rem] text-blue">2</h1>
+                    <h1 className="text-[1.2rem] text-blue">
+                      {followUpDetails.length}
+                    </h1>
                   </div>
                 </div>
                 <div
