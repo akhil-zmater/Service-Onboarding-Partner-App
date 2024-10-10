@@ -42,10 +42,7 @@ function Main(props: MainProps) {
   const [showTraining, setShowTraining] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  const [showBack, setShowBack] = useState({
-    home: false,
-    followUp: false,
-  });
+  const [showBack, setShowBack] = useState(false);
 
   const { loading } = useAppSelector(getSCDetailsLoadingState);
   const phoneRef = useRef<HTMLAnchorElement>(null);
@@ -214,11 +211,7 @@ function Main(props: MainProps) {
   };
 
   const handleHome = (e: React.MouseEvent<HTMLImageElement>) => {
-    if (props.isHome) {
-      setShowBack((prev) => ({ ...prev, home: true, followUp: false }));
-    } else {
-      setShowBack((prev) => ({ ...prev, home: false, followUp: true }));
-    }
+    setShowBack(true);
   };
 
   const handleCallClick = () => {
@@ -466,10 +459,8 @@ function Main(props: MainProps) {
         </div>
       ) : ( */}
       {/* <div> */}
-      {showBack.home ? (
+      {showBack ? (
         <Home />
-      ) : showBack.followUp ? (
-        <FollowUps />
       ) : (
         <div>
           {showRegistration ? (
