@@ -16,7 +16,6 @@ function CurrentLocMap({ cross }: CurrentLocMapProps) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
           setLocation({ lat: latitude, lng: longitude });
           window.open(
             `https://www.google.com/maps?q=${latitude},${longitude}`,
@@ -25,6 +24,11 @@ function CurrentLocMap({ cross }: CurrentLocMapProps) {
         },
         (error) => {
           console.error("Error getting location", error);
+        },
+        {
+          enableHighAccuracy: true, // Request high-accuracy location
+          timeout: 10000, // Optional: Specify a timeout if location retrieval takes too long
+          maximumAge: 0, // Optional: Force to get the most current location
         }
       );
     } else {
@@ -34,9 +38,6 @@ function CurrentLocMap({ cross }: CurrentLocMapProps) {
 
   return (
     <div className="bg-white w-full p-5 m-5 rounded-lg font-poppins ">
-      {/* <p className="text-lg font-semibold py-4 text-blue underline">
-          Location:
-        </p> */}
       <div className="flex gap-1 items-center justify-between">
         <p
           onClick={handleGetLocation}
@@ -46,11 +47,10 @@ function CurrentLocMap({ cross }: CurrentLocMapProps) {
         </p>
         <img
           src={crosss}
-          alt=""
-          className="w-5 h-5 rounded-full p-[0.1rem] "
+          alt="Close"
+          className="w-5 h-5 rounded-full p-[0.1rem]"
           onClick={cross}
         />
-        {/* <img src={mapp} alt="" className="h-5 w-5" /> */}
       </div>
     </div>
   );

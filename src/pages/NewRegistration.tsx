@@ -9,6 +9,8 @@ import NextFollowup from "./NextFollowup";
 import Maps from "./Maps";
 import Main from "./Main";
 import Home from "./Home";
+import CurrentLocMap from "./CurrentLocMap";
+import loc from "../images/loc.svg";
 
 export default function NewRegistration() {
   const [subscription, setSubscription] = useState<string | null>("");
@@ -103,13 +105,26 @@ export default function NewRegistration() {
       </div>
     </div>
   ));
+
+  const handleOpenMap = () => {
+    setShowMap(true);
+  };
+
+  const handleCloseMap = () => {
+    setShowMap(false);
+  };
+
+  const handleBack = () => {
+    setShowMain(true);
+  };
+
   return (
     <div>
       {showMain ? (
         <Home />
       ) : (
         <div>
-          <Navbar onClick={() => {}} />
+          <Navbar onClick={handleBack} />
           <div className="ml-[0.7rem] mt-[1.2rem] mr-[0.5rem]">
             <h1 className="tracking-tight text-[1rem] leading-[1.5rem] bg-gradient-to-r from-[rgba(21,79,187,1)] to-[rgba(28,73,151,1)] bg-bluegrad bg-clip-text text-transparent font-medium">
               New Registration
@@ -181,30 +196,26 @@ export default function NewRegistration() {
                 <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                   Service Center Location
                 </p>
-                {/* <div
-              onClick={handleMaps} //Maps integration
-              className="flex items-center gap-2 h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
-            >
-              <img src={loc} alt="" className="h-6 w-6" />
-              <Input
-                type="text"
-                name="service_center_location"
-                value={activeSCDetails?.serviceCenterAddress as string}
-                placeholder=""
-                onChange={handleRegFields}
-                className="outline-none w-full"
-                isReadOnly={true}
-              />
-            </div> */}
-                {/* {showMap && (
-              <div className="fixed inset-0 bg-black opacity-95 flex items-center justify-center z-50">
-                <Maps
-                  cross={handleCloseMap}
-                  latitude={activeSCDetails?.latitude as number}
-                  longitude={activeSCDetails?.longitude as number}
-                />
-              </div>
-            )} */}
+                <div
+                  onClick={handleOpenMap}
+                  className="flex items-center gap-2 h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
+                >
+                  <img src={loc} alt="" className="h-6 w-6" />
+                  <Input
+                    type="text"
+                    name="service_center_location"
+                    value=""
+                    placeholder=""
+                    onChange={handleRegFields}
+                    className="outline-none w-full"
+                    isReadOnly={true}
+                  />
+                </div>
+                {showMap && (
+                  <div className="fixed inset-0 bg-black opacity-95 flex items-center justify-center z-50">
+                    <CurrentLocMap cross={handleCloseMap} />
+                  </div>
+                )}
               </div>
 
               {/* <div className="flex flex-col gap-1"> // Service centerPhoto
