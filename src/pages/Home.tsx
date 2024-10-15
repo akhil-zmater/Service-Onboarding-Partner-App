@@ -14,11 +14,13 @@ import {
 } from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
 import Loader from "./Loader";
+import NewRegistration from "./NewRegistration";
 
 function Home() {
   const dispatch = useAppDispatch();
   const [showMain, setShowMain] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [showNewReg, setShowNewReg] = useState(false);
   const [showFollowUps, setShowFollowUps] = useState(false);
   const [mobileNumber, setMobileNumber] = useState<string>("");
   const { success } = useAppSelector(getSCDetailsLoadingState);
@@ -54,89 +56,100 @@ function Home() {
     setShowFollowUps(true);
   };
 
+  const handleAddNewSC = (e: React.MouseEvent<HTMLParagraphElement>) => {
+    setShowNewReg(true);
+  };
+
   return (
     <div>
-      {/* {getAssignedFollowUpLoading ? (
-        <Loader />
-      ) : ( */}
-      <div>
-        {showMain ? (
-          <Main />
-        ) : showFollowUps ? (
-          <FollowUps />
-        ) : (
-          <div className="bg-white h-screen w-screen flex flex-col justify-between items-center py-[1.5rem] px-[1rem]">
-            {/* LOGO, TITLE, PHONE INPUT  */}
-            <div className="">
-              <img src={logo} alt="logo" className="" />
-              <h1 className="mt-[1.5rem] tracking-tight text-[2rem] leading-[2.5rem] bg-gradient-to-r from-[rgba(21,79,187,1)] to-[rgba(28,73,151,1)] bg-bluegrad bg-clip-text text-transparent font-medium">
-                Service Partner Onboarding
-              </h1>
-              <div className="mt-[1rem] flex flex-col gap-2">
-                <div className="flex justify-between  items-center text-[0.9rem] leading-[1rem] font-medium border border-border p-[1rem] font-poppins rounded-lg">
-                  <div className="flex items-center justify-center gap-16">
-                    <div className="flex flex-col gap-2">
-                      <h1 className="text-[0.8rem] text-ipcol ">ASSIGNED</h1>
-                      <h1 className="text-[1.2rem] text-blue">
-                        {assignedDetails.length}
-                      </h1>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <h1 className="text-[0.8rem] text-ipcol ">FOLLOWUP</h1>
-                      <h1 className="text-[1.2rem] text-blue">
-                        {followUpDetails.length}
-                      </h1>
-                    </div>
-                  </div>
-                  <div
-                    onClick={handleFollowUps}
-                    className="border rounded-[0.3rem] p-1 border-blue"
-                  >
-                    <img src={open} alt="" className="" />
-                  </div>
-                </div>
-                <h1 className="text-sm leading-[1rem] mt-3 font-normal text-ipcol">
-                  Service Center Phone Number
+      {showNewReg ? (
+        <NewRegistration />
+      ) : (
+        <div>
+          {showMain ? (
+            <Main />
+          ) : showFollowUps ? (
+            <FollowUps />
+          ) : (
+            <div className="bg-white h-screen w-screen flex flex-col justify-between items-center py-[1.5rem] px-[1rem]">
+              {/* LOGO, TITLE, PHONE INPUT  */}
+              <div className="">
+                <img src={logo} alt="logo" className="" />
+                <h1 className="mt-[1.5rem] tracking-tight text-[2rem] leading-[2.5rem] bg-gradient-to-r from-[rgba(21,79,187,1)] to-[rgba(28,73,151,1)] bg-bluegrad bg-clip-text text-transparent font-medium">
+                  Service Partner Onboarding
                 </h1>
-                <div className="flex flex-col gap-2">
-                  <div className="flex justify-between items-center text-ipcol h-[3.5rem] w-[100%] p-[1rem] border border-border rounded-[0.5rem] text-[1rem] leading-[1.5rem] font-normal">
-                    <div className="flex gap-2">
-                      <p className="text-ipcol text-[1rem] font-normal leading-[1.5rem]">
-                        +91
-                      </p>
-                      <Input
-                        type="number"
-                        name="phone"
-                        value={mobileNumber}
-                        placeholder="Enter Phone Number"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                          if (/^\d{0,10}$/.test(e.target.value))
-                            setMobileNumber(e.target.value);
-                        }}
-                        className="focus:outline-none"
-                        maxLength={10 as number}
-                      />
+                <div className="mt-[1rem] flex flex-col gap-2">
+                  <div className="flex justify-between  items-center text-[0.9rem] leading-[1rem] font-medium border border-border p-[1rem] font-poppins rounded-lg">
+                    <div className="flex items-center justify-center gap-16">
+                      <div className="flex flex-col gap-2">
+                        <h1 className="text-[0.8rem] text-ipcol ">ASSIGNED</h1>
+                        <h1 className="text-[1.2rem] text-blue">
+                          {assignedDetails.length}
+                        </h1>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <h1 className="text-[0.8rem] text-ipcol ">FOLLOWUP</h1>
+                        <h1 className="text-[1.2rem] text-blue">
+                          {followUpDetails.length}
+                        </h1>
+                      </div>
                     </div>
                     <div
-                      onClick={handleSubmit}
+                      onClick={handleFollowUps}
                       className="border rounded-[0.3rem] p-1 border-blue"
                     >
                       <img src={open} alt="" className="" />
                     </div>
                   </div>
-                  <div>
-                    {showError && (
-                      <div className="text-[0.8rem] font-normal pl-2 leading-[1rem] text-red">
-                        Invalid Mobile Number !
+                  <h1 className="text-sm leading-[1rem] mt-3 font-normal text-ipcol">
+                    Service Center Phone Number
+                  </h1>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex justify-between items-center text-ipcol h-[3.5rem] w-[100%] p-[1rem] border border-border rounded-[0.5rem] text-[1rem] leading-[1.5rem] font-normal">
+                      <div className="flex gap-2">
+                        <p className="text-ipcol text-[1rem] font-normal leading-[1.5rem]">
+                          +91
+                        </p>
+                        <Input
+                          type="number"
+                          name="phone"
+                          value={mobileNumber}
+                          placeholder="Enter Phone Number"
+                          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            if (/^\d{0,10}$/.test(e.target.value))
+                              setMobileNumber(e.target.value);
+                          }}
+                          className="focus:outline-none"
+                          maxLength={10 as number}
+                        />
                       </div>
-                    )}
+                      <div
+                        onClick={handleSubmit}
+                        className="border rounded-[0.3rem] p-1 border-blue"
+                      >
+                        <img src={open} alt="" className="" />
+                      </div>
+                    </div>
+                    <p
+                      onClick={handleAddNewSC}
+                      className="text-xs mt-2 font-medium leading-[1rem] text-right text-blue underline"
+                    >
+                      Add Service Center{" "}
+                    </p>
+                    <div>
+                      {showError && (
+                        <div className="text-[0.8rem] font-normal pl-2 leading-[1rem] text-red">
+                          Invalid Mobile Number !
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
