@@ -9,6 +9,24 @@ export interface ServiceCenterStateTypes {
   apiState: ApiErrorState;
 }
 
+export interface addRegistrationDetailsReqbody {
+  phoneNumber: string;
+  serviceCenterOwnerName: string;
+  serviceCenterAddress: string;
+  serviceCenterName: string;
+  latitude: string;
+  longitude: string;
+  salesRepId: string;
+  registeredDate?: string;
+  comments: string;
+  registrationStatus: string;
+  subscriptionType?: string;
+  followup?: Followup | null;
+}
+export interface addRegistrationDetailsPayload
+  extends addRegistrationDetailsReqbody {
+  isFollowUpClicked: boolean;
+}
 export interface ScLoadingStates {
   getSCDetailsLoadingState: LoadingStateType;
   postSCDetailsLoadingState: LoadingStateType;
@@ -19,6 +37,7 @@ export interface ScLoadingStates {
   addTrainingDetailsLoadingState: LoadingStateType;
   addOnBoardingDetailsLoadingState: LoadingStateType;
   getAssignedFollowUpDetailsLoadingState: LoadingStateType;
+  addRegistrationDetailsLoadingState: LoadingStateType;
 }
 
 export interface ApiErrorState {
@@ -103,7 +122,7 @@ interface PhotographyDetails {
   comments?: string;
 }
 
-interface Followup {
+export interface Followup {
   reason: string;
   followUpDate: string;
 }

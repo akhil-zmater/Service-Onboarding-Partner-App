@@ -530,7 +530,90 @@ function* getAssignedFollowUpDetailsSaga() {
     yield put(scStoreActions.setAssignedFollowUpLoadingState(failureState));
   }
 }
+
+const addRegistrationDetails = (body: scType.addRegistrationDetailsReqbody) => {
+  return HttpService({
+    method: EReqMethod.POST,
+    url: END_POINTS.postSCDetails,
+    body,
+  });
+};
+
+function* addRegistrationDetailsSaga(
+  action: PayloadAction<scType.addRegistrationDetailsPayload>
+) {
+  const {
+    isFollowUpClicked,
+    comments,
+    latitude,
+    longitude,
+    phoneNumber,
+    registrationStatus,
+    salesRepId,
+    serviceCenterAddress,
+    serviceCenterName,
+    serviceCenterOwnerName,
+    subscriptionType,
+  } = action.payload;
+
+  try {
+    yield put(
+      scStoreActions.setAddRegistrationDetailsLoadingState(loadingState)
+    );
+    const followUpdetails: scType.Followup = yield select(getFollowUpDetails);
+    const details: scType.addRegistrationDetailsReqbody = isFollowUpClicked
+      ? {
+          comments: comments,
+          latitude: latitude,
+          longitude,
+          phoneNumber,
+          registrationStatus,
+          salesRepId,
+          serviceCenterAddress,
+          serviceCenterName,
+          serviceCenterOwnerName,
+          followup: followUpdetails ? followUpdetails : null,
+        }
+      : {
+          comments,
+          latitude,
+          longitude,
+          phoneNumber,
+          registrationStatus,
+          salesRepId,
+          serviceCenterAddress,
+          serviceCenterName,
+          serviceCenterOwnerName,
+          subscriptionType,
+          followup: null,
+        };
+    const resp: APIResponse<string> = yield call(
+      addRegistrationDetails,
+      details
+    );
+    if (resp.status === APPSTATES.SUCCESS) {
+      yield put(
+        scStoreActions.setAddRegistrationDetailsLoadingState(successState)
+      );
+    } else {
+      yield put(
+        scStoreActions.setAddRegistrationDetailsLoadingState(failureState)
+      );
+    }
+  } catch (error) {
+    yield put(
+      scStoreActions.setApiError({
+        isVisible: true,
+        message: error as string,
+      })
+    );
+    yield put(
+      scStoreActions.setAddRegistrationDetailsLoadingState(failureState)
+    );
+  }
+}
 export default function* watchServiceCenterActions() {
+  yield takeLatest(scActionTypes.NEW_REGISTRATION, addRegistrationDetailsSaga);
   yield takeLatest(
     scActionTypes.ASSIGNED_FOLLOWUP_DETAILS,
     getAssignedFollowUpDetailsSaga
