@@ -7,6 +7,7 @@ import {
   END_POINT_BASE,
   END_POINTS,
   EReqMethod,
+  LOGIN_END_POINT,
 } from "../../constants/apiCalls";
 import { PayloadAction } from "@reduxjs/toolkit";
 import * as scType from "./servicCenter.types";
@@ -128,7 +129,7 @@ function* postSCDetailsSaga(
 const postLoginDetails = (body: scType.postLoginByDetailsBody) => {
   return HttpService({
     method: EReqMethod.POST,
-    url: "https://gateway-dev.thevehicle.app/internal/user/login",
+    url: LOGIN_END_POINT,
     body,
   });
 };
