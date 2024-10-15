@@ -20,6 +20,7 @@ const initialState: serviceCenterType.ServiceCenterStateTypes = {
     addTrainingDetailsLoadingState: resetLoadingState,
     addOnBoardingDetailsLoadingState: resetLoadingState,
     getAssignedFollowUpDetailsLoadingState: resetLoadingState,
+    addRegistrationDetailsLoadingState: resetLoadingState,
   },
 
   addFollowUpDetails: {
@@ -31,6 +32,15 @@ const serviceCenterSlice = createSlice({
   name: "serviceCenterSlice",
   initialState,
   reducers: {
+    //addRegistration
+    setAddRegistrationDetailsLoadingState: (
+      state,
+      action: PayloadAction<LoadingStateType>
+    ) => {
+      state.scLoadingStates.addRegistrationDetailsLoadingState = {
+        ...action.payload,
+      };
+    },
     //ErrorState
     setApiError: (
       state,

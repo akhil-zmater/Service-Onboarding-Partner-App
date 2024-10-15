@@ -9,9 +9,16 @@ export const scActionTypes = {
   ADD_TRAINING_DETAILS: "ADD_TRAINING_DETAILS",
   ADD_ONBOARDING_DETAILS: "ADD_ONBOARDING_DETAILS",
   ASSIGNED_FOLLOWUP_DETAILS: "ASSIGNED_FOLLOWUP_DETAILS",
+  NEW_REGISTRATION: "NEW_REGISTRATION",
 };
 
 export const serviceCenterActions = {
+  addNewRegistrationDetails: (
+    payload: scTypes.addRegistrationDetailsPayload
+  ) => ({
+    type: scActionTypes.NEW_REGISTRATION,
+    payload,
+  }),
   getAssignedFollowUpDetails: () => ({
     type: scActionTypes.ASSIGNED_FOLLOWUP_DETAILS,
   }),
