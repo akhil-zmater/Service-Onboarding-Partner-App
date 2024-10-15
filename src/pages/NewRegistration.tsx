@@ -11,11 +11,11 @@ import Navbar from "./Navbar";
 import NextFollowup from "./NextFollowup";
 import Home from "./Home";
 import loc from "../images/loc.svg";
-import CurrentLocMap from "./CurrentLocMap";
 import useGetCurrentLocation from "../hooks/useGetCurrentLocation";
 import useFetchPinAddress from "../hooks/useFetchPinAddress";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
+import CurrentLocMap from "./CurrentLocMap";
 
 export default function NewRegistration() {
   const { location } = useGetCurrentLocation();
