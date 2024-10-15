@@ -50,3 +50,5 @@ export const getFollowUpDetailsData = createSelector(
 export const isApiError = (state: RootState) => state.serviceCenter.apiState;
 export const getAssignedFollowupDetailsLoadingState = (state: RootState) =>
   state.serviceCenter.scLoadingStates.getAssignedFollowUpDetailsLoadingState;
+export const getAddRegistrationDetailsLoadingState = (state: RootState) =>
+  state.serviceCenter.scLoadingStates.addRegistrationDetailsLoadingState;

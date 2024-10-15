@@ -1,18 +1,45 @@
 import React, { useState } from "react";
 import Input from "../components/Input";
 import Submit from "../components/Submit";
-import { useAppSelector } from "../state";
+import { useAppDispatch, useAppSelector } from "../state";
 import { BtnTypes } from "../state/serviceCenter/servicCenter.types";
-import { getEmployeeId } from "../state/serviceCenter/serviceCenter.selector";
+import {
+  getAddRegistrationDetailsLoadingState,
+  getEmployeeId,
+} from "../state/serviceCenter/serviceCenter.selector";
 import Navbar from "./Navbar";
 import NextFollowup from "./NextFollowup";
-import Maps from "./Maps";
-import Main from "./Main";
 import Home from "./Home";
-import CurrentLocMap from "./CurrentLocMap";
 import loc from "../images/loc.svg";
+import useGetCurrentLocation from "../hooks/useGetCurrentLocation";
+import useFetchPinAddress from "../hooks/useFetchPinAddress";
+import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
+import { scActions } from "../state/serviceCenter/serviceCenter.store";
+import CurrentLocMap from "./CurrentLocMap";
 
 export default function NewRegistration() {
+  const { location } = useGetCurrentLocation();
+  const { success } = useAppSelector(getAddRegistrationDetailsLoadingState);
+
+  const [locationDetails, setLocationDetails] = React.useState<{
+    lat: number;
+    lng: number;
+  }>({ lat: location?.lat as number, lng: location?.lng as number });
+  const { address, loading } = useFetchPinAddress({
+    latitude: locationDetails.lat as number,
+    longitude: locationDetails.lng as number,
+  });
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    if (location !== undefined) {
+      setLocationDetails({
+        lat: location?.lat as number,
+        lng: location?.lng as number,
+      });
+    }
+  }, [location]);
+
   const [subscription, setSubscription] = useState<string | null>("");
   const [showMap, setShowMap] = useState(false);
   const [showMain, setShowMain] = useState(false);
@@ -22,6 +49,7 @@ export default function NewRegistration() {
     phoneNumber: "",
     ownerName: "",
     scName: "",
+    subscription_type: "",
   });
   const currDate = new Date();
   const employeeId = useAppSelector(getEmployeeId);
@@ -30,11 +58,23 @@ export default function NewRegistration() {
     month: "short",
     year: "numeric",
   });
+  React.useEffect(() => {
+    if (success) {
+      setShowMain(true);
+      dispatch(scActions.resetSCloadingStates());
+    }
+  }, [success]);
 
   const handleSubscription = (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
   ) => {
     const sub = e.currentTarget.getAttribute("data-name");
+    if (sub) {
+      setInputsss((prev) => ({
+        ...prev,
+        subscription_type: sub,
+      }));
+    }
     setSubscription(sub);
   };
 
@@ -58,11 +98,28 @@ export default function NewRegistration() {
       (input) => input.trim() === ""
     );
     console.log("empty===>.>", isEmptyField);
-    if (isEmptyField || state === "") {
+    if (isEmptyField || state === "" || loading) {
       setShowError(true);
     } else {
       setShowError(false);
-      setShowMain(true);
+      dispatch(
+        serviceCenterActions.addNewRegistrationDetails({
+          comments: inputs.additional_comments,
+          isFollowUpClicked: state === "Follow Up",
+          phoneNumber: inputs.phoneNumber,
+          latitude: locationDetails.lat.toString(),
+          longitude: locationDetails.lng.toString(),
+          registrationStatus:
+            state === "Follow Up" ? "Followup" : (state as string),
+          salesRepId: employeeId as string,
+          serviceCenterAddress: address,
+          serviceCenterName: inputs.scName,
+          serviceCenterOwnerName: inputs.ownerName,
+          subscriptionType: inputs.subscription_type,
+          registeredDate: formattedDate,
+        })
+      );
+      // setShowMain(true);
       console.log("inputs===>>.", inputs, subscription, state);
     }
   };
@@ -106,25 +163,35 @@ export default function NewRegistration() {
     </div>
   ));
 
-  const handleOpenMap = () => {
-    setShowMap(true);
-  };
-
-  const handleCloseMap = () => {
-    setShowMap(false);
-  };
-
-  const handleBack = () => {
+  const handleMain = (e: React.MouseEvent<HTMLImageElement>) => {
     setShowMain(true);
   };
 
+  const handleMaps = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!loading) {
+      setShowMap(true);
+    }
+  };
+
+  const handleCloseMap = (e: React.MouseEvent<HTMLDivElement>) => {
+    setShowMap(false);
+  };
+
+  const dragHandler = (event: google.maps.MapMouseEvent) => {
+    const lat = event.latLng?.lat();
+    const lng = event.latLng?.lng();
+    if (lat !== undefined && lng !== undefined) {
+      setLocationDetails({ lat, lng });
+      console.log(`Updated Latitude: ${lat}, Updated Longitude: ${lng}`);
+    }
+  };
   return (
     <div>
       {showMain ? (
         <Home />
       ) : (
         <div>
-          <Navbar onClick={handleBack} />
+          <Navbar onClick={handleMain} />
           <div className="ml-[0.7rem] mt-[1.2rem] mr-[0.5rem]">
             <h1 className="tracking-tight text-[1rem] leading-[1.5rem] bg-gradient-to-r from-[rgba(21,79,187,1)] to-[rgba(28,73,151,1)] bg-bluegrad bg-clip-text text-transparent font-medium">
               New Registration
@@ -197,14 +264,14 @@ export default function NewRegistration() {
                   Service Center Location
                 </p>
                 <div
-                  onClick={handleOpenMap}
+                  onClick={handleMaps} //Maps integration
                   className="flex items-center gap-2 h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
                 >
                   <img src={loc} alt="" className="h-6 w-6" />
                   <Input
                     type="text"
                     name="service_center_location"
-                    value=""
+                    value={loading ? "Loading...." : address}
                     placeholder=""
                     onChange={handleRegFields}
                     className="outline-none w-full"
@@ -213,7 +280,12 @@ export default function NewRegistration() {
                 </div>
                 {showMap && (
                   <div className="fixed inset-0 bg-black opacity-95 flex items-center justify-center z-50">
-                    <CurrentLocMap cross={handleCloseMap} />
+                    <CurrentLocMap
+                      cross={handleCloseMap}
+                      latitude={locationDetails?.lat as number}
+                      longitude={locationDetails?.lng as number}
+                      dragHandler={dragHandler}
+                    />
                   </div>
                 )}
               </div>
