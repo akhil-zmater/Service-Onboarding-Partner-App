@@ -24,6 +24,8 @@ import {
   getEmployeeId,
   getFollowUpDetails,
 } from "./serviceCenter.selector";
+import { setCookie } from "../../utils/SessionManagement";
+import { EXPIRY_TIME_IN_HOURS } from "../../constants/data";
 
 const getSCDetails = (mobileNum: string) => {
   return HttpService({
@@ -148,6 +150,12 @@ function* postLoginDetailsSaga(
     );
     if (response.status === APPSTATES.SUCCESS) {
       console.log("resppp====>>>", response.data);
+
+      setCookie(
+        "user",
+        JSON.stringify(response.data),
+        Number(EXPIRY_TIME_IN_HOURS)
+      );
 
       yield put(scStoreActions.setAddLoginDetails(response.data));
       yield put({ type: scActionTypes.ASSIGNED_FOLLOWUP_DETAILS });

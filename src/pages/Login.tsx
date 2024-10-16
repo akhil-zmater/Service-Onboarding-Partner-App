@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../components/Input";
 import logo from "../images/logo.svg";
 import Home from "./Home";
@@ -6,6 +6,8 @@ import Submit from "../components/Submit";
 import { useAppDispatch, useAppSelector } from "../state";
 import { AddLoginDetailsLoadingState } from "../state/serviceCenter/serviceCenter.selector";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
+import { scActions as scStoreActions } from "./../state/serviceCenter/serviceCenter.store";
+import { getCookie } from "../utils/SessionManagement";
 
 function Login() {
   const [showHome, setShowHome] = useState(false);
@@ -13,11 +15,26 @@ function Login() {
   const dispatch = useAppDispatch();
   const { success } = useAppSelector(AddLoginDetailsLoadingState);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    const loggedUser = getCookie("user");
+
+    if (loggedUser === null) return;
+
+    const loggedUserJson = JSON.parse(loggedUser);
+
+    if (loggedUserJson?.employeeId) {
+      dispatch(scStoreActions.setAddLoginDetails(loggedUserJson));
+      dispatch(serviceCenterActions.getAssignedFollowUpDetails());
+      setShowHome(true);
+    }
+  }, []);
+
+  useEffect(() => {
     if (success) {
       setShowHome(true);
     }
   }, [success]);
+
   const [login, setLogin] = useState({
     id: "",
     password: "",

@@ -19,27 +19,27 @@ function NextFollowup(props: NextFollowUpProps) {
       return activeScDetails?.registrationFollowup?.followUpDate as string;
     } else if (props.tab === BtnTypes.VERIFICATION) {
       if (activeScDetails?.verificationDetails !== null) {
-        return activeScDetails?.verificationDetails.followup
-          .followUpDate as string;
+        return activeScDetails?.verificationDetails?.followup
+          ?.followUpDate as string;
       }
     } else if (props.tab === BtnTypes.FLEX_INSTALLATION) {
       if (activeScDetails?.flexDetails !== null) {
-        return activeScDetails?.flexDetails.followup.followUpDate as string;
+        return activeScDetails?.flexDetails?.followup?.followUpDate as string;
       }
     } else if (props.tab === BtnTypes.PHOTOGRAPHY) {
       if (activeScDetails?.photographyDetails !== null) {
         return activeScDetails?.photographyDetails?.followup
-          .followUpDate as string;
+          ?.followUpDate as string;
       }
     } else if (props.tab === BtnTypes.TRAINING) {
       if (activeScDetails?.trainingDetails !== null) {
         return activeScDetails?.trainingDetails?.followup
-          .followUpDate as string;
+          ?.followUpDate as string;
       }
     } else if (props.tab === BtnTypes.ONBOARDING) {
       if (activeScDetails?.onBoardingDetails !== null) {
         return activeScDetails?.onBoardingDetails?.followup
-          .followUpDate as string;
+          ?.followUpDate as string;
       }
     } else {
       return "";
@@ -64,33 +64,33 @@ function NextFollowup(props: NextFollowUpProps) {
       if (activeScDetails?.verificationDetails !== null) {
         setSelectedDate(formattedDate);
         setComments(
-          activeScDetails?.verificationDetails.followup.reason as string
+          activeScDetails?.verificationDetails?.followup?.reason as string
         );
       }
     } else if (props.tab === BtnTypes.FLEX_INSTALLATION) {
       if (activeScDetails?.flexDetails !== null) {
         setSelectedDate(formattedDate);
-        setComments(activeScDetails?.flexDetails.followup.reason as string);
+        setComments(activeScDetails?.flexDetails?.followup?.reason as string);
       }
     } else if (props.tab === BtnTypes.PHOTOGRAPHY) {
       if (activeScDetails?.photographyDetails !== null) {
         setSelectedDate(formattedDate);
         setComments(
-          activeScDetails?.photographyDetails?.followup.reason as string
+          activeScDetails?.photographyDetails?.followup?.reason as string
         );
       }
     } else if (props.tab === BtnTypes.TRAINING) {
       if (activeScDetails?.trainingDetails !== null) {
         setSelectedDate(formattedDate);
         setComments(
-          activeScDetails?.trainingDetails?.followup.reason as string
+          activeScDetails?.trainingDetails?.followup?.reason as string
         );
       }
     } else if (props.tab === BtnTypes.ONBOARDING) {
       if (activeScDetails?.onBoardingDetails !== null) {
         setSelectedDate(formattedDate);
         setComments(
-          activeScDetails?.onBoardingDetails?.followup.reason as string
+          activeScDetails?.onBoardingDetails?.followup?.reason as string
         );
       }
     }
