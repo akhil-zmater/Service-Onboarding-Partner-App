@@ -16,6 +16,7 @@ import {
   addScDetailsLOadingState,
   getActiveScDetails,
   getEmployeeId,
+  getFollowUpDetails,
 } from "../state/serviceCenter/serviceCenter.selector";
 
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
@@ -24,6 +25,7 @@ import {
   RegistrationStatusEnum,
   SubscriptionTypeEnum,
 } from "../state/serviceCenter/servicCenter.types";
+import { scActions } from "../state/serviceCenter/serviceCenter.store";
 
 interface RegistrationTabProps {
   isEditing: boolean;
@@ -33,10 +35,12 @@ export default function RegistrationTab(props: RegistrationTabProps) {
   const dispatch = useDispatch();
   const employeeId = useAppSelector(getEmployeeId);
   const activeSCDetails = useAppSelector(getActiveScDetails);
+  const followUpdetails = useAppSelector(getFollowUpDetails);
   const { success } = useAppSelector(addScDetailsLOadingState);
   React.useEffect(() => {
     if (success) {
       setShowMain(true);
+      dispatch(scActions.resetSCloadingStates());
     }
   }, [success]);
   const [showMain, setShowMain] = useState(false);
@@ -186,7 +190,25 @@ export default function RegistrationTab(props: RegistrationTabProps) {
 
   const handleSubmit = () => {
     if (state !== "") {
-      console.log("detailsss===>>", inputs, state);
+      if (
+        state === statusButtons[0] &&
+        (inputs?.additional_comments === "" || inputs?.subscription_type === "")
+      ) {
+        setShowError(true);
+        return;
+      }
+      if (
+        state === statusButtons[1] &&
+        (followUpdetails?.followUpDate === "" || followUpdetails?.reason === "")
+      ) {
+        setShowError(true);
+        return;
+      }
+      if (state === statusButtons[2] && inputs?.additional_comments === "") {
+        setShowError(true);
+        return;
+      }
+
       dispatch(
         serviceCenterActions.postSCDetails({
           registrationStatus:

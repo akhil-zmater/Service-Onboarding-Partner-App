@@ -59,6 +59,16 @@ function NextFollowup(props: NextFollowUpProps) {
       if (activeScDetails?.registrationFollowup !== null) {
         setSelectedDate(formattedDate);
         setComments(activeScDetails?.registrationFollowup?.reason as string);
+        dispatch(
+          scActions.setPostFollowUpDate(
+            activeScDetails?.registrationFollowup?.followUpDate as string
+          )
+        );
+        dispatch(
+          scActions.setPostFollowUpReason(
+            activeScDetails?.registrationFollowup?.reason as string
+          )
+        );
       }
     } else if (props.tab === BtnTypes.VERIFICATION) {
       if (activeScDetails?.verificationDetails !== null) {
@@ -66,17 +76,49 @@ function NextFollowup(props: NextFollowUpProps) {
         setComments(
           activeScDetails?.verificationDetails?.followup?.reason as string
         );
+        dispatch(
+          scActions.setPostFollowUpDate(
+            activeScDetails?.verificationDetails?.followup
+              ?.followUpDate as string
+          )
+        );
+        dispatch(
+          scActions.setPostFollowUpReason(
+            activeScDetails?.verificationDetails?.followup?.reason as string
+          )
+        );
       }
     } else if (props.tab === BtnTypes.FLEX_INSTALLATION) {
       if (activeScDetails?.flexDetails !== null) {
         setSelectedDate(formattedDate);
         setComments(activeScDetails?.flexDetails?.followup?.reason as string);
+        dispatch(
+          scActions.setPostFollowUpDate(
+            activeScDetails?.flexDetails?.followup?.followUpDate as string
+          )
+        );
+        dispatch(
+          scActions.setPostFollowUpReason(
+            activeScDetails?.flexDetails?.followup?.reason as string
+          )
+        );
       }
     } else if (props.tab === BtnTypes.PHOTOGRAPHY) {
       if (activeScDetails?.photographyDetails !== null) {
         setSelectedDate(formattedDate);
         setComments(
           activeScDetails?.photographyDetails?.followup?.reason as string
+        );
+        dispatch(
+          scActions.setPostFollowUpDate(
+            activeScDetails?.photographyDetails?.followup
+              ?.followUpDate as string
+          )
+        );
+        dispatch(
+          scActions.setPostFollowUpReason(
+            activeScDetails?.photographyDetails?.followup?.reason as string
+          )
         );
       }
     } else if (props.tab === BtnTypes.TRAINING) {
@@ -85,12 +127,32 @@ function NextFollowup(props: NextFollowUpProps) {
         setComments(
           activeScDetails?.trainingDetails?.followup?.reason as string
         );
+        dispatch(
+          scActions.setPostFollowUpDate(
+            activeScDetails?.trainingDetails?.followup?.followUpDate as string
+          )
+        );
+        dispatch(
+          scActions.setPostFollowUpReason(
+            activeScDetails?.trainingDetails?.followup?.reason as string
+          )
+        );
       }
     } else if (props.tab === BtnTypes.ONBOARDING) {
       if (activeScDetails?.onBoardingDetails !== null) {
         setSelectedDate(formattedDate);
         setComments(
           activeScDetails?.onBoardingDetails?.followup?.reason as string
+        );
+        dispatch(
+          scActions.setPostFollowUpDate(
+            activeScDetails?.onBoardingDetails?.followup?.followUpDate as string
+          )
+        );
+        dispatch(
+          scActions.setPostFollowUpReason(
+            activeScDetails?.onBoardingDetails?.followup?.reason as string
+          )
         );
       }
     }

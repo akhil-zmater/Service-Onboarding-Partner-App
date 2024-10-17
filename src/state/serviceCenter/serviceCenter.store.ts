@@ -147,6 +147,7 @@ const serviceCenterSlice = createSlice({
         resetLoadingState;
       state.scLoadingStates.addRegistrationDetailsLoadingState =
         resetLoadingState;
+      state.scLoadingStates.postLoginDetailsLoadingState = resetLoadingState;
     },
 
     setPostLoginDetailsLoadingState: (

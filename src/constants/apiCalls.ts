@@ -33,7 +33,7 @@ export const ERROR_MESSAGES = {
 
 export const END_POINT_BASE = "http://zmater.com/bluewheel";
 export const LOGIN_END_POINT =
-  "https://gateway-dev.thevehicle.app/internal/user/login";
+  "https://gateway-prod.thevehicle.app/internal/user/login";
 
 export const END_POINTS = {
   postSCDetails: END_POINT_BASE + "/service/service-center",
