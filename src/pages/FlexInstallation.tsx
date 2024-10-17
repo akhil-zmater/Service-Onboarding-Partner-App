@@ -20,6 +20,7 @@ import { useAppSelector } from "../state";
 import {
   AddFlexDetailsLoadingState,
   getEmployeeId,
+  getFollowUpDetails,
 } from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
@@ -30,6 +31,7 @@ interface FlexInstallationProps {
 
 function FlexInstallation(props: FlexInstallationProps) {
   const activeSCDetails = useAppSelector(getActiveScDetails);
+  const followUpDetails = useAppSelector(getFollowUpDetails);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const dispatch = useDispatch();
   const [showMain, setShowMain] = useState(false);
@@ -100,15 +102,21 @@ function FlexInstallation(props: FlexInstallationProps) {
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // const allInputFields = Object.values(inputs).every((value) => {
-    //   return value !== null && typeof value === "string" && value.trim() !== "";
-    // });
-
-    if (
-      inputs.status !== null ||
-      inputs.installation_comments === "" ||
-      inputs.technician_name === ""
-    ) {
+    if (inputs?.status !== "") {
+      if (
+        inputs?.status === statusButtons[1] &&
+        (selectedDate === null || inputs?.installation_comments === "")
+      ) {
+        setShowError(true);
+        return;
+      }
+      if (
+        inputs?.status === statusButtons[0] &&
+        followUpDetails?.reason === ""
+      ) {
+        setShowError(true);
+        return;
+      }
       const day =
         selectedDate && String(selectedDate?.getDate()).padStart(2, "0"); // Get day and pad with leading zero
       const month =

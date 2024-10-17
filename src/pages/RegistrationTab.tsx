@@ -115,7 +115,7 @@ export default function RegistrationTab(props: RegistrationTabProps) {
     if (!props.isEditing) {
       const statuss = e.currentTarget.getAttribute("data-name");
       setState(statuss as string);
-      console.log("toggle===>>", statuss);
+      setInputsss({ ...inputs, additional_comments: "" });
     }
   };
 

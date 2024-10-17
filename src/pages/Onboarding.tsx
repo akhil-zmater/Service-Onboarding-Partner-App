@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../state";
 import {
   AddOnboadingDetailsLoadingState,
   getEmployeeId,
+  getFollowUpDetails,
 } from "../state/serviceCenter/serviceCenter.selector";
 import { serviceCenterActions } from "../state/serviceCenter/serviceCenter.action";
 import {
@@ -23,6 +24,7 @@ interface OnboardingProps {
 
 function Onboarding(porps: OnboardingProps) {
   const activeSCDetails = useAppSelector(getActiveScDetails);
+  const followUpdetails = useAppSelector(getFollowUpDetails);
   const [showMain, setShowMain] = useState(false);
   const OnboardingStatusButtons = ["Onboarding Pending", "Onboarding Complete"];
   const dispatch = useAppDispatch();
@@ -68,17 +70,35 @@ function Onboarding(porps: OnboardingProps) {
 
   const empId = useAppSelector(getEmployeeId);
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    dispatch(
-      serviceCenterActions.addOnBoardingDetails({
-        comments: inputs.additional_comments,
-        repId: empId as string,
-        status:
-          inputs.status === "Onboarding Complete"
-            ? PTOStatusEnum.COMPLETE
-            : PTOStatusEnum.PENDING,
-        isFollowUpClicked: inputs.status === "Onboarding Pending",
-      })
-    );
+    if (inputs?.status !== "") {
+      if (
+        inputs?.status === OnboardingStatusButtons[0] &&
+        followUpdetails.reason === ""
+      ) {
+        alert("Please Fill All Input Fields");
+        return;
+      }
+      if (
+        inputs?.status === OnboardingStatusButtons[1] &&
+        inputs?.additional_comments === ""
+      ) {
+        alert("Please Fill All Input Fields");
+        return;
+      }
+      dispatch(
+        serviceCenterActions.addOnBoardingDetails({
+          comments: inputs.additional_comments,
+          repId: empId as string,
+          status:
+            inputs.status === "Onboarding Complete"
+              ? PTOStatusEnum.COMPLETE
+              : PTOStatusEnum.PENDING,
+          isFollowUpClicked: inputs.status === "Onboarding Pending",
+        })
+      );
+    } else {
+      alert("Please Fill All Input Fields");
+    }
   };
 
   const handleOnboardingToggle = (

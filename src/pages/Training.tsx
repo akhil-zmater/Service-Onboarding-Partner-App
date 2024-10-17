@@ -13,6 +13,7 @@ import {
 import {
   AddTrainingDetailsLoadingState,
   getEmployeeId,
+  getFollowUpDetails,
 } from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
@@ -23,6 +24,7 @@ interface TrainingProps {
 
 function TrainAndOnboard(props: TrainingProps) {
   const activeSCDetails = useAppSelector(getActiveScDetails);
+  const followUpDetails = useAppSelector(getFollowUpDetails);
   const [showMain, setShowMain] = useState(false);
   const dispatch = useAppDispatch();
   const { success } = useAppSelector(AddTrainingDetailsLoadingState);
@@ -68,6 +70,20 @@ function TrainAndOnboard(props: TrainingProps) {
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     console.log("details====>>", inputs);
     if (inputs.status !== "") {
+      if (
+        inputs.status === TrainingStatusButtons[0] &&
+        followUpDetails.reason === ""
+      ) {
+        alert("Please Fill All Input Fields");
+        return;
+      }
+      if (
+        inputs?.status === TrainingStatusButtons[1] &&
+        inputs.additional_comments === ""
+      ) {
+        alert("Please Fill All Input Fields");
+        return;
+      }
       dispatch(
         serviceCenterActions.addTrainingDetails({
           comments: inputs.additional_comments,
@@ -79,6 +95,8 @@ function TrainAndOnboard(props: TrainingProps) {
           isFollowUpClicked: inputs.status === "Training Pending",
         })
       );
+    } else {
+      alert("Please Fill All Input Fields");
     }
   };
 

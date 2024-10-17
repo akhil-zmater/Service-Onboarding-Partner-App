@@ -20,6 +20,7 @@ import { useAppSelector } from "../state";
 import {
   AddVerificationDetailsLoadingState,
   getEmployeeId,
+  getFollowUpDetails,
 } from "../state/serviceCenter/serviceCenter.selector";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
@@ -33,6 +34,7 @@ function Verification(props: VerificationProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const statusButtons = ["Pending", "Approved", "Rejected"];
   const { success } = useAppSelector(AddVerificationDetailsLoadingState);
+  const followUpDetailss = useAppSelector(getFollowUpDetails);
   React.useEffect(() => {
     if (success) {
       setShowMain(true);
@@ -81,8 +83,18 @@ function Verification(props: VerificationProps) {
           verifier_name: activeScDetails?.verificationDetails.verifierName,
           status: "Pending",
         }));
-      } else {
-        setInputsss((prev) => ({ ...prev, status: "Rejected" }));
+      } else if (
+        activeScDetails?.verificationDetails.verificationStatus ===
+        VerificationStatusEnum.REJECTED
+      ) {
+        setInputsss((prev) => ({
+          ...prev,
+          verifier_name: activeScDetails?.verificationDetails
+            .verifierName as string,
+          status: "Rejected",
+          verifier_comments: activeScDetails?.verificationDetails
+            .comments as string,
+        }));
       }
     }
   }, [activeScDetails]);
@@ -100,11 +112,33 @@ function Verification(props: VerificationProps) {
   const empId = useAppSelector(getEmployeeId);
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (inputs.status !== "") {
+    if (inputs?.status !== "" && inputs?.verifier_name !== "") {
+      console.log(selectedDate, "selectedDate===>>");
+      if (
+        inputs?.status === statusButtons[1] &&
+        (inputs?.flexDimensions === "" || selectedDate === null)
+      ) {
+        setShowError(true);
+        return;
+      }
+      if (
+        inputs?.status === statusButtons[0] &&
+        followUpDetailss?.reason === ""
+      ) {
+        setShowError(true);
+        return;
+      }
+      if (
+        inputs?.status === statusButtons[2] &&
+        inputs?.verifier_comments === ""
+      ) {
+        setShowError(true);
+        return;
+      }
       const day =
-        selectedDate && String(selectedDate?.getDate()).padStart(2, "0"); // Get day and pad with leading zero
+        selectedDate && String(selectedDate?.getDate()).padStart(2, "0");
       const month =
-        selectedDate && String(selectedDate?.getMonth() + 1).padStart(2, "0"); // Get month (0-indexed, so +1) and pad with leading zero
+        selectedDate && String(selectedDate?.getMonth() + 1).padStart(2, "0");
       const year = selectedDate?.getFullYear(); // Get year
       const formattedDate = `${day}-${month}-${year}`;
       console.log("verificationDetails===>>>", inputs, formattedDate);
@@ -158,8 +192,8 @@ function Verification(props: VerificationProps) {
         setInputsss((prev) => ({
           ...prev,
           status: statuss,
+          verifier_comments: "",
         }));
-        // setOnbarding(statuss);
       }
     }
   };

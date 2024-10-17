@@ -107,7 +107,6 @@ const serviceCenterSlice = createSlice({
       };
     },
     setPostFollowUpDate: (state, action: PayloadAction<string>) => {
-      console.log(action.payload, "date====>>>>>.");
       state.addFollowUpDetails.followUpDate = action.payload;
     },
     setPostFollowUpReason: (state, action: PayloadAction<string>) => {
