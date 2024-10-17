@@ -9,6 +9,7 @@ interface FollowUDetailsProps {
   address: string;
   onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   status?: string;
+  index: boolean;
 }
 
 function FollowUDetails(props: FollowUDetailsProps) {
@@ -22,7 +23,13 @@ function FollowUDetails(props: FollowUDetailsProps) {
   };
 
   return (
-    <div className="flex flex-col gap-1 border-b py-[0.5rem] border-border">
+    <div
+      className={`${
+        props.index
+          ? "flex flex-col gap-1 py-[0.5rem] "
+          : "flex flex-col gap-1 border-b py-[0.5rem] border-border"
+      }`}
+    >
       <h1 className="text-[0.9rem] text-black leading-[1.5rem] font-normal overflow-hidden">
         {props.name}
       </h1>

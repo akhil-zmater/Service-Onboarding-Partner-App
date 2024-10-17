@@ -36,6 +36,8 @@ function FollowUps() {
     const comp = e.currentTarget.getAttribute("data-name");
     setButton(comp);
   };
+  const isLastElementFolloWUp = followUpDetails.length - 1;
+  const isLastElementAssigned = assignedDetails.length - 1;
 
   return (
     <div>
@@ -103,6 +105,7 @@ function FollowUps() {
                         }}
                       >
                         <FollowUDetails
+                          index={isLastElementAssigned === key}
                           key={key}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -142,6 +145,7 @@ function FollowUps() {
                         }}
                       >
                         <FollowUDetails
+                          index={isLastElementFolloWUp === key}
                           key={key}
                           status={`Next FollowUp Date : ${details.followUpDetails?.followUpDate}`}
                           onClick={(e) => {
