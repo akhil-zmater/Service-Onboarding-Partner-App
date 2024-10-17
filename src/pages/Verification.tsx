@@ -116,7 +116,9 @@ function Verification(props: VerificationProps) {
       console.log(selectedDate, "selectedDate===>>");
       if (
         inputs?.status === statusButtons[1] &&
-        (inputs?.flexDimensions === "" || selectedDate === null)
+        (inputs?.flexDimensions === "" ||
+          selectedDate === null ||
+          inputs?.verifier_comments === "")
       ) {
         setShowError(true);
         return;

@@ -1,24 +1,41 @@
 import { EXPIRY_TIME_IN_HOURS } from "../constants/data";
 
+interface CookieData {
+  timeStamp: number;
+  value: string;
+}
+
 export const setCookie = (name: string, value: string, hours: number) => {
   const date = new Date();
   date.setTime(date.getTime() + hours * 60 * 60 * 1000);
   const expires = "; expires=" + date.toUTCString();
+
+  const cookieData: CookieData = { timeStamp: Date.now(), value };
+
+  console.log("cookieData: ", cookieData);
+
   document.cookie =
-    name + "=" + encodeURIComponent(value) + expires + "; path=/";
+    name +
+    "=" +
+    encodeURIComponent(JSON.stringify(cookieData)) +
+    expires +
+    "; path=/";
 };
 
 export const getCookie = (name: string) => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
 
+  console.log("parts: ", parts);
+
   if (parts.length === 2) {
     const cookieValue = parts[1].split(";")[0];
 
     try {
-      const decodedData = decodeURIComponent(cookieValue);
-      const parsedValue = JSON.parse(decodedData);
+      const parsedValue = JSON.parse(decodeURIComponent(cookieValue));
       const currentTime = Date.now();
+
+      console.log("parsedValue: ", parsedValue);
 
       if (
         currentTime >
@@ -28,7 +45,7 @@ export const getCookie = (name: string) => {
         return null;
       }
 
-      return decodedData;
+      return parsedValue.value;
     } catch (error) {
       console.error("Error parsing cookie value:", error);
       return null;

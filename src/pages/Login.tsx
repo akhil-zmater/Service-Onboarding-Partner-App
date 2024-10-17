@@ -32,6 +32,7 @@ function Login() {
   useEffect(() => {
     if (success) {
       setShowHome(true);
+      dispatch(scStoreActions.resetSCloadingStates());
     }
   }, [success]);
 
