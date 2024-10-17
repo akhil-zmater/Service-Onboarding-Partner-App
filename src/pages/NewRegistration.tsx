@@ -6,6 +6,7 @@ import { BtnTypes } from "../state/serviceCenter/servicCenter.types";
 import {
   getAddRegistrationDetailsLoadingState,
   getEmployeeId,
+  getFollowUpDetails,
 } from "../state/serviceCenter/serviceCenter.selector";
 import Navbar from "./Navbar";
 import NextFollowup from "./NextFollowup";
@@ -83,6 +84,7 @@ export default function NewRegistration() {
     setInputsss({ ...inputs, [name]: value });
   };
   const [state, setState] = React.useState<string>("");
+  const followUpdetails = useAppSelector(getFollowUpDetails);
 
   const statusButtons = ["Registered", "Follow Up", "Reject"];
   const handleToggle = (
@@ -103,6 +105,17 @@ export default function NewRegistration() {
     ) {
       setShowError(true);
     } else {
+      if (state === statusButtons[1] && followUpdetails?.reason === "") {
+        setShowError(true);
+        return;
+      }
+      if (
+        state === statusButtons[0] &&
+        (inputs?.additional_comments === "" || inputs?.subscription_type === "")
+      ) {
+        setShowError(true);
+        return;
+      }
       setShowError(false);
       dispatch(
         serviceCenterActions.addNewRegistrationDetails({
@@ -207,92 +220,94 @@ export default function NewRegistration() {
               </p>
             </div>
             {/* INPUT FIELDS */}
-            <div className="mt-[0.75rem] flex flex-col gap-[1.25rem] w-full">
-              <div className="flex flex-col gap-1">
-                <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                  Sales Rep ID
-                </p>
-                <Input
-                  type="text"
-                  name="sales_rep_id"
-                  value={(employeeId as string) ?? ""}
-                  placeholder=""
-                  onChange={() => {}}
-                  className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
-                  isReadOnly={true}
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                  Service Center Phone Number
-                </p>
-                <Input
-                  type="text"
-                  name="phoneNumber"
-                  value={inputs.phoneNumber as string}
-                  placeholder=""
-                  onChange={handleRegFields}
-                  className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                  Service Center Name
-                </p>
-                <Input
-                  type="text"
-                  name="scName"
-                  value={inputs.scName as string}
-                  placeholder=""
-                  onChange={handleRegFields}
-                  className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                  Service Center Owner Name
-                </p>
-                <Input
-                  type="text"
-                  name="ownerName"
-                  value={inputs.ownerName as string}
-                  placeholder=""
-                  onChange={handleRegFields}
-                  className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                  Service Center Location
-                </p>
-                <div
-                  onClick={handleMaps} //Maps integration
-                  className="flex items-center gap-2 h-12 w-full px-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
-                >
-                  <img src={loc} alt="" className="h-6 w-6" />
+            <div className="flex flex-col">
+              <div className="mt-[0.75rem] flex flex-col gap-[1.25rem] w-full">
+                <div className="flex flex-col gap-1">
+                  <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                    Sales Rep ID
+                  </p>
                   <Input
                     type="text"
-                    name="service_center_location"
-                    value={loading ? "Loading...." : address}
+                    name="sales_rep_id"
+                    value={(employeeId as string) ?? ""}
                     placeholder=""
-                    onChange={handleRegFields}
-                    className="outline-none w-full overflow-hidden"
+                    onChange={() => {}}
+                    className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
                     isReadOnly={true}
                   />
                 </div>
-                {showMap && (
-                  <div className="fixed inset-0 bg-black opacity-95 flex items-center justify-center z-50">
-                    <CurrentLocMap
-                      cross={handleCloseMap}
-                      latitude={locationDetails?.lat as number}
-                      longitude={locationDetails?.lng as number}
-                      dragHandler={dragHandler}
+                <div className="flex flex-col gap-1">
+                  <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                    Service Center Phone Number
+                  </p>
+                  <Input
+                    type="text"
+                    name="phoneNumber"
+                    maxLength={10}
+                    value={inputs.phoneNumber as string}
+                    placeholder=""
+                    onChange={handleRegFields}
+                    className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                    Service Center Name
+                  </p>
+                  <Input
+                    type="text"
+                    name="scName"
+                    value={inputs.scName as string}
+                    placeholder=""
+                    onChange={handleRegFields}
+                    className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                    Service Center Owner Name
+                  </p>
+                  <Input
+                    type="text"
+                    name="ownerName"
+                    value={inputs.ownerName as string}
+                    placeholder=""
+                    onChange={handleRegFields}
+                    className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                    Service Center Location
+                  </p>
+                  <div
+                    onClick={handleMaps} //Maps integration
+                    className="flex items-center gap-2 h-12 w-full px-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
+                  >
+                    <img src={loc} alt="" className="h-6 w-6" />
+                    <Input
+                      type="text"
+                      name="service_center_location"
+                      value={loading ? "Loading...." : address}
+                      placeholder=""
+                      onChange={handleRegFields}
+                      className="outline-none w-full overflow-hidden"
+                      isReadOnly={true}
                     />
                   </div>
-                )}
-              </div>
+                  {showMap && (
+                    <div className="fixed inset-0 bg-black opacity-95 flex items-center justify-center z-50">
+                      <CurrentLocMap
+                        cross={handleCloseMap}
+                        latitude={locationDetails?.lat as number}
+                        longitude={locationDetails?.lng as number}
+                        dragHandler={dragHandler}
+                      />
+                    </div>
+                  )}
+                </div>
 
-              {/* <div className="flex flex-col gap-1"> // Service centerPhoto
+                {/* <div className="flex flex-col gap-1"> // Service centerPhoto
                     <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                       Service Center Photo
                     </p>
@@ -330,104 +345,107 @@ export default function NewRegistration() {
                     </div>
                   </div> */}
 
-              <div className="flex flex-col gap-1">
-                <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                  Onboarding Status
-                </p>
-                <div className="border border-border p-2 rounded-lg">
-                  {statusComp}
-                </div>
-              </div>
-              {state === "Registered" && (
                 <div className="flex flex-col gap-1">
                   <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                    Subscription Type
+                    Onboarding Status
                   </p>
                   <div className="border border-border p-2 rounded-lg">
-                    <div className="flex flex-col">
-                      <div className="text-sm text-black">
-                        <div
-                          onClick={handleSubscription}
-                          data-name="Paid"
-                          className="flex justify-between items-center pb-3 pt-2 border-b border-border text-black leading-[1rem] text-[0.75rem]"
-                        >
-                          <p>Paid</p>
+                    {statusComp}
+                  </div>
+                </div>
+                {state === "Registered" && (
+                  <div className="flex flex-col gap-1">
+                    <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                      Subscription Type
+                    </p>
+                    <div className="border border-border p-2 rounded-lg">
+                      <div className="flex flex-col">
+                        <div className="text-sm text-black">
                           <div
-                            className={`${
-                              subscription === "Paid"
-                                ? "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-blue"
-                                : "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-border"
-                            }`}
+                            onClick={handleSubscription}
+                            data-name="Paid"
+                            className="flex justify-between items-center pb-3 pt-2 border-b border-border text-black leading-[1rem] text-[0.75rem]"
                           >
-                            <button
-                              type="button"
-                              name="Paid"
-                              data-name="Paid"
-                              onClick={handleSubscription}
+                            <p>Paid</p>
+                            <div
                               className={`${
                                 subscription === "Paid"
-                                  ? "bg-blue rounded-full w-3 h-3"
-                                  : "bg-gray-300 rounded-full w-3 h-3"
+                                  ? "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-blue"
+                                  : "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-border"
                               }`}
-                            />
+                            >
+                              <button
+                                type="button"
+                                name="Paid"
+                                data-name="Paid"
+                                onClick={handleSubscription}
+                                className={`${
+                                  subscription === "Paid"
+                                    ? "bg-blue rounded-full w-3 h-3"
+                                    : "bg-gray-300 rounded-full w-3 h-3"
+                                }`}
+                              />
+                            </div>
                           </div>
-                        </div>
-                        <div
-                          data-name="Unpaid"
-                          onClick={handleSubscription}
-                          className="flex justify-between items-center pb-2 pt-2 text-black leading-[1rem] text-[0.75rem]"
-                        >
-                          <p>Unpaid</p>
                           <div
-                            className={`${
-                              subscription === "Unpaid"
-                                ? "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-blue"
-                                : "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-border"
-                            }`}
+                            data-name="Unpaid"
+                            onClick={handleSubscription}
+                            className="flex justify-between items-center pb-2 pt-2 text-black leading-[1rem] text-[0.75rem]"
                           >
-                            <button
-                              type="button"
-                              name="Unpaid"
-                              data-name="Unpaid"
-                              onClick={handleSubscription}
+                            <p>Unpaid</p>
+                            <div
                               className={`${
                                 subscription === "Unpaid"
-                                  ? "bg-blue rounded-full w-3 h-3"
-                                  : "bg-gray-300 rounded-full w-3 h-3"
+                                  ? "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-blue"
+                                  : "bg-white rounded-full w-5 h-5 flex justify-center items-center border-2 border-border"
                               }`}
-                            />
+                            >
+                              <button
+                                type="button"
+                                name="Unpaid"
+                                data-name="Unpaid"
+                                onClick={handleSubscription}
+                                className={`${
+                                  subscription === "Unpaid"
+                                    ? "bg-blue rounded-full w-3 h-3"
+                                    : "bg-gray-300 rounded-full w-3 h-3"
+                                }`}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
-              {state === "Follow Up" ? (
-                <NextFollowup tab={BtnTypes.NEWREGISTRATION} />
-              ) : (
-                <div className="flex flex-col gap-1">
-                  <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                    Comments
-                  </p>
-                  <Input
-                    type="text"
-                    name="additional_comments"
-                    value={inputs.additional_comments}
-                    placeholder=""
-                    onChange={handleRegFields}
-                    className="h-24 w-full pl-4 border border-border leading-[1rem] text-ipcol font-normal rounded-lg text-[1rem]"
-                  />
-                </div>
-              )}
-              <div>
-                {showError && (
-                  <p className="text-[0.8rem] font-normal pl-2 leading-[1rem] text-red">
-                    Please Fill All Fields !
-                  </p>
                 )}
+                {state === "Follow Up" ? (
+                  <NextFollowup tab={BtnTypes.NEWREGISTRATION} />
+                ) : (
+                  <div className="flex flex-col gap-1">
+                    <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                      Comments
+                    </p>
+                    <Input
+                      type="text"
+                      name="additional_comments"
+                      value={inputs.additional_comments}
+                      placeholder=""
+                      onChange={handleRegFields}
+                      className="h-24 w-full pl-4 border border-border leading-[1rem] text-ipcol font-normal rounded-lg text-[1rem]"
+                    />
+                  </div>
+                )}
+                <div>
+                  {showError && (
+                    <p className="text-[0.8rem] font-normal pl-2 leading-[1rem] text-red">
+                      Please Fill All Fields !
+                    </p>
+                  )}
+                </div>
+                <div className="self-center">
+                  <Submit onClick={handleSubmit} />
+                </div>
               </div>
-              <Submit onClick={handleSubmit} />
             </div>
           </div>
         </div>
