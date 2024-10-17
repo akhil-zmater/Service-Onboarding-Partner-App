@@ -224,6 +224,15 @@ function FlexInstallation(props: FlexInstallationProps) {
     setShowMain(true);
   };
 
+  const datePickerRef = useRef<DatePicker>(null);
+  const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
+    const datePickerInput = datePickerRef.current
+      ?.input as HTMLInputElement | null;
+    if (datePickerInput) {
+      datePickerInput.focus();
+    }
+  };
+
   return (
     <div className="w-screen">
       {showMain ? (
@@ -323,8 +332,12 @@ function FlexInstallation(props: FlexInstallationProps) {
                         <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                           Phtography Appointment Date
                         </p>
-                        <div className="flex items-center justify-between h-12 w-full px-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol">
+                        <div
+                          onClick={handleImageClick}
+                          className="flex items-center justify-between h-12 w-full px-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol"
+                        >
                           <DatePicker
+                            ref={datePickerRef}
                             selected={selectedDate}
                             onChange={(date: Date | null) =>
                               setSelectedDate(date)

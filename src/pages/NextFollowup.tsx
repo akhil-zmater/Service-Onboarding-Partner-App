@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Input from "../components/Input";
 import date from "../images/date.svg";
 import DatePicker from "react-datepicker";
@@ -166,12 +166,26 @@ function NextFollowup(props: NextFollowUpProps) {
 
     console.log("date===>>", e.target.value);
   };
+
+  const datePickerRef = useRef<DatePicker>(null);
+  const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
+    const datePickerInput = datePickerRef.current
+      ?.input as HTMLInputElement | null;
+    if (datePickerInput) {
+      datePickerInput.focus();
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 h-max">
       <div className="flex flex-col gap-1">
         <p className="text-xs text-ipcol">Next Follow - Up Date</p>
-        <div className="flex items-center justify-between h-12 w-full px-4 border border-border rounded-lg text-ipcol text-[0.8rem]">
+        <div
+          onClick={handleImageClick}
+          className="flex items-center justify-between h-12 w-full px-4 border border-border rounded-lg text-ipcol text-[0.8rem]"
+        >
           <DatePicker
+            ref={datePickerRef}
             selected={selectedDate}
             minDate={new Date()}
             onChange={(date: Date | null) => {
