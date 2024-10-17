@@ -10,7 +10,7 @@ import phone from "../images/phoneicon.svg";
 import mapii from "../images/mapsiconn.svg";
 // import Maps from "./Maps";
 import Home from "./Home";
-import { useAppSelector } from "../state";
+import { useAppDispatch, useAppSelector } from "../state";
 import {
   getActiveScDetails,
   getSCDetailsLoadingState,
@@ -25,10 +25,7 @@ import {
 } from "../state/serviceCenter/servicCenter.types";
 import Onboarding from "./Onboarding";
 import Maps from "./Maps";
-import ErrorBox from "./ErrorBox";
-import FollowUDetails from "../components/FollowUDetails";
-import FollowUps from "./FollowUps";
-import Loader from "./Loader";
+import { scActions } from "../state/serviceCenter/serviceCenter.store";
 interface MainProps {
   isHome?: boolean;
 }
@@ -68,9 +65,11 @@ function Main(props: MainProps) {
   const handleStatus = (newStatus: string, btnName: string) => {
     setStatus((prev) => ({ ...prev, newStatus: newStatus, btnName: btnName }));
   };
-
+  const dispatch = useAppDispatch();
   const handleButtons =
     (button: string) => (e: React.MouseEvent<HTMLDivElement>) => {
+      dispatch(scActions.setPostFollowUpDate(""));
+      dispatch(scActions.setPostFollowUpReason(""));
       const comp = e.currentTarget.getAttribute("data-name");
       switch (comp) {
         case "Registration":

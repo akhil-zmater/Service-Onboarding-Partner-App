@@ -113,6 +113,7 @@ function* postSCDetailsSaga(
         type: scActionTypes.GET_SC_DETAILS_PHONENO,
         payload: payload,
       });
+      yield call(getAssignedFollowUpDetailsSaga);
       yield put(scStoreActions.setPostSCDetailsLoadingState(successState));
     } else {
       yield put(scStoreActions.setPostSCDetailsLoadingState(failureState));
@@ -245,6 +246,7 @@ function* addVerificationDetailsSaga(
         type: scActionTypes.GET_SC_DETAILS_PHONENO,
         payload: payload,
       });
+      yield call(getAssignedFollowUpDetailsSaga);
       yield put(
         scStoreActions.setAddVerificationDetailsLoadingState(successState)
       );
@@ -312,6 +314,7 @@ function* addFlexDetailsSaga(
         type: scActionTypes.GET_SC_DETAILS_PHONENO,
         payload: payload,
       });
+      yield call(getAssignedFollowUpDetailsSaga);
       yield put(scStoreActions.setAddFlexDetailsLoadingState(successState));
     } else {
       yield put(scStoreActions.setAddFlexDetailsLoadingState(failureState));
@@ -378,6 +381,7 @@ function* addPhotographyDetailsSaga(
         type: scActionTypes.GET_SC_DETAILS_PHONENO,
         payload: payload,
       });
+      yield call(getAssignedFollowUpDetailsSaga);
       yield put(
         scStoreActions.setAddPhotographyDetailsLoadingState(successState)
       );
@@ -438,6 +442,7 @@ function* addTrainingDetailsSaga(
         type: scActionTypes.GET_SC_DETAILS_PHONENO,
         payload: payload,
       });
+      yield call(getAssignedFollowUpDetailsSaga);
       yield put(scStoreActions.setAddTrainingDetailsLoadingState(successState));
     } else {
       yield put(scStoreActions.setAddTrainingDetailsLoadingState(failureState));
@@ -490,6 +495,7 @@ function* addOnBoardingDetailsSaga(
         type: scActionTypes.GET_SC_DETAILS_PHONENO,
         payload: payload,
       });
+      yield call(getAssignedFollowUpDetailsSaga);
       yield put(
         scStoreActions.setAddOnboardingDetailsLoadingState(successState)
       );
@@ -601,6 +607,7 @@ function* addRegistrationDetailsSaga(
       details
     );
     if (resp.status === APPSTATES.SUCCESS) {
+      yield call(getAssignedFollowUpDetailsSaga);
       yield put(
         scStoreActions.setAddRegistrationDetailsLoadingState(successState)
       );

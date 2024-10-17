@@ -41,7 +41,7 @@ export const getFollowUpDetailsData = createSelector(
   [getAssignedFollowUpDetails],
   (getDetails) => {
     const data = getDetails.filter(
-      (details) => details.status === RegistrationStatusEnum.FOLLOWUP
+      (details) => details.status !== RegistrationStatusEnum.ASSIGNED
     );
     return data;
   }

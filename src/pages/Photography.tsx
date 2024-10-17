@@ -17,6 +17,7 @@ import { useAppSelector } from "../state";
 import {
   AddPhotoGraphyDetailsLoadingState,
   getEmployeeId,
+  getFollowUpDetails,
 } from "../state/serviceCenter/serviceCenter.selector";
 import { scActions } from "../state/serviceCenter/serviceCenter.store";
 import { getActiveScDetails } from "../state/serviceCenter/serviceCenter.selector";
@@ -28,6 +29,7 @@ interface PhotographyProps {
 function Photography(props: PhotographyProps) {
   const currDate = new Date();
   const activeSCDetails = useAppSelector(getActiveScDetails);
+  const followUpDetails = useAppSelector(getFollowUpDetails);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const dispatch = useDispatch();
   const [showMain, setShowMain] = useState(false);
@@ -78,6 +80,20 @@ function Photography(props: PhotographyProps) {
   const statusButtons = ["Photography Pending", "Photography Complete"];
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (inputs.status !== "") {
+      if (
+        inputs?.status === statusButtons[0] &&
+        followUpDetails.reason === ""
+      ) {
+        alert("Please Fill All Input Fields");
+        return;
+      }
+      if (
+        inputs?.status === statusButtons[1] &&
+        (selectedDate === null || inputs?.comments === "")
+      ) {
+        alert("Please Fill All Input Fields");
+        return;
+      }
       const day =
         selectedDate && String(selectedDate?.getDate()).padStart(2, "0"); // Get day and pad with leading zero
       const month =
@@ -86,23 +102,19 @@ function Photography(props: PhotographyProps) {
       const formattedDate = `${day}-${month}-${year}`;
       dispatch(
         serviceCenterActions.addPhotoGraphyDetails({
-          comments: inputs.comments,
+          comments: inputs?.comments,
           repId: empId as string,
           status:
-            inputs.status === "Photography Complete"
+            inputs?.status === "Photography Complete"
               ? PTOStatusEnum.COMPLETE
               : PTOStatusEnum.PENDING,
-          isFollowUpClicked: inputs.status === "Photography Pending",
+          isFollowUpClicked: inputs?.status === "Photography Pending",
           phDate: formattedDate,
         })
       );
     } else {
       alert("Please Fill All Input Fields");
     }
-    // if (inputs.status !== null) {
-    //   // dispatch(setInputs(inputs));
-    //   setShowMain(true);
-    // }
   };
 
   const handleToggle = (

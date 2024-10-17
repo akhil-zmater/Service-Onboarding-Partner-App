@@ -94,11 +94,13 @@ export default function NewRegistration() {
   };
 
   const handleSubmit = () => {
-    const isEmptyField = Object.values(inputs).some(
-      (input) => input.trim() === ""
-    );
-    console.log("empty===>.>", isEmptyField);
-    if (isEmptyField || state === "" || loading) {
+    if (
+      inputs.phoneNumber === "" ||
+      inputs.ownerName === "" ||
+      inputs.scName === "" ||
+      state === "" ||
+      loading
+    ) {
       setShowError(true);
     } else {
       setShowError(false);
@@ -402,7 +404,7 @@ export default function NewRegistration() {
                 </div>
               )}
               {state === "Follow Up" ? (
-                <NextFollowup tab={BtnTypes.REGISTRATION} />
+                <NextFollowup tab={BtnTypes.NEWREGISTRATION} />
               ) : (
                 <div className="flex flex-col gap-1">
                   <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">

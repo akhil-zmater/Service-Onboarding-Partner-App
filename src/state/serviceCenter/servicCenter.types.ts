@@ -165,6 +165,7 @@ export enum BtnTypes {
   PHOTOGRAPHY = "Photography",
   TRAINING = "Training",
   ONBOARDING = "Onboarding",
+  NEWREGISTRATION = "NewRegistration",
 }
 export enum StatusTypeEnum {
   COMPLETED = "Completed",
