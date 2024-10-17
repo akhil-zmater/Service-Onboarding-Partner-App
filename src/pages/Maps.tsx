@@ -28,8 +28,11 @@ function Maps({ cross, latitude, longitude }: MapsProps) {
   return (
     <div className="bg-white pb-2 px-2 w-full ml-3 mr-2 h-max rounded-lg font-poppins ">
       <div className="flex justify-between items-center">
-        <p className="text-lg font-semibold py-4 text-blue underline">
-          Location:
+        <p
+          onClick={handleMarkerClick}
+          className="text-lg font-semibold py-4 text-blue underline"
+        >
+          Open Google Maps
         </p>
         <img
           src={crosss}
@@ -48,7 +51,6 @@ function Maps({ cross, latitude, longitude }: MapsProps) {
               clickableIcons={true}
             >
               <Marker
-                onClick={handleMarkerClick}
                 draggable={true}
                 position={{ lat: latitude, lng: longitude }}
               />

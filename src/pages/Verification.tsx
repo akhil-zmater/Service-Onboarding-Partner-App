@@ -306,16 +306,15 @@ function Verification(props: VerificationProps) {
   };
 
   return (
-    <div>
+    <div className="w-screen">
       {showMain ? (
         <Main />
       ) : (
-        <div>
+        <div className="w-screen">
           {showMain ? (
             <Main />
           ) : (
-            <div>
-              {" "}
+            <div className="w-screen">
               <Navbar onClick={handleMain} />
               <div className="ml-[0.7rem] mt-[1.2rem] mr-[0.5rem]">
                 <h1 className="tracking-tight text-[1rem] leading-[1.5rem] bg-gradient-to-r from-[rgba(21,79,187,1)] to-[rgba(28,73,151,1)] bg-bluegrad bg-clip-text text-transparent font-medium">
@@ -330,32 +329,33 @@ function Verification(props: VerificationProps) {
                   </p>
                 </div>
                 {/* INPUT FIELDS */}
-                <div className="mt-4 flex flex-col gap-[1.25rem]">
-                  <div className="flex flex-col gap-1">
-                    <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                      Verifier Name
-                    </p>
-                    <Input
-                      type="text"
-                      name="verifier_name"
-                      value={inputs.verifier_name}
-                      placeholder=""
-                      onChange={handleVerFields}
-                      isReadOnly={props.isEditing}
-                      className="h-12 w-full pl-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg "
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                      Verification Status
-                    </p>
-                    <div className="border border-border leading-[1.25rem] font-normal py-2 px-4 rounded-lg">
-                      {statusComp}
+                <div className="flex flex-col w-full">
+                  <div className="mt-4 flex flex-col gap-[1.25rem]">
+                    <div className="flex flex-col gap-1">
+                      <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                        Verifier Name
+                      </p>
+                      <Input
+                        type="text"
+                        name="verifier_name"
+                        value={inputs.verifier_name}
+                        placeholder=""
+                        onChange={handleVerFields}
+                        isReadOnly={props.isEditing}
+                        className="h-12 w-full pl-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg "
+                      />
                     </div>
-                  </div>
-                  {inputs.status === "Approved" && (
-                    <div className="flex flex-col gap-2">
-                      {/* <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1">
+                      <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                        Verification Status
+                      </p>
+                      <div className="border border-border leading-[1.25rem] font-normal py-2 px-4 rounded-lg">
+                        {statusComp}
+                      </div>
+                    </div>
+                    {inputs.status === "Approved" && (
+                      <div className="flex flex-col gap-2">
+                        {/* <div className="flex flex-col gap-1">
                          <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                            Payment Status
                          </p>
@@ -363,7 +363,7 @@ function Verification(props: VerificationProps) {
                            {payComp}
                          </div>
                        </div> */}
-                      {/* {payment === "Payment Completed" && (
+                        {/* {payment === "Payment Completed" && (
                         <div className="flex flex-col gap-1">
                           <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                             Transaction ID
@@ -378,44 +378,44 @@ function Verification(props: VerificationProps) {
                           />
                         </div>
                       )} */}
-                      <div className="flex flex-col gap-1">
-                        <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                          Flex Installation Date
-                        </p>
-                        <div className="flex items-center justify-between h-12 w-full px-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg ">
-                          <DatePicker
-                            ref={datePickerRef}
-                            selected={selectedDate}
-                            onChange={(date: Date | null) =>
-                              setSelectedDate(date)
-                            }
-                            className="w-full outline-none text-base"
-                            dateFormat="yyyy-MM-d"
-                            disabled={props.isEditing}
-                          />
-                          <img
-                            src={date}
-                            alt=""
-                            className="w-5 h-5"
-                            onClick={handleImageClick}
+                        <div className="flex flex-col gap-1">
+                          <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                            Flex Installation Date
+                          </p>
+                          <div className="flex items-center justify-between h-12 w-full px-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg ">
+                            <DatePicker
+                              ref={datePickerRef}
+                              selected={selectedDate}
+                              onChange={(date: Date | null) =>
+                                setSelectedDate(date)
+                              }
+                              className="w-full outline-none text-base"
+                              dateFormat="yyyy-MM-d"
+                              disabled={props.isEditing}
+                            />
+                            <img
+                              src={date}
+                              alt=""
+                              className="w-5 h-5"
+                              onClick={handleImageClick}
+                            />
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                            Flex Dimensions
+                          </p>
+                          <Input
+                            type="text"
+                            name="flexDimensions"
+                            value={inputs.flexDimensions}
+                            placeholder="Enter Flex Dimensions"
+                            onChange={handleVerFields}
+                            isReadOnly={props.isEditing}
+                            className="h-24 w-full pl-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg "
                           />
                         </div>
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                          Flex Dimensions
-                        </p>
-                        <Input
-                          type="text"
-                          name="flexDimensions"
-                          value={inputs.flexDimensions}
-                          placeholder="Enter Flex Dimensions"
-                          onChange={handleVerFields}
-                          isReadOnly={props.isEditing}
-                          className="h-24 w-full pl-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg "
-                        />
-                      </div>
-                      {/* <div className="flex flex-col gap-1"> // TODO: future
+                        {/* <div className="flex flex-col gap-1"> // TODO: future
                         <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                           Verifier Selfie
                         </p>
@@ -452,42 +452,45 @@ function Verification(props: VerificationProps) {
                           )}
                         </div>
                       </div> */}
-                    </div>
-                  )}
-                  {inputs.status === "Pending" ? (
-                    <NextFollowup tab={BtnTypes.VERIFICATION} />
-                  ) : (
-                    <div className="flex flex-col gap-1">
-                      <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                        Comments
+                      </div>
+                    )}
+                    {inputs.status === "Pending" ? (
+                      <NextFollowup tab={BtnTypes.VERIFICATION} />
+                    ) : (
+                      <div className="flex flex-col gap-1">
+                        <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                          Comments
+                        </p>
+                        <Input
+                          type="text"
+                          name="verifier_comments"
+                          value={inputs.verifier_comments}
+                          placeholder=""
+                          onChange={handleVerFields}
+                          className="h-24 w-full pl-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg "
+                          isReadOnly={props.isEditing}
+                        />
+                      </div>
+                    )}
+                    {showError && (
+                      <p className="text-[0.8rem] font-normal pl-2 leading-[1rem] text-red">
+                        Please Fill All Fields !
                       </p>
-                      <Input
-                        type="text"
-                        name="verifier_comments"
-                        value={inputs.verifier_comments}
-                        placeholder=""
-                        onChange={handleVerFields}
-                        className="h-24 w-full pl-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg "
-                        isReadOnly={props.isEditing}
+                    )}
+
+                    <div className="self-center">
+                      <Submit
+                        onClick={handleSubmit}
+                        isDisabled={
+                          activeScDetails?.verificationDetails !== null
+                            ? activeScDetails?.verificationDetails
+                                .verificationStatus ===
+                              VerificationStatusEnum.VERIFIED
+                            : false
+                        }
                       />
                     </div>
-                  )}
-                  {showError && (
-                    <p className="text-[0.8rem] font-normal pl-2 leading-[1rem] text-red">
-                      Please Fill All Fields !
-                    </p>
-                  )}
-
-                  <Submit
-                    onClick={handleSubmit}
-                    isDisabled={
-                      activeScDetails?.verificationDetails !== null
-                        ? activeScDetails?.verificationDetails
-                            .verificationStatus ===
-                          VerificationStatusEnum.VERIFIED
-                        : false
-                    }
-                  />
+                  </div>
                 </div>
               </div>
             </div>

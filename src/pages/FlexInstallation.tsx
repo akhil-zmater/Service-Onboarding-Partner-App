@@ -225,15 +225,15 @@ function FlexInstallation(props: FlexInstallationProps) {
   };
 
   return (
-    <div>
+    <div className="w-screen">
       {showMain ? (
         <Main />
       ) : (
-        <div>
+        <div className="w-screen">
           {showMain ? (
             <Main />
           ) : (
-            <div>
+            <div className="w-screen">
               <Navbar onClick={handleMain} />
               <div className="ml-[0.7rem] mt-[1.2rem] mr-[0.5rem]">
                 <h1 className="tracking-tight text-[1rem] leading-[1.5rem] bg-gradient-to-r from-[rgba(21,79,187,1)] to-[rgba(28,73,151,1)] bg-bluegrad bg-clip-text text-transparent font-medium">
@@ -248,23 +248,24 @@ function FlexInstallation(props: FlexInstallationProps) {
                   </p>
                 </div>
                 {/* INPUT FIELDS */}
-                <div className="mt-[0.75rem] flex flex-col gap-[1.25rem] ">
-                  <div className="flex flex-col gap-1">
-                    <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                      Technician Id
-                    </p>
-                    <Input
-                      type="text"
-                      name="technician_name"
-                      value={(employeeId as string) ?? ""}
-                      placeholder=""
-                      onChange={handleInput}
-                      className="h-12 w-full pl-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol"
-                      isReadOnly={true}
-                    />
-                  </div>
+                <div className="flex flex-col w-full">
+                  <div className="mt-[0.75rem] flex flex-col gap-[1.25rem] ">
+                    <div className="flex flex-col gap-1">
+                      <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                        Technician Id
+                      </p>
+                      <Input
+                        type="text"
+                        name="technician_name"
+                        value={(employeeId as string) ?? ""}
+                        placeholder=""
+                        onChange={handleInput}
+                        className="h-12 w-full pl-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol"
+                        isReadOnly={true}
+                      />
+                    </div>
 
-                  {/* <div className="flex flex-col gap-1"> //TODO: in future
+                    {/* <div className="flex flex-col gap-1"> //TODO: in future
                     <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                       Installation Pics
                     </p>
@@ -309,68 +310,71 @@ function FlexInstallation(props: FlexInstallationProps) {
                       </div>
                     </div>
                   </div> */}
-                  <div className="flex flex-col gap-1">
-                    <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                      Installation Status
-                    </p>
-                    <div className="border border-border p-2 rounded-lg">
-                      {statusComp}
-                    </div>
-                  </div>
-                  {inputs.status === "Flex Installation Complete" && (
                     <div className="flex flex-col gap-1">
                       <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                        Phtography Appointment Date
+                        Installation Status
                       </p>
-                      <div className="flex items-center justify-between h-12 w-full px-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol">
-                        <DatePicker
-                          selected={selectedDate}
-                          onChange={(date: Date | null) =>
-                            setSelectedDate(date)
-                          }
-                          className="w-full outline-none"
-                          dateFormat="yyyy-MM-d"
-                          disabled={props.isEditing}
-                        />
-                        <img src={date} alt="" className="w-5 h-5" />
+                      <div className="border border-border p-2 rounded-lg">
+                        {statusComp}
                       </div>
                     </div>
-                  )}
+                    {inputs.status === "Flex Installation Complete" && (
+                      <div className="flex flex-col gap-1">
+                        <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                          Phtography Appointment Date
+                        </p>
+                        <div className="flex items-center justify-between h-12 w-full px-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol">
+                          <DatePicker
+                            selected={selectedDate}
+                            onChange={(date: Date | null) =>
+                              setSelectedDate(date)
+                            }
+                            className="w-full outline-none"
+                            dateFormat="yyyy-MM-d"
+                            disabled={props.isEditing}
+                          />
+                          <img src={date} alt="" className="w-5 h-5" />
+                        </div>
+                      </div>
+                    )}
 
-                  {inputs.status === "Flex Installation Pending" ? (
-                    <NextFollowup tab={BtnTypes.FLEX_INSTALLATION} />
-                  ) : (
-                    <div className="flex flex-col gap-1">
-                      <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                        Comments
+                    {inputs.status === "Flex Installation Pending" ? (
+                      <NextFollowup tab={BtnTypes.FLEX_INSTALLATION} />
+                    ) : (
+                      <div className="flex flex-col gap-1">
+                        <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                          Comments
+                        </p>
+                        <Input
+                          type="text"
+                          name="installation_comments"
+                          value={inputs.installation_comments}
+                          placeholder=""
+                          onChange={handleInput}
+                          isReadOnly={props.isEditing}
+                          className="h-24 w-full pl-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol"
+                        />
+                      </div>
+                    )}
+                    {showError && (
+                      <p className="text-[0.8rem] font-normal pl-2 leading-[1rem] text-red">
+                        Please Fill All Fields !
                       </p>
-                      <Input
-                        type="text"
-                        name="installation_comments"
-                        value={inputs.installation_comments}
-                        placeholder=""
-                        onChange={handleInput}
-                        isReadOnly={props.isEditing}
-                        className="h-24 w-full pl-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol"
+                    )}
+                    <div className="self-center">
+                      <Submit
+                        onClick={handleSubmit}
+                        isDisabled={
+                          activeSCDetails?.flexDetails !== null
+                            ? activeSCDetails?.flexDetails.status ===
+                              FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
+                              ? true
+                              : false
+                            : false
+                        }
                       />
                     </div>
-                  )}
-                  {showError && (
-                    <p className="text-[0.8rem] font-normal pl-2 leading-[1rem] text-red">
-                      Please Fill All Fields !
-                    </p>
-                  )}
-                  <Submit
-                    onClick={handleSubmit}
-                    isDisabled={
-                      activeSCDetails?.flexDetails !== null
-                        ? activeSCDetails?.flexDetails.status ===
-                          FlexInstallationEnum.FLEX_INSTALLATION_COMPLETE
-                          ? true
-                          : false
-                        : false
-                    }
-                  />
+                  </div>
                 </div>
               </div>
             </div>
