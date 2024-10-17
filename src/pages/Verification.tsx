@@ -384,10 +384,7 @@ function Verification(props: VerificationProps) {
                           <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                             Flex Installation Date
                           </p>
-                          <div
-                            onClick={handleImageClick}
-                            className="flex items-center justify-between h-12 w-full px-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg "
-                          >
+                          <div className="flex items-center justify-between h-12 w-full px-4 border border-border leading-[1.25rem] font-normal text-[1rem] rounded-lg ">
                             <DatePicker
                               ref={datePickerRef}
                               selected={selectedDate}
@@ -398,7 +395,12 @@ function Verification(props: VerificationProps) {
                               dateFormat="yyyy-MM-d"
                               disabled={props.isEditing}
                             />
-                            <img src={date} alt="" className="w-5 h-5" />
+                            <img
+                              src={date}
+                              alt=""
+                              className="w-5 h-5"
+                              onClick={handleImageClick}
+                            />
                           </div>
                         </div>
                         <div className="flex flex-col gap-1">
