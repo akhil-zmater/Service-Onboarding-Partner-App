@@ -165,15 +165,15 @@ function TrainAndOnboard(props: TrainingProps) {
   };
 
   return (
-    <div>
+    <div className="w-screen">
       {showMain ? (
         <Main />
       ) : (
-        <div>
+        <div className="w-screen">
           {showMain ? (
             <Main />
           ) : (
-            <div>
+            <div className="w-screen">
               <Navbar onClick={handleMain} />
               <div className="ml-[0.7rem] mt-[1.2rem] mr-[0.5rem]">
                 <h1 className="tracking-tight text-[1rem] leading-[1.5rem] bg-gradient-to-r from-[rgba(21,79,187,1)] to-[rgba(28,73,151,1)] bg-bluegrad bg-clip-text text-transparent font-medium">
@@ -188,42 +188,46 @@ function TrainAndOnboard(props: TrainingProps) {
                   </p>
                 </div>
                 {/* INPUT FIELDS */}
-                <div className="mt-4 flex flex-col gap-4">
-                  <div className="flex flex-col gap-1">
-                    <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                      Trainig Status
-                    </p>
-                    <div className="border border-border p-2 rounded-lg">
-                      {TrainingComp}
-                    </div>
-                  </div>
-                  {inputs.status === "Training Pending" ? (
-                    <NextFollowup tab={BtnTypes.TRAINING} />
-                  ) : (
+                <div className="flex flex-col w-full">
+                  <div className="mt-4 flex flex-col gap-4">
                     <div className="flex flex-col gap-1">
                       <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                        Comments
+                        Trainig Status
                       </p>
-                      <Input
-                        type="text"
-                        name="additional_comments"
-                        value={inputs.additional_comments}
-                        placeholder=""
-                        onChange={handleInput}
-                        isReadOnly={props.isEditing}
-                        className="h-24 w-full pl-4 border border-border leading-[1rem] text-ipcol font-normal rounded-lg text-[1rem]"
+                      <div className="border border-border p-2 rounded-lg">
+                        {TrainingComp}
+                      </div>
+                    </div>
+                    {inputs.status === "Training Pending" ? (
+                      <NextFollowup tab={BtnTypes.TRAINING} />
+                    ) : (
+                      <div className="flex flex-col gap-1">
+                        <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                          Comments
+                        </p>
+                        <Input
+                          type="text"
+                          name="additional_comments"
+                          value={inputs.additional_comments}
+                          placeholder=""
+                          onChange={handleInput}
+                          isReadOnly={props.isEditing}
+                          className="h-24 w-full pl-4 border border-border leading-[1rem] text-ipcol font-normal rounded-lg text-[1rem]"
+                        />
+                      </div>
+                    )}
+                    <div className="self-center">
+                      <Submit
+                        onClick={handleSubmit}
+                        isDisabled={
+                          activeSCDetails?.trainingDetails !== null
+                            ? activeSCDetails?.trainingDetails?.status ===
+                              PTOStatusEnum.COMPLETE
+                            : false
+                        }
                       />
                     </div>
-                  )}
-                  <Submit
-                    onClick={handleSubmit}
-                    isDisabled={
-                      activeSCDetails?.trainingDetails !== null
-                        ? activeSCDetails?.trainingDetails?.status ===
-                          PTOStatusEnum.COMPLETE
-                        : false
-                    }
-                  />
+                  </div>
                 </div>
               </div>
             </div>

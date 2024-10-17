@@ -188,15 +188,15 @@ function Photography(props: PhotographyProps) {
   }
 
   return (
-    <div>
+    <div className="w-screen">
       {showMain ? (
         <Main />
       ) : (
-        <div>
+        <div className="w-screen">
           {showMain ? (
             <Main />
           ) : (
-            <div>
+            <div className="w-screen">
               {" "}
               <Navbar onClick={handleMain} />
               <div className="ml-[0.7rem] mt-[1.2rem] mr-[0.5rem]">
@@ -212,74 +212,79 @@ function Photography(props: PhotographyProps) {
                   </p>
                 </div>
                 {/* INPUT FIELDS */}
-                <div className="mt-[0.75rem] flex flex-col gap-[1.25rem]">
-                  <div className="flex flex-col gap-1">
-                    <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                      Photographer Id
-                    </p>
-                    <Input
-                      type="text"
-                      name="photographer_name"
-                      value={(employeeId as string) ?? ""}
-                      placeholder=""
-                      onChange={handleInput}
-                      isReadOnly={true}
-                      className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                      Photography Status
-                    </p>
-                    <div className="border border-border p-2 rounded-lg">
-                      {statusComp}
-                    </div>
-                  </div>
-                  {inputs.status === "Photography Complete" && (
+                <div className="flex flex-col w-full">
+                  <div className="mt-[0.75rem] flex flex-col gap-[1.25rem]">
                     <div className="flex flex-col gap-1">
                       <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                        Photography Date
-                      </p>
-                      <div className="flex items-center justify-between h-12 w-full px-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol">
-                        <DatePicker
-                          selected={selectedDate}
-                          onChange={(date: Date | null) =>
-                            setSelectedDate(date)
-                          }
-                          className="w-full outline-none"
-                          dateFormat="yyyy-MM-d"
-                          disabled={props.isEditing}
-                        />
-                        <img src={date} alt="" className="w-5 h-5" />
-                      </div>
-                    </div>
-                  )}
-                  {inputs.status === "Photography Pending" ? (
-                    <NextFollowup tab={BtnTypes.PHOTOGRAPHY} />
-                  ) : (
-                    <div className="flex flex-col gap-1">
-                      <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
-                        Comments
+                        Photographer Id
                       </p>
                       <Input
                         type="text"
-                        name="comments"
-                        value={inputs.comments}
+                        name="photographer_name"
+                        value={(employeeId as string) ?? ""}
                         placeholder=""
                         onChange={handleInput}
-                        isReadOnly={props.isEditing}
-                        className="h-24 w-full pl-4 border border-border rounded-lg text-[1rem] leading-[1.25rem] text-ipcol font-normal "
+                        isReadOnly={true}
+                        className="h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol"
                       />
                     </div>
-                  )}
-                  <Submit
-                    onClick={handleSubmit}
-                    isDisabled={
-                      activeSCDetails?.photographyDetails?.status === "complete"
-                        ? true
-                        : false
-                    }
-                  />
+                    <div className="flex flex-col gap-1">
+                      <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                        Photography Status
+                      </p>
+                      <div className="border border-border p-2 rounded-lg">
+                        {statusComp}
+                      </div>
+                    </div>
+                    {inputs.status === "Photography Complete" && (
+                      <div className="flex flex-col gap-1">
+                        <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                          Photography Date
+                        </p>
+                        <div className="flex items-center justify-between h-12 w-full px-4 border border-border rounded-lg text-[1rem] font-normal leading-[1.25rem] text-ipcol">
+                          <DatePicker
+                            selected={selectedDate}
+                            onChange={(date: Date | null) =>
+                              setSelectedDate(date)
+                            }
+                            className="w-full outline-none"
+                            dateFormat="yyyy-MM-d"
+                            disabled={props.isEditing}
+                          />
+                          <img src={date} alt="" className="w-5 h-5" />
+                        </div>
+                      </div>
+                    )}
+                    {inputs.status === "Photography Pending" ? (
+                      <NextFollowup tab={BtnTypes.PHOTOGRAPHY} />
+                    ) : (
+                      <div className="flex flex-col gap-1">
+                        <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
+                          Comments
+                        </p>
+                        <Input
+                          type="text"
+                          name="comments"
+                          value={inputs.comments}
+                          placeholder=""
+                          onChange={handleInput}
+                          isReadOnly={props.isEditing}
+                          className="h-24 w-full pl-4 border border-border rounded-lg text-[1rem] leading-[1.25rem] text-ipcol font-normal "
+                        />
+                      </div>
+                    )}
+                    <div className="self-center">
+                      <Submit
+                        onClick={handleSubmit}
+                        isDisabled={
+                          activeSCDetails?.photographyDetails?.status ===
+                          "complete"
+                            ? true
+                            : false
+                        }
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

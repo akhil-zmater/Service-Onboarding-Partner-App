@@ -80,7 +80,7 @@ function Home() {
                 </h1>
                 <div className="mt-[1rem] flex flex-col gap-2">
                   <div className="flex justify-between  items-center text-[0.9rem] leading-[1rem] font-medium border border-border p-[1rem] font-poppins rounded-lg">
-                    <div className="flex items-center justify-center gap-16">
+                    <div className="flex items-center gap-8">
                       <div className="flex flex-col gap-2">
                         <h1 className="text-[0.8rem] text-ipcol ">ASSIGNED</h1>
                         <h1 className="text-[1.2rem] text-blue">
@@ -106,12 +106,12 @@ function Home() {
                   </h1>
                   <div className="flex flex-col gap-2">
                     <div className="flex justify-between items-center text-ipcol h-[3.5rem] w-[100%] p-[1rem] border border-border rounded-[0.5rem] text-[1rem] leading-[1.5rem] font-normal">
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 w-52">
                         <p className="text-ipcol text-[1rem] font-normal leading-[1.5rem]">
                           +91
                         </p>
                         <Input
-                          type="number"
+                          type="text"
                           name="phone"
                           value={mobileNumber}
                           placeholder="Enter Phone Number"
@@ -119,7 +119,7 @@ function Home() {
                             if (/^\d{0,10}$/.test(e.target.value))
                               setMobileNumber(e.target.value);
                           }}
-                          className="focus:outline-none"
+                          className="focus:outline-none hover:no-spinner w-full overflow-hidden"
                           maxLength={10 as number}
                         />
                       </div>

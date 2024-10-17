@@ -23,7 +23,7 @@ function FollowUDetails(props: FollowUDetailsProps) {
 
   return (
     <div className="flex flex-col gap-1 border-b py-[0.5rem] border-border">
-      <h1 className="text-[0.9rem] text-black leading-[1.5rem] font-normal ">
+      <h1 className="text-[0.9rem] text-black leading-[1.5rem] font-normal overflow-hidden">
         {props.name}
       </h1>
       <div className="flex flex-col gap-1">
@@ -42,7 +42,7 @@ function FollowUDetails(props: FollowUDetailsProps) {
           </div>
           <div onClick={props.onClick} className="flex items-center">
             <img src={loc} alt="" />
-            <p className="underline text-blue text-[0.85rem] leading-[1rem] font-normal pb-[0.5rem]">
+            <p className="underline text-blue text-[0.85rem] leading-4 font-normal overflow-hidden whitespace-nowrap overflow-ellipsis w-full max-w-[200px]">
               {props.address}
             </p>
           </div>

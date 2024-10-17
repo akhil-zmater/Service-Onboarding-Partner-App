@@ -518,13 +518,13 @@ function Main(props: MainProps) {
             <div>
               <Navbar onClick={handleHome} />
               <div className="ml-[0.7rem] mt-[1.2rem] mr-[0.5rem]">
-                <h1 className="text-black text-[1.1rem] font-medium leading-[1.7rem]">
+                <h1 className="text-black text-[1.1rem] font-medium leading-[1.7rem]  overflow-hidden whitespace-nowrap overflow-ellipsis w-full max-w-[200px]">
                   {activeScDetails?.serviceCenterName}
                 </h1>
                 <div className="flex flex-col gap-[0.25rem] mt-[0.3rem]">
                   <div className="flex gap-1 text-xs font-normal leading-[1rem] text-[1rem]">
                     <p className="text-background pl-[0.32rem] ">Owner Name:</p>
-                    <span className="font-normal text-black leading-[1rem]  ">
+                    <span className="font-normal text-black leading-[1rem]  overflow-hidden whitespace-nowrap overflow-ellipsis w-full max-w-[200px]">
                       {activeScDetails?.serviceCenterOwnerName}
                     </span>
                   </div>
@@ -549,7 +549,7 @@ function Main(props: MainProps) {
                       <img src={mapii} alt="" className="w-6 h-6" />
                       <p
                         onClick={handleMaps}
-                        className="underline text-blue text-[0.8rem] leading-[1rem] font-normal pb-[0.2rem]"
+                        className="underline text-blue text-[0.8rem] leading-[1rem] font-normal pb-[0.2rem] overflow-hidden whitespace-nowrap overflow-ellipsis w-full max-w-[200px]"
                       >
                         {activeScDetails?.serviceCenterAddress}
                       </p>

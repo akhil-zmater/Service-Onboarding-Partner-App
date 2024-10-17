@@ -188,11 +188,11 @@ export default function NewRegistration() {
     }
   };
   return (
-    <div>
+    <div className="w-screen">
       {showMain ? (
         <Home />
       ) : (
-        <div>
+        <div className="w-screen">
           <Navbar onClick={handleMain} />
           <div className="ml-[0.7rem] mt-[1.2rem] mr-[0.5rem]">
             <h1 className="tracking-tight text-[1rem] leading-[1.5rem] bg-gradient-to-r from-[rgba(21,79,187,1)] to-[rgba(28,73,151,1)] bg-bluegrad bg-clip-text text-transparent font-medium">
@@ -207,7 +207,7 @@ export default function NewRegistration() {
               </p>
             </div>
             {/* INPUT FIELDS */}
-            <div className="mt-[0.75rem] flex flex-col gap-[1.25rem] ">
+            <div className="mt-[0.75rem] flex flex-col gap-[1.25rem] w-full">
               <div className="flex flex-col gap-1">
                 <p className="font-normal text-[0.75rem] leading-[1rem] text-ipcol">
                   Sales Rep ID
@@ -267,7 +267,7 @@ export default function NewRegistration() {
                 </p>
                 <div
                   onClick={handleMaps} //Maps integration
-                  className="flex items-center gap-2 h-12 w-full pl-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
+                  className="flex items-center gap-2 h-12 w-full px-[0.75rem] border border-border  rounded-lg text-[1rem] text-ipcol "
                 >
                   <img src={loc} alt="" className="h-6 w-6" />
                   <Input
@@ -276,7 +276,7 @@ export default function NewRegistration() {
                     value={loading ? "Loading...." : address}
                     placeholder=""
                     onChange={handleRegFields}
-                    className="outline-none w-full"
+                    className="outline-none w-full overflow-hidden"
                     isReadOnly={true}
                   />
                 </div>
