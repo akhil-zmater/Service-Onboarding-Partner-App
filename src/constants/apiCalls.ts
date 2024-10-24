@@ -31,7 +31,7 @@ export const ERROR_MESSAGES = {
   loginExpiry: "loginExpiry",
 };
 
-export const END_POINT_BASE = "http://zmater.com/bluewheel";
+export const END_POINT_BASE = "https://zmater.com/bluewheel";
 export const LOGIN_END_POINT =
   "https://gateway-prod.thevehicle.app/internal/user/login";
 
